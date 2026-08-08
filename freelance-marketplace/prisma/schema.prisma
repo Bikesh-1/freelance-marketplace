@@ -8,51 +8,76 @@ datasource db {
 }
 
 model User {
-  id                String             @id @default(cuid())
-  name              String
-  email             String             @unique
-  password          String
-  role              Role
-  sentMessages Message[] @relation("SentMessages") 
-  receivedMessages Message[] @relation("ReceivedMessages")
+  id            String  @id @default(cuid())
+  name          String
+  email         String  @unique
+  password      String
+  role          Role
+  walletAddress String? @unique
+  isVerified    Boolean @default(false)
+
+  sentMessages      Message[]          @relation("SentMessages")
+  receivedMessages  Message[]          @relation("ReceivedMessages")
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
   clientProfile     ClientProfile?
   freelancerProfile FreelancerProfile?
+
+  notifications      Notification[]
+  walletTransactions WalletTransaction[]
+  recommendations    AIRecommendation[]
+
+  @@index([role])
+  @@index([walletAddress])
 }
 
 model FreelancerProfile {
-  id              String            @id @default(cuid())
-  userId          String            @unique
-  title           String
-  bio             String
-  experienceLevel ExperienceLevel
-  hourlyRate      Float
-  location        String?
-  github          String?
-  linkedin        String?
-  portfolio       String?
-  isAvailable     Boolean           @default(true)
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  skills          FreelancerSkill[]
-  portfolios      Portfolio[]
-  applications    Application[]
-  reviews         Review[]
+  id                String            @id @default(cuid())
+  userId            String            @unique
+  title             String
+  bio               String
+  fullName String?
+country String?
+isProfileCompleted Boolean @default(false)
+  experienceLevel   ExperienceLevel
+  hourlyRate        Float
+  location          String?
+  github            String?
+  linkedin          String?
+  portfolio         String?
+  yearsOfExperience Int               @default(0)
+  totalProjects     Int               @default(0)
+  averageRating     Float             @default(0)
+  aiEmbedding       String?
+  isAvailable       Boolean           @default(true)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skills            FreelancerSkill[]
+  portfolios        Portfolio[]
+  applications      Application[]
+  reviews           Review[]
+
+  @@index([hourlyRate])
+  @@index([experienceLevel])
+  @@index([averageRating])
+  @@index([isAvailable])
 }
 
 model ClientProfile {
-  id          String   @id @default(cuid())
-  userId      String   @unique
-  companyName String
-  companyBio  String
-  website     String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  jobs        Job[]
-  reviews     Review[]
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  companyName     String
+  companyBio      String
+  website         String?
+  country String?
+isProfileCompleted Boolean @default(false)
+  totalJobsPosted Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobs            Job[]
+  reviews         Review[]
 }
 
 model Skill {
@@ -72,19 +97,26 @@ model FreelancerSkill {
 }
 
 model Job {
-  id             String        @id @default(cuid())
-  clientId       String
-  title          String
-  description    String        @db.Text
-  budget         Float
-  requiredSkills String[]
-  status         JobStatus     @default(OPEN)
-  deadline       DateTime
-  client         ClientProfile @relation(fields: [clientId], references: [id], onDelete: Cascade)
-  applications   Application[]
-  escrow         Escrow?
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  id                   String        @id @default(cuid())
+  clientId             String
+  title                String
+  description          String        @db.Text
+  budget               Float
+  requiredSkills       String[]
+  milestones           Milestone[]
+  status               JobStatus     @default(OPEN)
+  deadline             DateTime
+  selectedFreelancerId String?
+  aiEmbedding          String?
+  client               ClientProfile @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  applications         Application[]
+  escrow               Escrow?
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+
+  @@index([status])
+  @@index([budget])
+  @@index([deadline])
 }
 
 model Portfolio {
@@ -105,6 +137,7 @@ model Application {
   freelancerId   String
   coverLetter    String            @db.Text
   proposedBudget Float
+  aiScore        Float?
   status         ApplicationStatus @default(PENDING)
   job            Job               @relation(fields: [jobId], references: [id], onDelete: Cascade)
   freelancer     FreelancerProfile @relation(fields: [freelancerId], references: [id], onDelete: Cascade)
@@ -112,17 +145,23 @@ model Application {
   updatedAt      DateTime          @updatedAt
 
   @@unique([jobId, freelancerId])
+  @@index([status])
+  @@index([aiScore])
 }
 
 model Review {
-  id           String            @id @default(cuid())
+  id           String @id @default(cuid())
   clientId     String
   freelancerId String
-  rating       Int
-  comment      String            @db.Text
-  client       ClientProfile     @relation(fields: [clientId], references: [id], onDelete: Cascade)
-  freelancer   FreelancerProfile @relation(fields: [freelancerId], references: [id], onDelete: Cascade)
-  createdAt    DateTime          @default(now())
+
+  rating Int
+
+  comment    String            @db.Text
+  client     ClientProfile     @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  freelancer FreelancerProfile @relation(fields: [freelancerId], references: [id], onDelete: Cascade)
+  createdAt  DateTime          @default(now())
+
+  @@index([rating])
 }
 
 model Message {
@@ -140,12 +179,17 @@ model Escrow {
   id              String        @id @default(cuid())
   jobId           String        @unique
   contractAddress String
+  transactionHash String?
+  network         String        @default("sepolia")
   amount          Float
   status          EscrowStatus  @default(CREATED)
   job             Job           @relation(fields: [jobId], references: [id], onDelete: Cascade)
   transactions    Transaction[]
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
+
+  @@index([status])
+  @@index([network])
 }
 
 model Transaction {
@@ -155,8 +199,92 @@ model Transaction {
   amount      Float
   fromAddress String
   toAddress   String
+  blockNumber Int?
+  gasUsed     String?
+  network     String   @default("sepolia")
   escrow      Escrow   @relation(fields: [escrowId], references: [id], onDelete: Cascade)
   createdAt   DateTime @default(now())
+
+  @@index([txHash])
+  @@index([network])
+}
+
+model Notification {
+  id String @id @default(cuid())
+
+  userId  String
+  type    NotificationType
+  title   String
+  message String           @db.Text
+  isRead  Boolean          @default(false)
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([isRead])
+}
+
+model Milestone {
+  id    String @id @default(cuid())
+  jobId String
+
+  title       String
+  description String @db.Text
+
+  amount Float
+
+  isCompleted Boolean @default(false)
+
+  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([jobId])
+}
+
+model AIRecommendation {
+  id           String   @id @default(cuid())
+  userId       String
+  jobId        String?
+  freelancerId String?
+  score        Float
+  reason       String   @db.Text
+  createdAt    DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([score])
+}
+
+model WalletTransaction {
+  id            String   @id @default(cuid())
+  userId        String
+  txHash        String   @unique
+  amount        Float
+  type          String
+  network       String
+  walletAddress String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+
+  @@index([userId])
+  @@index([txHash])
+}
+
+model BlockchainEvent {
+  id          String   @id @default(cuid())
+  escrowId    String?
+  eventName   String
+  txHash      String
+  blockNumber Int
+  network     String
+  payload     String   @db.Text
+  createdAt   DateTime @default(now())
+
+  @@index([txHash])
+  @@index([eventName])
 }
 
 enum Role {
@@ -189,4 +317,16 @@ enum EscrowStatus {
   FUNDED
   RELEASED
   REFUNDED
+}
+
+enum NotificationType {
+  JOB_POSTED
+  APPLICATION_RECEIVED
+  APPLICATION_ACCEPTED
+  APPLICATION_REJECTED
+  PAYMENT_FUNDED
+  PAYMENT_RELEASED
+  PAYMENT_REFUNDED
+  MESSAGE_RECEIVED
+  SYSTEM
 }

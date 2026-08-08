@@ -20,8 +20,18 @@ export type ClientProfileModel = runtime.Types.Result.DefaultSelection<Prisma.$C
 
 export type AggregateClientProfile = {
   _count: ClientProfileCountAggregateOutputType | null
+  _avg: ClientProfileAvgAggregateOutputType | null
+  _sum: ClientProfileSumAggregateOutputType | null
   _min: ClientProfileMinAggregateOutputType | null
   _max: ClientProfileMaxAggregateOutputType | null
+}
+
+export type ClientProfileAvgAggregateOutputType = {
+  totalJobsPosted: number | null
+}
+
+export type ClientProfileSumAggregateOutputType = {
+  totalJobsPosted: number | null
 }
 
 export type ClientProfileMinAggregateOutputType = {
@@ -30,6 +40,9 @@ export type ClientProfileMinAggregateOutputType = {
   companyName: string | null
   companyBio: string | null
   website: string | null
+  country: string | null
+  isProfileCompleted: boolean | null
+  totalJobsPosted: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -40,6 +53,9 @@ export type ClientProfileMaxAggregateOutputType = {
   companyName: string | null
   companyBio: string | null
   website: string | null
+  country: string | null
+  isProfileCompleted: boolean | null
+  totalJobsPosted: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -50,11 +66,22 @@ export type ClientProfileCountAggregateOutputType = {
   companyName: number
   companyBio: number
   website: number
+  country: number
+  isProfileCompleted: number
+  totalJobsPosted: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
+
+export type ClientProfileAvgAggregateInputType = {
+  totalJobsPosted?: true
+}
+
+export type ClientProfileSumAggregateInputType = {
+  totalJobsPosted?: true
+}
 
 export type ClientProfileMinAggregateInputType = {
   id?: true
@@ -62,6 +89,9 @@ export type ClientProfileMinAggregateInputType = {
   companyName?: true
   companyBio?: true
   website?: true
+  country?: true
+  isProfileCompleted?: true
+  totalJobsPosted?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -72,6 +102,9 @@ export type ClientProfileMaxAggregateInputType = {
   companyName?: true
   companyBio?: true
   website?: true
+  country?: true
+  isProfileCompleted?: true
+  totalJobsPosted?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -82,6 +115,9 @@ export type ClientProfileCountAggregateInputType = {
   companyName?: true
   companyBio?: true
   website?: true
+  country?: true
+  isProfileCompleted?: true
+  totalJobsPosted?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -125,6 +161,18 @@ export type ClientProfileAggregateArgs<ExtArgs extends runtime.Types.Extensions.
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: ClientProfileAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: ClientProfileSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: ClientProfileMinAggregateInputType
@@ -155,6 +203,8 @@ export type ClientProfileGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   _count?: ClientProfileCountAggregateInputType | true
+  _avg?: ClientProfileAvgAggregateInputType
+  _sum?: ClientProfileSumAggregateInputType
   _min?: ClientProfileMinAggregateInputType
   _max?: ClientProfileMaxAggregateInputType
 }
@@ -165,9 +215,14 @@ export type ClientProfileGroupByOutputType = {
   companyName: string
   companyBio: string
   website: string | null
+  country: string | null
+  isProfileCompleted: boolean
+  totalJobsPosted: number
   createdAt: Date
   updatedAt: Date
   _count: ClientProfileCountAggregateOutputType | null
+  _avg: ClientProfileAvgAggregateOutputType | null
+  _sum: ClientProfileSumAggregateOutputType | null
   _min: ClientProfileMinAggregateOutputType | null
   _max: ClientProfileMaxAggregateOutputType | null
 }
@@ -196,6 +251,9 @@ export type ClientProfileWhereInput = {
   companyName?: Prisma.StringFilter<"ClientProfile"> | string
   companyBio?: Prisma.StringFilter<"ClientProfile"> | string
   website?: Prisma.StringNullableFilter<"ClientProfile"> | string | null
+  country?: Prisma.StringNullableFilter<"ClientProfile"> | string | null
+  isProfileCompleted?: Prisma.BoolFilter<"ClientProfile"> | boolean
+  totalJobsPosted?: Prisma.IntFilter<"ClientProfile"> | number
   createdAt?: Prisma.DateTimeFilter<"ClientProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ClientProfile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -209,6 +267,9 @@ export type ClientProfileOrderByWithRelationInput = {
   companyName?: Prisma.SortOrder
   companyBio?: Prisma.SortOrder
   website?: Prisma.SortOrderInput | Prisma.SortOrder
+  country?: Prisma.SortOrderInput | Prisma.SortOrder
+  isProfileCompleted?: Prisma.SortOrder
+  totalJobsPosted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -225,6 +286,9 @@ export type ClientProfileWhereUniqueInput = Prisma.AtLeast<{
   companyName?: Prisma.StringFilter<"ClientProfile"> | string
   companyBio?: Prisma.StringFilter<"ClientProfile"> | string
   website?: Prisma.StringNullableFilter<"ClientProfile"> | string | null
+  country?: Prisma.StringNullableFilter<"ClientProfile"> | string | null
+  isProfileCompleted?: Prisma.BoolFilter<"ClientProfile"> | boolean
+  totalJobsPosted?: Prisma.IntFilter<"ClientProfile"> | number
   createdAt?: Prisma.DateTimeFilter<"ClientProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ClientProfile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -238,11 +302,16 @@ export type ClientProfileOrderByWithAggregationInput = {
   companyName?: Prisma.SortOrder
   companyBio?: Prisma.SortOrder
   website?: Prisma.SortOrderInput | Prisma.SortOrder
+  country?: Prisma.SortOrderInput | Prisma.SortOrder
+  isProfileCompleted?: Prisma.SortOrder
+  totalJobsPosted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ClientProfileCountOrderByAggregateInput
+  _avg?: Prisma.ClientProfileAvgOrderByAggregateInput
   _max?: Prisma.ClientProfileMaxOrderByAggregateInput
   _min?: Prisma.ClientProfileMinOrderByAggregateInput
+  _sum?: Prisma.ClientProfileSumOrderByAggregateInput
 }
 
 export type ClientProfileScalarWhereWithAggregatesInput = {
@@ -254,6 +323,9 @@ export type ClientProfileScalarWhereWithAggregatesInput = {
   companyName?: Prisma.StringWithAggregatesFilter<"ClientProfile"> | string
   companyBio?: Prisma.StringWithAggregatesFilter<"ClientProfile"> | string
   website?: Prisma.StringNullableWithAggregatesFilter<"ClientProfile"> | string | null
+  country?: Prisma.StringNullableWithAggregatesFilter<"ClientProfile"> | string | null
+  isProfileCompleted?: Prisma.BoolWithAggregatesFilter<"ClientProfile"> | boolean
+  totalJobsPosted?: Prisma.IntWithAggregatesFilter<"ClientProfile"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ClientProfile"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ClientProfile"> | Date | string
 }
@@ -263,6 +335,9 @@ export type ClientProfileCreateInput = {
   companyName: string
   companyBio: string
   website?: string | null
+  country?: string | null
+  isProfileCompleted?: boolean
+  totalJobsPosted?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutClientProfileInput
@@ -276,6 +351,9 @@ export type ClientProfileUncheckedCreateInput = {
   companyName: string
   companyBio: string
   website?: string | null
+  country?: string | null
+  isProfileCompleted?: boolean
+  totalJobsPosted?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
@@ -287,6 +365,9 @@ export type ClientProfileUpdateInput = {
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
   companyBio?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalJobsPosted?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutClientProfileNestedInput
@@ -300,6 +381,9 @@ export type ClientProfileUncheckedUpdateInput = {
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
   companyBio?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalJobsPosted?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
@@ -312,6 +396,9 @@ export type ClientProfileCreateManyInput = {
   companyName: string
   companyBio: string
   website?: string | null
+  country?: string | null
+  isProfileCompleted?: boolean
+  totalJobsPosted?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -321,6 +408,9 @@ export type ClientProfileUpdateManyMutationInput = {
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
   companyBio?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalJobsPosted?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -331,6 +421,9 @@ export type ClientProfileUncheckedUpdateManyInput = {
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
   companyBio?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalJobsPosted?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -346,8 +439,15 @@ export type ClientProfileCountOrderByAggregateInput = {
   companyName?: Prisma.SortOrder
   companyBio?: Prisma.SortOrder
   website?: Prisma.SortOrder
+  country?: Prisma.SortOrder
+  isProfileCompleted?: Prisma.SortOrder
+  totalJobsPosted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type ClientProfileAvgOrderByAggregateInput = {
+  totalJobsPosted?: Prisma.SortOrder
 }
 
 export type ClientProfileMaxOrderByAggregateInput = {
@@ -356,6 +456,9 @@ export type ClientProfileMaxOrderByAggregateInput = {
   companyName?: Prisma.SortOrder
   companyBio?: Prisma.SortOrder
   website?: Prisma.SortOrder
+  country?: Prisma.SortOrder
+  isProfileCompleted?: Prisma.SortOrder
+  totalJobsPosted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -366,8 +469,15 @@ export type ClientProfileMinOrderByAggregateInput = {
   companyName?: Prisma.SortOrder
   companyBio?: Prisma.SortOrder
   website?: Prisma.SortOrder
+  country?: Prisma.SortOrder
+  isProfileCompleted?: Prisma.SortOrder
+  totalJobsPosted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type ClientProfileSumOrderByAggregateInput = {
+  totalJobsPosted?: Prisma.SortOrder
 }
 
 export type ClientProfileScalarRelationFilter = {
@@ -440,6 +550,9 @@ export type ClientProfileCreateWithoutUserInput = {
   companyName: string
   companyBio: string
   website?: string | null
+  country?: string | null
+  isProfileCompleted?: boolean
+  totalJobsPosted?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   jobs?: Prisma.JobCreateNestedManyWithoutClientInput
@@ -451,6 +564,9 @@ export type ClientProfileUncheckedCreateWithoutUserInput = {
   companyName: string
   companyBio: string
   website?: string | null
+  country?: string | null
+  isProfileCompleted?: boolean
+  totalJobsPosted?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
@@ -478,6 +594,9 @@ export type ClientProfileUpdateWithoutUserInput = {
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
   companyBio?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalJobsPosted?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
@@ -489,6 +608,9 @@ export type ClientProfileUncheckedUpdateWithoutUserInput = {
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
   companyBio?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalJobsPosted?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
@@ -500,6 +622,9 @@ export type ClientProfileCreateWithoutJobsInput = {
   companyName: string
   companyBio: string
   website?: string | null
+  country?: string | null
+  isProfileCompleted?: boolean
+  totalJobsPosted?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutClientProfileInput
@@ -512,6 +637,9 @@ export type ClientProfileUncheckedCreateWithoutJobsInput = {
   companyName: string
   companyBio: string
   website?: string | null
+  country?: string | null
+  isProfileCompleted?: boolean
+  totalJobsPosted?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutClientInput
@@ -538,6 +666,9 @@ export type ClientProfileUpdateWithoutJobsInput = {
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
   companyBio?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalJobsPosted?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutClientProfileNestedInput
@@ -550,6 +681,9 @@ export type ClientProfileUncheckedUpdateWithoutJobsInput = {
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
   companyBio?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalJobsPosted?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutClientNestedInput
@@ -560,6 +694,9 @@ export type ClientProfileCreateWithoutReviewsInput = {
   companyName: string
   companyBio: string
   website?: string | null
+  country?: string | null
+  isProfileCompleted?: boolean
+  totalJobsPosted?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutClientProfileInput
@@ -572,6 +709,9 @@ export type ClientProfileUncheckedCreateWithoutReviewsInput = {
   companyName: string
   companyBio: string
   website?: string | null
+  country?: string | null
+  isProfileCompleted?: boolean
+  totalJobsPosted?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
@@ -598,6 +738,9 @@ export type ClientProfileUpdateWithoutReviewsInput = {
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
   companyBio?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalJobsPosted?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutClientProfileNestedInput
@@ -610,6 +753,9 @@ export type ClientProfileUncheckedUpdateWithoutReviewsInput = {
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
   companyBio?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalJobsPosted?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
@@ -661,6 +807,9 @@ export type ClientProfileSelect<ExtArgs extends runtime.Types.Extensions.Interna
   companyName?: boolean
   companyBio?: boolean
   website?: boolean
+  country?: boolean
+  isProfileCompleted?: boolean
+  totalJobsPosted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -675,6 +824,9 @@ export type ClientProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   companyName?: boolean
   companyBio?: boolean
   website?: boolean
+  country?: boolean
+  isProfileCompleted?: boolean
+  totalJobsPosted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -686,6 +838,9 @@ export type ClientProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   companyName?: boolean
   companyBio?: boolean
   website?: boolean
+  country?: boolean
+  isProfileCompleted?: boolean
+  totalJobsPosted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -697,11 +852,14 @@ export type ClientProfileSelectScalar = {
   companyName?: boolean
   companyBio?: boolean
   website?: boolean
+  country?: boolean
+  isProfileCompleted?: boolean
+  totalJobsPosted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ClientProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "companyName" | "companyBio" | "website" | "createdAt" | "updatedAt", ExtArgs["result"]["clientProfile"]>
+export type ClientProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "companyName" | "companyBio" | "website" | "country" | "isProfileCompleted" | "totalJobsPosted" | "createdAt" | "updatedAt", ExtArgs["result"]["clientProfile"]>
 export type ClientProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   jobs?: boolean | Prisma.ClientProfile$jobsArgs<ExtArgs>
@@ -728,6 +886,9 @@ export type $ClientProfilePayload<ExtArgs extends runtime.Types.Extensions.Inter
     companyName: string
     companyBio: string
     website: string | null
+    country: string | null
+    isProfileCompleted: boolean
+    totalJobsPosted: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["clientProfile"]>
@@ -1161,6 +1322,9 @@ export interface ClientProfileFieldRefs {
   readonly companyName: Prisma.FieldRef<"ClientProfile", 'String'>
   readonly companyBio: Prisma.FieldRef<"ClientProfile", 'String'>
   readonly website: Prisma.FieldRef<"ClientProfile", 'String'>
+  readonly country: Prisma.FieldRef<"ClientProfile", 'String'>
+  readonly isProfileCompleted: Prisma.FieldRef<"ClientProfile", 'Boolean'>
+  readonly totalJobsPosted: Prisma.FieldRef<"ClientProfile", 'Int'>
   readonly createdAt: Prisma.FieldRef<"ClientProfile", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"ClientProfile", 'DateTime'>
 }

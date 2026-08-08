@@ -62,7 +62,12 @@ export const ModelName = {
   Review: 'Review',
   Message: 'Message',
   Escrow: 'Escrow',
-  Transaction: 'Transaction'
+  Transaction: 'Transaction',
+  Notification: 'Notification',
+  Milestone: 'Milestone',
+  AIRecommendation: 'AIRecommendation',
+  WalletTransaction: 'WalletTransaction',
+  BlockchainEvent: 'BlockchainEvent'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -87,6 +92,8 @@ export const UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   role: 'role',
+  walletAddress: 'walletAddress',
+  isVerified: 'isVerified',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -99,12 +106,19 @@ export const FreelancerProfileScalarFieldEnum = {
   userId: 'userId',
   title: 'title',
   bio: 'bio',
+  fullName: 'fullName',
+  country: 'country',
+  isProfileCompleted: 'isProfileCompleted',
   experienceLevel: 'experienceLevel',
   hourlyRate: 'hourlyRate',
   location: 'location',
   github: 'github',
   linkedin: 'linkedin',
   portfolio: 'portfolio',
+  yearsOfExperience: 'yearsOfExperience',
+  totalProjects: 'totalProjects',
+  averageRating: 'averageRating',
+  aiEmbedding: 'aiEmbedding',
   isAvailable: 'isAvailable',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -119,6 +133,9 @@ export const ClientProfileScalarFieldEnum = {
   companyName: 'companyName',
   companyBio: 'companyBio',
   website: 'website',
+  country: 'country',
+  isProfileCompleted: 'isProfileCompleted',
+  totalJobsPosted: 'totalJobsPosted',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -152,6 +169,8 @@ export const JobScalarFieldEnum = {
   requiredSkills: 'requiredSkills',
   status: 'status',
   deadline: 'deadline',
+  selectedFreelancerId: 'selectedFreelancerId',
+  aiEmbedding: 'aiEmbedding',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -179,6 +198,7 @@ export const ApplicationScalarFieldEnum = {
   freelancerId: 'freelancerId',
   coverLetter: 'coverLetter',
   proposedBudget: 'proposedBudget',
+  aiScore: 'aiScore',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -215,6 +235,8 @@ export const EscrowScalarFieldEnum = {
   id: 'id',
   jobId: 'jobId',
   contractAddress: 'contractAddress',
+  transactionHash: 'transactionHash',
+  network: 'network',
   amount: 'amount',
   status: 'status',
   createdAt: 'createdAt',
@@ -231,10 +253,81 @@ export const TransactionScalarFieldEnum = {
   amount: 'amount',
   fromAddress: 'fromAddress',
   toAddress: 'toAddress',
+  blockNumber: 'blockNumber',
+  gasUsed: 'gasUsed',
+  network: 'network',
   createdAt: 'createdAt'
 } as const
 
 export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  isRead: 'isRead',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const MilestoneScalarFieldEnum = {
+  id: 'id',
+  jobId: 'jobId',
+  title: 'title',
+  description: 'description',
+  amount: 'amount',
+  isCompleted: 'isCompleted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MilestoneScalarFieldEnum = (typeof MilestoneScalarFieldEnum)[keyof typeof MilestoneScalarFieldEnum]
+
+
+export const AIRecommendationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  jobId: 'jobId',
+  freelancerId: 'freelancerId',
+  score: 'score',
+  reason: 'reason',
+  createdAt: 'createdAt'
+} as const
+
+export type AIRecommendationScalarFieldEnum = (typeof AIRecommendationScalarFieldEnum)[keyof typeof AIRecommendationScalarFieldEnum]
+
+
+export const WalletTransactionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  txHash: 'txHash',
+  amount: 'amount',
+  type: 'type',
+  network: 'network',
+  walletAddress: 'walletAddress',
+  createdAt: 'createdAt'
+} as const
+
+export type WalletTransactionScalarFieldEnum = (typeof WalletTransactionScalarFieldEnum)[keyof typeof WalletTransactionScalarFieldEnum]
+
+
+export const BlockchainEventScalarFieldEnum = {
+  id: 'id',
+  escrowId: 'escrowId',
+  eventName: 'eventName',
+  txHash: 'txHash',
+  blockNumber: 'blockNumber',
+  network: 'network',
+  payload: 'payload',
+  createdAt: 'createdAt'
+} as const
+
+export type BlockchainEventScalarFieldEnum = (typeof BlockchainEventScalarFieldEnum)[keyof typeof BlockchainEventScalarFieldEnum]
 
 
 export const SortOrder = {

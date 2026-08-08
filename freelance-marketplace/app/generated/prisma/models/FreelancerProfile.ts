@@ -28,10 +28,16 @@ export type AggregateFreelancerProfile = {
 
 export type FreelancerProfileAvgAggregateOutputType = {
   hourlyRate: number | null
+  yearsOfExperience: number | null
+  totalProjects: number | null
+  averageRating: number | null
 }
 
 export type FreelancerProfileSumAggregateOutputType = {
   hourlyRate: number | null
+  yearsOfExperience: number | null
+  totalProjects: number | null
+  averageRating: number | null
 }
 
 export type FreelancerProfileMinAggregateOutputType = {
@@ -39,12 +45,19 @@ export type FreelancerProfileMinAggregateOutputType = {
   userId: string | null
   title: string | null
   bio: string | null
+  fullName: string | null
+  country: string | null
+  isProfileCompleted: boolean | null
   experienceLevel: $Enums.ExperienceLevel | null
   hourlyRate: number | null
   location: string | null
   github: string | null
   linkedin: string | null
   portfolio: string | null
+  yearsOfExperience: number | null
+  totalProjects: number | null
+  averageRating: number | null
+  aiEmbedding: string | null
   isAvailable: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -55,12 +68,19 @@ export type FreelancerProfileMaxAggregateOutputType = {
   userId: string | null
   title: string | null
   bio: string | null
+  fullName: string | null
+  country: string | null
+  isProfileCompleted: boolean | null
   experienceLevel: $Enums.ExperienceLevel | null
   hourlyRate: number | null
   location: string | null
   github: string | null
   linkedin: string | null
   portfolio: string | null
+  yearsOfExperience: number | null
+  totalProjects: number | null
+  averageRating: number | null
+  aiEmbedding: string | null
   isAvailable: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -71,12 +91,19 @@ export type FreelancerProfileCountAggregateOutputType = {
   userId: number
   title: number
   bio: number
+  fullName: number
+  country: number
+  isProfileCompleted: number
   experienceLevel: number
   hourlyRate: number
   location: number
   github: number
   linkedin: number
   portfolio: number
+  yearsOfExperience: number
+  totalProjects: number
+  averageRating: number
+  aiEmbedding: number
   isAvailable: number
   createdAt: number
   updatedAt: number
@@ -86,10 +113,16 @@ export type FreelancerProfileCountAggregateOutputType = {
 
 export type FreelancerProfileAvgAggregateInputType = {
   hourlyRate?: true
+  yearsOfExperience?: true
+  totalProjects?: true
+  averageRating?: true
 }
 
 export type FreelancerProfileSumAggregateInputType = {
   hourlyRate?: true
+  yearsOfExperience?: true
+  totalProjects?: true
+  averageRating?: true
 }
 
 export type FreelancerProfileMinAggregateInputType = {
@@ -97,12 +130,19 @@ export type FreelancerProfileMinAggregateInputType = {
   userId?: true
   title?: true
   bio?: true
+  fullName?: true
+  country?: true
+  isProfileCompleted?: true
   experienceLevel?: true
   hourlyRate?: true
   location?: true
   github?: true
   linkedin?: true
   portfolio?: true
+  yearsOfExperience?: true
+  totalProjects?: true
+  averageRating?: true
+  aiEmbedding?: true
   isAvailable?: true
   createdAt?: true
   updatedAt?: true
@@ -113,12 +153,19 @@ export type FreelancerProfileMaxAggregateInputType = {
   userId?: true
   title?: true
   bio?: true
+  fullName?: true
+  country?: true
+  isProfileCompleted?: true
   experienceLevel?: true
   hourlyRate?: true
   location?: true
   github?: true
   linkedin?: true
   portfolio?: true
+  yearsOfExperience?: true
+  totalProjects?: true
+  averageRating?: true
+  aiEmbedding?: true
   isAvailable?: true
   createdAt?: true
   updatedAt?: true
@@ -129,12 +176,19 @@ export type FreelancerProfileCountAggregateInputType = {
   userId?: true
   title?: true
   bio?: true
+  fullName?: true
+  country?: true
+  isProfileCompleted?: true
   experienceLevel?: true
   hourlyRate?: true
   location?: true
   github?: true
   linkedin?: true
   portfolio?: true
+  yearsOfExperience?: true
+  totalProjects?: true
+  averageRating?: true
+  aiEmbedding?: true
   isAvailable?: true
   createdAt?: true
   updatedAt?: true
@@ -232,12 +286,19 @@ export type FreelancerProfileGroupByOutputType = {
   userId: string
   title: string
   bio: string
+  fullName: string | null
+  country: string | null
+  isProfileCompleted: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
   location: string | null
   github: string | null
   linkedin: string | null
   portfolio: string | null
+  yearsOfExperience: number
+  totalProjects: number
+  averageRating: number
+  aiEmbedding: string | null
   isAvailable: boolean
   createdAt: Date
   updatedAt: Date
@@ -271,12 +332,19 @@ export type FreelancerProfileWhereInput = {
   userId?: Prisma.StringFilter<"FreelancerProfile"> | string
   title?: Prisma.StringFilter<"FreelancerProfile"> | string
   bio?: Prisma.StringFilter<"FreelancerProfile"> | string
+  fullName?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
+  country?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
+  isProfileCompleted?: Prisma.BoolFilter<"FreelancerProfile"> | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFilter<"FreelancerProfile"> | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFilter<"FreelancerProfile"> | number
   location?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
   github?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
   linkedin?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
   portfolio?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
+  yearsOfExperience?: Prisma.IntFilter<"FreelancerProfile"> | number
+  totalProjects?: Prisma.IntFilter<"FreelancerProfile"> | number
+  averageRating?: Prisma.FloatFilter<"FreelancerProfile"> | number
+  aiEmbedding?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
   isAvailable?: Prisma.BoolFilter<"FreelancerProfile"> | boolean
   createdAt?: Prisma.DateTimeFilter<"FreelancerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FreelancerProfile"> | Date | string
@@ -292,12 +360,19 @@ export type FreelancerProfileOrderByWithRelationInput = {
   userId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   bio?: Prisma.SortOrder
+  fullName?: Prisma.SortOrderInput | Prisma.SortOrder
+  country?: Prisma.SortOrderInput | Prisma.SortOrder
+  isProfileCompleted?: Prisma.SortOrder
   experienceLevel?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
   github?: Prisma.SortOrderInput | Prisma.SortOrder
   linkedin?: Prisma.SortOrderInput | Prisma.SortOrder
   portfolio?: Prisma.SortOrderInput | Prisma.SortOrder
+  yearsOfExperience?: Prisma.SortOrder
+  totalProjects?: Prisma.SortOrder
+  averageRating?: Prisma.SortOrder
+  aiEmbedding?: Prisma.SortOrderInput | Prisma.SortOrder
   isAvailable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -316,12 +391,19 @@ export type FreelancerProfileWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.FreelancerProfileWhereInput | Prisma.FreelancerProfileWhereInput[]
   title?: Prisma.StringFilter<"FreelancerProfile"> | string
   bio?: Prisma.StringFilter<"FreelancerProfile"> | string
+  fullName?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
+  country?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
+  isProfileCompleted?: Prisma.BoolFilter<"FreelancerProfile"> | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFilter<"FreelancerProfile"> | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFilter<"FreelancerProfile"> | number
   location?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
   github?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
   linkedin?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
   portfolio?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
+  yearsOfExperience?: Prisma.IntFilter<"FreelancerProfile"> | number
+  totalProjects?: Prisma.IntFilter<"FreelancerProfile"> | number
+  averageRating?: Prisma.FloatFilter<"FreelancerProfile"> | number
+  aiEmbedding?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
   isAvailable?: Prisma.BoolFilter<"FreelancerProfile"> | boolean
   createdAt?: Prisma.DateTimeFilter<"FreelancerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FreelancerProfile"> | Date | string
@@ -337,12 +419,19 @@ export type FreelancerProfileOrderByWithAggregationInput = {
   userId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   bio?: Prisma.SortOrder
+  fullName?: Prisma.SortOrderInput | Prisma.SortOrder
+  country?: Prisma.SortOrderInput | Prisma.SortOrder
+  isProfileCompleted?: Prisma.SortOrder
   experienceLevel?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
   github?: Prisma.SortOrderInput | Prisma.SortOrder
   linkedin?: Prisma.SortOrderInput | Prisma.SortOrder
   portfolio?: Prisma.SortOrderInput | Prisma.SortOrder
+  yearsOfExperience?: Prisma.SortOrder
+  totalProjects?: Prisma.SortOrder
+  averageRating?: Prisma.SortOrder
+  aiEmbedding?: Prisma.SortOrderInput | Prisma.SortOrder
   isAvailable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -361,12 +450,19 @@ export type FreelancerProfileScalarWhereWithAggregatesInput = {
   userId?: Prisma.StringWithAggregatesFilter<"FreelancerProfile"> | string
   title?: Prisma.StringWithAggregatesFilter<"FreelancerProfile"> | string
   bio?: Prisma.StringWithAggregatesFilter<"FreelancerProfile"> | string
+  fullName?: Prisma.StringNullableWithAggregatesFilter<"FreelancerProfile"> | string | null
+  country?: Prisma.StringNullableWithAggregatesFilter<"FreelancerProfile"> | string | null
+  isProfileCompleted?: Prisma.BoolWithAggregatesFilter<"FreelancerProfile"> | boolean
   experienceLevel?: Prisma.EnumExperienceLevelWithAggregatesFilter<"FreelancerProfile"> | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatWithAggregatesFilter<"FreelancerProfile"> | number
   location?: Prisma.StringNullableWithAggregatesFilter<"FreelancerProfile"> | string | null
   github?: Prisma.StringNullableWithAggregatesFilter<"FreelancerProfile"> | string | null
   linkedin?: Prisma.StringNullableWithAggregatesFilter<"FreelancerProfile"> | string | null
   portfolio?: Prisma.StringNullableWithAggregatesFilter<"FreelancerProfile"> | string | null
+  yearsOfExperience?: Prisma.IntWithAggregatesFilter<"FreelancerProfile"> | number
+  totalProjects?: Prisma.IntWithAggregatesFilter<"FreelancerProfile"> | number
+  averageRating?: Prisma.FloatWithAggregatesFilter<"FreelancerProfile"> | number
+  aiEmbedding?: Prisma.StringNullableWithAggregatesFilter<"FreelancerProfile"> | string | null
   isAvailable?: Prisma.BoolWithAggregatesFilter<"FreelancerProfile"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"FreelancerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"FreelancerProfile"> | Date | string
@@ -376,12 +472,19 @@ export type FreelancerProfileCreateInput = {
   id?: string
   title: string
   bio: string
+  fullName?: string | null
+  country?: string | null
+  isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
   location?: string | null
   github?: string | null
   linkedin?: string | null
   portfolio?: string | null
+  yearsOfExperience?: number
+  totalProjects?: number
+  averageRating?: number
+  aiEmbedding?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -397,12 +500,19 @@ export type FreelancerProfileUncheckedCreateInput = {
   userId: string
   title: string
   bio: string
+  fullName?: string | null
+  country?: string | null
+  isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
   location?: string | null
   github?: string | null
   linkedin?: string | null
   portfolio?: string | null
+  yearsOfExperience?: number
+  totalProjects?: number
+  averageRating?: number
+  aiEmbedding?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -416,12 +526,19 @@ export type FreelancerProfileUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   github?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portfolio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsOfExperience?: Prisma.IntFieldUpdateOperationsInput | number
+  totalProjects?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  aiEmbedding?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -437,12 +554,19 @@ export type FreelancerProfileUncheckedUpdateInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   github?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portfolio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsOfExperience?: Prisma.IntFieldUpdateOperationsInput | number
+  totalProjects?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  aiEmbedding?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -457,12 +581,19 @@ export type FreelancerProfileCreateManyInput = {
   userId: string
   title: string
   bio: string
+  fullName?: string | null
+  country?: string | null
+  isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
   location?: string | null
   github?: string | null
   linkedin?: string | null
   portfolio?: string | null
+  yearsOfExperience?: number
+  totalProjects?: number
+  averageRating?: number
+  aiEmbedding?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -472,12 +603,19 @@ export type FreelancerProfileUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   github?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portfolio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsOfExperience?: Prisma.IntFieldUpdateOperationsInput | number
+  totalProjects?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  aiEmbedding?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -488,12 +626,19 @@ export type FreelancerProfileUncheckedUpdateManyInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   github?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portfolio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsOfExperience?: Prisma.IntFieldUpdateOperationsInput | number
+  totalProjects?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  aiEmbedding?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -509,12 +654,19 @@ export type FreelancerProfileCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   bio?: Prisma.SortOrder
+  fullName?: Prisma.SortOrder
+  country?: Prisma.SortOrder
+  isProfileCompleted?: Prisma.SortOrder
   experienceLevel?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
   location?: Prisma.SortOrder
   github?: Prisma.SortOrder
   linkedin?: Prisma.SortOrder
   portfolio?: Prisma.SortOrder
+  yearsOfExperience?: Prisma.SortOrder
+  totalProjects?: Prisma.SortOrder
+  averageRating?: Prisma.SortOrder
+  aiEmbedding?: Prisma.SortOrder
   isAvailable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -522,6 +674,9 @@ export type FreelancerProfileCountOrderByAggregateInput = {
 
 export type FreelancerProfileAvgOrderByAggregateInput = {
   hourlyRate?: Prisma.SortOrder
+  yearsOfExperience?: Prisma.SortOrder
+  totalProjects?: Prisma.SortOrder
+  averageRating?: Prisma.SortOrder
 }
 
 export type FreelancerProfileMaxOrderByAggregateInput = {
@@ -529,12 +684,19 @@ export type FreelancerProfileMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   bio?: Prisma.SortOrder
+  fullName?: Prisma.SortOrder
+  country?: Prisma.SortOrder
+  isProfileCompleted?: Prisma.SortOrder
   experienceLevel?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
   location?: Prisma.SortOrder
   github?: Prisma.SortOrder
   linkedin?: Prisma.SortOrder
   portfolio?: Prisma.SortOrder
+  yearsOfExperience?: Prisma.SortOrder
+  totalProjects?: Prisma.SortOrder
+  averageRating?: Prisma.SortOrder
+  aiEmbedding?: Prisma.SortOrder
   isAvailable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -545,12 +707,19 @@ export type FreelancerProfileMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   bio?: Prisma.SortOrder
+  fullName?: Prisma.SortOrder
+  country?: Prisma.SortOrder
+  isProfileCompleted?: Prisma.SortOrder
   experienceLevel?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
   location?: Prisma.SortOrder
   github?: Prisma.SortOrder
   linkedin?: Prisma.SortOrder
   portfolio?: Prisma.SortOrder
+  yearsOfExperience?: Prisma.SortOrder
+  totalProjects?: Prisma.SortOrder
+  averageRating?: Prisma.SortOrder
+  aiEmbedding?: Prisma.SortOrder
   isAvailable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -558,6 +727,9 @@ export type FreelancerProfileMinOrderByAggregateInput = {
 
 export type FreelancerProfileSumOrderByAggregateInput = {
   hourlyRate?: Prisma.SortOrder
+  yearsOfExperience?: Prisma.SortOrder
+  totalProjects?: Prisma.SortOrder
+  averageRating?: Prisma.SortOrder
 }
 
 export type FreelancerProfileScalarRelationFilter = {
@@ -609,12 +781,12 @@ export type FloatFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type FreelancerProfileCreateNestedOneWithoutSkillsInput = {
@@ -677,12 +849,19 @@ export type FreelancerProfileCreateWithoutUserInput = {
   id?: string
   title: string
   bio: string
+  fullName?: string | null
+  country?: string | null
+  isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
   location?: string | null
   github?: string | null
   linkedin?: string | null
   portfolio?: string | null
+  yearsOfExperience?: number
+  totalProjects?: number
+  averageRating?: number
+  aiEmbedding?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -696,12 +875,19 @@ export type FreelancerProfileUncheckedCreateWithoutUserInput = {
   id?: string
   title: string
   bio: string
+  fullName?: string | null
+  country?: string | null
+  isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
   location?: string | null
   github?: string | null
   linkedin?: string | null
   portfolio?: string | null
+  yearsOfExperience?: number
+  totalProjects?: number
+  averageRating?: number
+  aiEmbedding?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -731,12 +917,19 @@ export type FreelancerProfileUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   github?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portfolio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsOfExperience?: Prisma.IntFieldUpdateOperationsInput | number
+  totalProjects?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  aiEmbedding?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -750,12 +943,19 @@ export type FreelancerProfileUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   github?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portfolio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsOfExperience?: Prisma.IntFieldUpdateOperationsInput | number
+  totalProjects?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  aiEmbedding?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -769,12 +969,19 @@ export type FreelancerProfileCreateWithoutSkillsInput = {
   id?: string
   title: string
   bio: string
+  fullName?: string | null
+  country?: string | null
+  isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
   location?: string | null
   github?: string | null
   linkedin?: string | null
   portfolio?: string | null
+  yearsOfExperience?: number
+  totalProjects?: number
+  averageRating?: number
+  aiEmbedding?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -789,12 +996,19 @@ export type FreelancerProfileUncheckedCreateWithoutSkillsInput = {
   userId: string
   title: string
   bio: string
+  fullName?: string | null
+  country?: string | null
+  isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
   location?: string | null
   github?: string | null
   linkedin?: string | null
   portfolio?: string | null
+  yearsOfExperience?: number
+  totalProjects?: number
+  averageRating?: number
+  aiEmbedding?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -823,12 +1037,19 @@ export type FreelancerProfileUpdateWithoutSkillsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   github?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portfolio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsOfExperience?: Prisma.IntFieldUpdateOperationsInput | number
+  totalProjects?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  aiEmbedding?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -843,12 +1064,19 @@ export type FreelancerProfileUncheckedUpdateWithoutSkillsInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   github?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portfolio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsOfExperience?: Prisma.IntFieldUpdateOperationsInput | number
+  totalProjects?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  aiEmbedding?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -861,12 +1089,19 @@ export type FreelancerProfileCreateWithoutPortfoliosInput = {
   id?: string
   title: string
   bio: string
+  fullName?: string | null
+  country?: string | null
+  isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
   location?: string | null
   github?: string | null
   linkedin?: string | null
   portfolio?: string | null
+  yearsOfExperience?: number
+  totalProjects?: number
+  averageRating?: number
+  aiEmbedding?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -881,12 +1116,19 @@ export type FreelancerProfileUncheckedCreateWithoutPortfoliosInput = {
   userId: string
   title: string
   bio: string
+  fullName?: string | null
+  country?: string | null
+  isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
   location?: string | null
   github?: string | null
   linkedin?: string | null
   portfolio?: string | null
+  yearsOfExperience?: number
+  totalProjects?: number
+  averageRating?: number
+  aiEmbedding?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -915,12 +1157,19 @@ export type FreelancerProfileUpdateWithoutPortfoliosInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   github?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portfolio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsOfExperience?: Prisma.IntFieldUpdateOperationsInput | number
+  totalProjects?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  aiEmbedding?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -935,12 +1184,19 @@ export type FreelancerProfileUncheckedUpdateWithoutPortfoliosInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   github?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portfolio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsOfExperience?: Prisma.IntFieldUpdateOperationsInput | number
+  totalProjects?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  aiEmbedding?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -953,12 +1209,19 @@ export type FreelancerProfileCreateWithoutApplicationsInput = {
   id?: string
   title: string
   bio: string
+  fullName?: string | null
+  country?: string | null
+  isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
   location?: string | null
   github?: string | null
   linkedin?: string | null
   portfolio?: string | null
+  yearsOfExperience?: number
+  totalProjects?: number
+  averageRating?: number
+  aiEmbedding?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -973,12 +1236,19 @@ export type FreelancerProfileUncheckedCreateWithoutApplicationsInput = {
   userId: string
   title: string
   bio: string
+  fullName?: string | null
+  country?: string | null
+  isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
   location?: string | null
   github?: string | null
   linkedin?: string | null
   portfolio?: string | null
+  yearsOfExperience?: number
+  totalProjects?: number
+  averageRating?: number
+  aiEmbedding?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1007,12 +1277,19 @@ export type FreelancerProfileUpdateWithoutApplicationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   github?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portfolio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsOfExperience?: Prisma.IntFieldUpdateOperationsInput | number
+  totalProjects?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  aiEmbedding?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1027,12 +1304,19 @@ export type FreelancerProfileUncheckedUpdateWithoutApplicationsInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   github?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portfolio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsOfExperience?: Prisma.IntFieldUpdateOperationsInput | number
+  totalProjects?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  aiEmbedding?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1045,12 +1329,19 @@ export type FreelancerProfileCreateWithoutReviewsInput = {
   id?: string
   title: string
   bio: string
+  fullName?: string | null
+  country?: string | null
+  isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
   location?: string | null
   github?: string | null
   linkedin?: string | null
   portfolio?: string | null
+  yearsOfExperience?: number
+  totalProjects?: number
+  averageRating?: number
+  aiEmbedding?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1065,12 +1356,19 @@ export type FreelancerProfileUncheckedCreateWithoutReviewsInput = {
   userId: string
   title: string
   bio: string
+  fullName?: string | null
+  country?: string | null
+  isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
   location?: string | null
   github?: string | null
   linkedin?: string | null
   portfolio?: string | null
+  yearsOfExperience?: number
+  totalProjects?: number
+  averageRating?: number
+  aiEmbedding?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1099,12 +1397,19 @@ export type FreelancerProfileUpdateWithoutReviewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   github?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portfolio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsOfExperience?: Prisma.IntFieldUpdateOperationsInput | number
+  totalProjects?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  aiEmbedding?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1119,12 +1424,19 @@ export type FreelancerProfileUncheckedUpdateWithoutReviewsInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   github?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portfolio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsOfExperience?: Prisma.IntFieldUpdateOperationsInput | number
+  totalProjects?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  aiEmbedding?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1196,12 +1508,19 @@ export type FreelancerProfileSelect<ExtArgs extends runtime.Types.Extensions.Int
   userId?: boolean
   title?: boolean
   bio?: boolean
+  fullName?: boolean
+  country?: boolean
+  isProfileCompleted?: boolean
   experienceLevel?: boolean
   hourlyRate?: boolean
   location?: boolean
   github?: boolean
   linkedin?: boolean
   portfolio?: boolean
+  yearsOfExperience?: boolean
+  totalProjects?: boolean
+  averageRating?: boolean
+  aiEmbedding?: boolean
   isAvailable?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1218,12 +1537,19 @@ export type FreelancerProfileSelectCreateManyAndReturn<ExtArgs extends runtime.T
   userId?: boolean
   title?: boolean
   bio?: boolean
+  fullName?: boolean
+  country?: boolean
+  isProfileCompleted?: boolean
   experienceLevel?: boolean
   hourlyRate?: boolean
   location?: boolean
   github?: boolean
   linkedin?: boolean
   portfolio?: boolean
+  yearsOfExperience?: boolean
+  totalProjects?: boolean
+  averageRating?: boolean
+  aiEmbedding?: boolean
   isAvailable?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1235,12 +1561,19 @@ export type FreelancerProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   userId?: boolean
   title?: boolean
   bio?: boolean
+  fullName?: boolean
+  country?: boolean
+  isProfileCompleted?: boolean
   experienceLevel?: boolean
   hourlyRate?: boolean
   location?: boolean
   github?: boolean
   linkedin?: boolean
   portfolio?: boolean
+  yearsOfExperience?: boolean
+  totalProjects?: boolean
+  averageRating?: boolean
+  aiEmbedding?: boolean
   isAvailable?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1252,18 +1585,25 @@ export type FreelancerProfileSelectScalar = {
   userId?: boolean
   title?: boolean
   bio?: boolean
+  fullName?: boolean
+  country?: boolean
+  isProfileCompleted?: boolean
   experienceLevel?: boolean
   hourlyRate?: boolean
   location?: boolean
   github?: boolean
   linkedin?: boolean
   portfolio?: boolean
+  yearsOfExperience?: boolean
+  totalProjects?: boolean
+  averageRating?: boolean
+  aiEmbedding?: boolean
   isAvailable?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type FreelancerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "title" | "bio" | "experienceLevel" | "hourlyRate" | "location" | "github" | "linkedin" | "portfolio" | "isAvailable" | "createdAt" | "updatedAt", ExtArgs["result"]["freelancerProfile"]>
+export type FreelancerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "title" | "bio" | "fullName" | "country" | "isProfileCompleted" | "experienceLevel" | "hourlyRate" | "location" | "github" | "linkedin" | "portfolio" | "yearsOfExperience" | "totalProjects" | "averageRating" | "aiEmbedding" | "isAvailable" | "createdAt" | "updatedAt", ExtArgs["result"]["freelancerProfile"]>
 export type FreelancerProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   skills?: boolean | Prisma.FreelancerProfile$skillsArgs<ExtArgs>
@@ -1293,12 +1633,19 @@ export type $FreelancerProfilePayload<ExtArgs extends runtime.Types.Extensions.I
     userId: string
     title: string
     bio: string
+    fullName: string | null
+    country: string | null
+    isProfileCompleted: boolean
     experienceLevel: $Enums.ExperienceLevel
     hourlyRate: number
     location: string | null
     github: string | null
     linkedin: string | null
     portfolio: string | null
+    yearsOfExperience: number
+    totalProjects: number
+    averageRating: number
+    aiEmbedding: string | null
     isAvailable: boolean
     createdAt: Date
     updatedAt: Date
@@ -1734,12 +2081,19 @@ export interface FreelancerProfileFieldRefs {
   readonly userId: Prisma.FieldRef<"FreelancerProfile", 'String'>
   readonly title: Prisma.FieldRef<"FreelancerProfile", 'String'>
   readonly bio: Prisma.FieldRef<"FreelancerProfile", 'String'>
+  readonly fullName: Prisma.FieldRef<"FreelancerProfile", 'String'>
+  readonly country: Prisma.FieldRef<"FreelancerProfile", 'String'>
+  readonly isProfileCompleted: Prisma.FieldRef<"FreelancerProfile", 'Boolean'>
   readonly experienceLevel: Prisma.FieldRef<"FreelancerProfile", 'ExperienceLevel'>
   readonly hourlyRate: Prisma.FieldRef<"FreelancerProfile", 'Float'>
   readonly location: Prisma.FieldRef<"FreelancerProfile", 'String'>
   readonly github: Prisma.FieldRef<"FreelancerProfile", 'String'>
   readonly linkedin: Prisma.FieldRef<"FreelancerProfile", 'String'>
   readonly portfolio: Prisma.FieldRef<"FreelancerProfile", 'String'>
+  readonly yearsOfExperience: Prisma.FieldRef<"FreelancerProfile", 'Int'>
+  readonly totalProjects: Prisma.FieldRef<"FreelancerProfile", 'Int'>
+  readonly averageRating: Prisma.FieldRef<"FreelancerProfile", 'Float'>
+  readonly aiEmbedding: Prisma.FieldRef<"FreelancerProfile", 'String'>
   readonly isAvailable: Prisma.FieldRef<"FreelancerProfile", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"FreelancerProfile", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"FreelancerProfile", 'DateTime'>
