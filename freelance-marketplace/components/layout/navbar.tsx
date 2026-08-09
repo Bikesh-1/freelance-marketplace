@@ -13,7 +13,7 @@ export default function Navbar() {
                 </Link>
                 <nav className="flex items-center gap-4">
                     <Link href="/jobs" className="text-slate-300 hover:text-white">
-                        Jobs
+                        Find Jobs
                     </Link>
                     <Link href="/freelancers" className="text-slate-300 hover:text-white" > Freelancers
                     </Link>

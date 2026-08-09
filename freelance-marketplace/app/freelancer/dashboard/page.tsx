@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import Navbar from "@/components/layout/navbar";
 import Card from "@/components/ui/card";
 import Button from "@/components/ui/button";
+import ConnectWalletButton from "@/components/wallet/ConnectWalletButton";
 
 export default async function FreelancerDashboard() {
   const session = await getServerSession(authOptions);
@@ -39,7 +40,15 @@ export default async function FreelancerDashboard() {
         <h1 className="text-4xl font-bold mb-8">
           Freelancer Dashboard
         </h1>
+        <div className="p-10">
+          <div className="flex justify-between items-center">
+            <h1 className="text-3xl font-bold">
+              Client Dashboard
+            </h1>
 
+            <ConnectWalletButton />
+          </div>
+        </div>
         <p className="text-slate-400 mb-10">
           Welcome, {profile.fullName || session.user.name}
         </p>

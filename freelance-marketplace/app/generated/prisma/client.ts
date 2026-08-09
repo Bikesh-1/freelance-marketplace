@@ -126,3 +126,13 @@ export type WalletTransaction = Prisma.WalletTransactionModel
  * 
  */
 export type BlockchainEvent = Prisma.BlockchainEventModel
+/**
+ * Model Experience
+ * 
+ */
+export type Experience = Prisma.ExperienceModel
+/**
+ * Model JobSkill
+ * 
+ */
+export type JobSkill = Prisma.JobSkillModel

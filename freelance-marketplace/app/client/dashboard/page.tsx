@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import Navbar from "@/components/layout/navbar";
 import Card from "@/components/ui/card";
 import Button from "@/components/ui/button";
+import ConnectWalletButton from "@/components/wallet/ConnectWalletButton";
 
 export default async function ClientDashboard() {
   const session = await getServerSession(authOptions);
@@ -43,7 +44,15 @@ export default async function ClientDashboard() {
         <p className="text-slate-400 mb-10">
           Welcome, {profile.companyName}
         </p>
+        <div className="p-10">
+          <div className="flex justify-between items-center">
+            <h1 className="text-3xl font-bold">
+              Client Dashboard
+            </h1>
 
+            <ConnectWalletButton />
+          </div>
+        </div>
         <div className="grid md:grid-cols-3 gap-6">
           <Card>
             <h3 className="text-xl font-semibold mb-2">

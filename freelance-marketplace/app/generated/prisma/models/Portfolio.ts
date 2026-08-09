@@ -32,6 +32,7 @@ export type PortfolioMinAggregateOutputType = {
   projectUrl: string | null
   githubUrl: string | null
   imageUrl: string | null
+  liveUrl: string | null
   createdAt: Date | null
 }
 
@@ -43,6 +44,7 @@ export type PortfolioMaxAggregateOutputType = {
   projectUrl: string | null
   githubUrl: string | null
   imageUrl: string | null
+  liveUrl: string | null
   createdAt: Date | null
 }
 
@@ -54,6 +56,7 @@ export type PortfolioCountAggregateOutputType = {
   projectUrl: number
   githubUrl: number
   imageUrl: number
+  liveUrl: number
   createdAt: number
   _all: number
 }
@@ -67,6 +70,7 @@ export type PortfolioMinAggregateInputType = {
   projectUrl?: true
   githubUrl?: true
   imageUrl?: true
+  liveUrl?: true
   createdAt?: true
 }
 
@@ -78,6 +82,7 @@ export type PortfolioMaxAggregateInputType = {
   projectUrl?: true
   githubUrl?: true
   imageUrl?: true
+  liveUrl?: true
   createdAt?: true
 }
 
@@ -89,6 +94,7 @@ export type PortfolioCountAggregateInputType = {
   projectUrl?: true
   githubUrl?: true
   imageUrl?: true
+  liveUrl?: true
   createdAt?: true
   _all?: true
 }
@@ -173,6 +179,7 @@ export type PortfolioGroupByOutputType = {
   projectUrl: string | null
   githubUrl: string | null
   imageUrl: string | null
+  liveUrl: string | null
   createdAt: Date
   _count: PortfolioCountAggregateOutputType | null
   _min: PortfolioMinAggregateOutputType | null
@@ -205,6 +212,7 @@ export type PortfolioWhereInput = {
   projectUrl?: Prisma.StringNullableFilter<"Portfolio"> | string | null
   githubUrl?: Prisma.StringNullableFilter<"Portfolio"> | string | null
   imageUrl?: Prisma.StringNullableFilter<"Portfolio"> | string | null
+  liveUrl?: Prisma.StringNullableFilter<"Portfolio"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Portfolio"> | Date | string
   freelancer?: Prisma.XOR<Prisma.FreelancerProfileScalarRelationFilter, Prisma.FreelancerProfileWhereInput>
 }
@@ -217,6 +225,7 @@ export type PortfolioOrderByWithRelationInput = {
   projectUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   githubUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  liveUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   freelancer?: Prisma.FreelancerProfileOrderByWithRelationInput
 }
@@ -232,6 +241,7 @@ export type PortfolioWhereUniqueInput = Prisma.AtLeast<{
   projectUrl?: Prisma.StringNullableFilter<"Portfolio"> | string | null
   githubUrl?: Prisma.StringNullableFilter<"Portfolio"> | string | null
   imageUrl?: Prisma.StringNullableFilter<"Portfolio"> | string | null
+  liveUrl?: Prisma.StringNullableFilter<"Portfolio"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Portfolio"> | Date | string
   freelancer?: Prisma.XOR<Prisma.FreelancerProfileScalarRelationFilter, Prisma.FreelancerProfileWhereInput>
 }, "id">
@@ -244,6 +254,7 @@ export type PortfolioOrderByWithAggregationInput = {
   projectUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   githubUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  liveUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.PortfolioCountOrderByAggregateInput
   _max?: Prisma.PortfolioMaxOrderByAggregateInput
@@ -261,6 +272,7 @@ export type PortfolioScalarWhereWithAggregatesInput = {
   projectUrl?: Prisma.StringNullableWithAggregatesFilter<"Portfolio"> | string | null
   githubUrl?: Prisma.StringNullableWithAggregatesFilter<"Portfolio"> | string | null
   imageUrl?: Prisma.StringNullableWithAggregatesFilter<"Portfolio"> | string | null
+  liveUrl?: Prisma.StringNullableWithAggregatesFilter<"Portfolio"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Portfolio"> | Date | string
 }
 
@@ -271,6 +283,7 @@ export type PortfolioCreateInput = {
   projectUrl?: string | null
   githubUrl?: string | null
   imageUrl?: string | null
+  liveUrl?: string | null
   createdAt?: Date | string
   freelancer: Prisma.FreelancerProfileCreateNestedOneWithoutPortfoliosInput
 }
@@ -283,6 +296,7 @@ export type PortfolioUncheckedCreateInput = {
   projectUrl?: string | null
   githubUrl?: string | null
   imageUrl?: string | null
+  liveUrl?: string | null
   createdAt?: Date | string
 }
 
@@ -293,6 +307,7 @@ export type PortfolioUpdateInput = {
   projectUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  liveUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   freelancer?: Prisma.FreelancerProfileUpdateOneRequiredWithoutPortfoliosNestedInput
 }
@@ -305,6 +320,7 @@ export type PortfolioUncheckedUpdateInput = {
   projectUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  liveUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -316,6 +332,7 @@ export type PortfolioCreateManyInput = {
   projectUrl?: string | null
   githubUrl?: string | null
   imageUrl?: string | null
+  liveUrl?: string | null
   createdAt?: Date | string
 }
 
@@ -326,6 +343,7 @@ export type PortfolioUpdateManyMutationInput = {
   projectUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  liveUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -337,6 +355,7 @@ export type PortfolioUncheckedUpdateManyInput = {
   projectUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  liveUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -358,6 +377,7 @@ export type PortfolioCountOrderByAggregateInput = {
   projectUrl?: Prisma.SortOrder
   githubUrl?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
+  liveUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -369,6 +389,7 @@ export type PortfolioMaxOrderByAggregateInput = {
   projectUrl?: Prisma.SortOrder
   githubUrl?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
+  liveUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -380,6 +401,7 @@ export type PortfolioMinOrderByAggregateInput = {
   projectUrl?: Prisma.SortOrder
   githubUrl?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
+  liveUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -432,6 +454,7 @@ export type PortfolioCreateWithoutFreelancerInput = {
   projectUrl?: string | null
   githubUrl?: string | null
   imageUrl?: string | null
+  liveUrl?: string | null
   createdAt?: Date | string
 }
 
@@ -442,6 +465,7 @@ export type PortfolioUncheckedCreateWithoutFreelancerInput = {
   projectUrl?: string | null
   githubUrl?: string | null
   imageUrl?: string | null
+  liveUrl?: string | null
   createdAt?: Date | string
 }
 
@@ -482,6 +506,7 @@ export type PortfolioScalarWhereInput = {
   projectUrl?: Prisma.StringNullableFilter<"Portfolio"> | string | null
   githubUrl?: Prisma.StringNullableFilter<"Portfolio"> | string | null
   imageUrl?: Prisma.StringNullableFilter<"Portfolio"> | string | null
+  liveUrl?: Prisma.StringNullableFilter<"Portfolio"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Portfolio"> | Date | string
 }
 
@@ -492,6 +517,7 @@ export type PortfolioCreateManyFreelancerInput = {
   projectUrl?: string | null
   githubUrl?: string | null
   imageUrl?: string | null
+  liveUrl?: string | null
   createdAt?: Date | string
 }
 
@@ -502,6 +528,7 @@ export type PortfolioUpdateWithoutFreelancerInput = {
   projectUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  liveUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -512,6 +539,7 @@ export type PortfolioUncheckedUpdateWithoutFreelancerInput = {
   projectUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  liveUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -522,6 +550,7 @@ export type PortfolioUncheckedUpdateManyWithoutFreelancerInput = {
   projectUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  liveUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -535,6 +564,7 @@ export type PortfolioSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   projectUrl?: boolean
   githubUrl?: boolean
   imageUrl?: boolean
+  liveUrl?: boolean
   createdAt?: boolean
   freelancer?: boolean | Prisma.FreelancerProfileDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["portfolio"]>
@@ -547,6 +577,7 @@ export type PortfolioSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   projectUrl?: boolean
   githubUrl?: boolean
   imageUrl?: boolean
+  liveUrl?: boolean
   createdAt?: boolean
   freelancer?: boolean | Prisma.FreelancerProfileDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["portfolio"]>
@@ -559,6 +590,7 @@ export type PortfolioSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   projectUrl?: boolean
   githubUrl?: boolean
   imageUrl?: boolean
+  liveUrl?: boolean
   createdAt?: boolean
   freelancer?: boolean | Prisma.FreelancerProfileDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["portfolio"]>
@@ -571,10 +603,11 @@ export type PortfolioSelectScalar = {
   projectUrl?: boolean
   githubUrl?: boolean
   imageUrl?: boolean
+  liveUrl?: boolean
   createdAt?: boolean
 }
 
-export type PortfolioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "freelancerId" | "title" | "description" | "projectUrl" | "githubUrl" | "imageUrl" | "createdAt", ExtArgs["result"]["portfolio"]>
+export type PortfolioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "freelancerId" | "title" | "description" | "projectUrl" | "githubUrl" | "imageUrl" | "liveUrl" | "createdAt", ExtArgs["result"]["portfolio"]>
 export type PortfolioInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   freelancer?: boolean | Prisma.FreelancerProfileDefaultArgs<ExtArgs>
 }
@@ -598,6 +631,7 @@ export type $PortfolioPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     projectUrl: string | null
     githubUrl: string | null
     imageUrl: string | null
+    liveUrl: string | null
     createdAt: Date
   }, ExtArgs["result"]["portfolio"]>
   composites: {}
@@ -1030,6 +1064,7 @@ export interface PortfolioFieldRefs {
   readonly projectUrl: Prisma.FieldRef<"Portfolio", 'String'>
   readonly githubUrl: Prisma.FieldRef<"Portfolio", 'String'>
   readonly imageUrl: Prisma.FieldRef<"Portfolio", 'String'>
+  readonly liveUrl: Prisma.FieldRef<"Portfolio", 'String'>
   readonly createdAt: Prisma.FieldRef<"Portfolio", 'DateTime'>
 }
     

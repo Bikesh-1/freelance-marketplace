@@ -67,7 +67,9 @@ export const ModelName = {
   Milestone: 'Milestone',
   AIRecommendation: 'AIRecommendation',
   WalletTransaction: 'WalletTransaction',
-  BlockchainEvent: 'BlockchainEvent'
+  BlockchainEvent: 'BlockchainEvent',
+  Experience: 'Experience',
+  JobSkill: 'JobSkill'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -166,6 +168,8 @@ export const JobScalarFieldEnum = {
   title: 'title',
   description: 'description',
   budget: 'budget',
+  jobType: 'jobType',
+  duration: 'duration',
   requiredSkills: 'requiredSkills',
   status: 'status',
   deadline: 'deadline',
@@ -186,6 +190,7 @@ export const PortfolioScalarFieldEnum = {
   projectUrl: 'projectUrl',
   githubUrl: 'githubUrl',
   imageUrl: 'imageUrl',
+  liveUrl: 'liveUrl',
   createdAt: 'createdAt'
 } as const
 
@@ -328,6 +333,29 @@ export const BlockchainEventScalarFieldEnum = {
 } as const
 
 export type BlockchainEventScalarFieldEnum = (typeof BlockchainEventScalarFieldEnum)[keyof typeof BlockchainEventScalarFieldEnum]
+
+
+export const ExperienceScalarFieldEnum = {
+  id: 'id',
+  companyName: 'companyName',
+  role: 'role',
+  description: 'description',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  createdAt: 'createdAt',
+  freelancerId: 'freelancerId'
+} as const
+
+export type ExperienceScalarFieldEnum = (typeof ExperienceScalarFieldEnum)[keyof typeof ExperienceScalarFieldEnum]
+
+
+export const JobSkillScalarFieldEnum = {
+  id: 'id',
+  jobId: 'jobId',
+  skillId: 'skillId'
+} as const
+
+export type JobSkillScalarFieldEnum = (typeof JobSkillScalarFieldEnum)[keyof typeof JobSkillScalarFieldEnum]
 
 
 export const SortOrder = {

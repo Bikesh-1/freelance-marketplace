@@ -17,6 +17,14 @@ export const Role = {
 export type Role = (typeof Role)[keyof typeof Role]
 
 
+export const JobType = {
+  FIXED: 'FIXED',
+  HOURLY: 'HOURLY'
+} as const
+
+export type JobType = (typeof JobType)[keyof typeof JobType]
+
+
 export const ExperienceLevel = {
   BEGINNER: 'BEGINNER',
   INTERMEDIATE: 'INTERMEDIATE',
