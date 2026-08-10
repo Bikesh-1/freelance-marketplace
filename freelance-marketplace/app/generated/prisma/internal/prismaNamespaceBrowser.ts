@@ -69,7 +69,8 @@ export const ModelName = {
   WalletTransaction: 'WalletTransaction',
   BlockchainEvent: 'BlockchainEvent',
   Experience: 'Experience',
-  JobSkill: 'JobSkill'
+  JobSkill: 'JobSkill',
+  Dispute: 'Dispute'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -286,7 +287,10 @@ export const MilestoneScalarFieldEnum = {
   title: 'title',
   description: 'description',
   amount: 'amount',
-  isCompleted: 'isCompleted',
+  dueDate: 'dueDate',
+  status: 'status',
+  escrowId: 'escrowId',
+  order: 'order',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -356,6 +360,22 @@ export const JobSkillScalarFieldEnum = {
 } as const
 
 export type JobSkillScalarFieldEnum = (typeof JobSkillScalarFieldEnum)[keyof typeof JobSkillScalarFieldEnum]
+
+
+export const DisputeScalarFieldEnum = {
+  id: 'id',
+  milestoneId: 'milestoneId',
+  openedById: 'openedById',
+  reason: 'reason',
+  evidence: 'evidence',
+  status: 'status',
+  adminNotes: 'adminNotes',
+  resolvedAt: 'resolvedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DisputeScalarFieldEnum = (typeof DisputeScalarFieldEnum)[keyof typeof DisputeScalarFieldEnum]
 
 
 export const SortOrder = {

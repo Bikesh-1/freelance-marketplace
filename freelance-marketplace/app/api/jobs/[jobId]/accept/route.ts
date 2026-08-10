@@ -92,7 +92,17 @@ export async function POST(
           application.freelancerId,
       },
     });
-
+    await prisma.escrow.create({
+  data: {
+    jobId: params.jobId,
+    contractAddress:
+      process.env
+        .NEXT_PUBLIC_ESCROW_CONTRACT_ADDRESS || "",
+    amount: job.budget,
+    network: "hardhat-local",
+    status: "CREATED",
+  },
+});
     return NextResponse.json({
       success: true,
       message: "Freelancer selected successfully",

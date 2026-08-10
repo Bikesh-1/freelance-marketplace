@@ -221,6 +221,7 @@ export type UserWhereInput = {
   notifications?: Prisma.NotificationListRelationFilter
   walletTransactions?: Prisma.WalletTransactionListRelationFilter
   recommendations?: Prisma.AIRecommendationListRelationFilter
+  openedDisputes?: Prisma.DisputeListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -240,6 +241,7 @@ export type UserOrderByWithRelationInput = {
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   walletTransactions?: Prisma.WalletTransactionOrderByRelationAggregateInput
   recommendations?: Prisma.AIRecommendationOrderByRelationAggregateInput
+  openedDisputes?: Prisma.DisputeOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -262,6 +264,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   notifications?: Prisma.NotificationListRelationFilter
   walletTransactions?: Prisma.WalletTransactionListRelationFilter
   recommendations?: Prisma.AIRecommendationListRelationFilter
+  openedDisputes?: Prisma.DisputeListRelationFilter
 }, "id" | "email" | "walletAddress">
 
 export type UserOrderByWithAggregationInput = {
@@ -311,6 +314,7 @@ export type UserCreateInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   walletTransactions?: Prisma.WalletTransactionCreateNestedManyWithoutUserInput
   recommendations?: Prisma.AIRecommendationCreateNestedManyWithoutUserInput
+  openedDisputes?: Prisma.DisputeCreateNestedManyWithoutOpenedByInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -330,6 +334,7 @@ export type UserUncheckedCreateInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   walletTransactions?: Prisma.WalletTransactionUncheckedCreateNestedManyWithoutUserInput
   recommendations?: Prisma.AIRecommendationUncheckedCreateNestedManyWithoutUserInput
+  openedDisputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutOpenedByInput
 }
 
 export type UserUpdateInput = {
@@ -349,6 +354,7 @@ export type UserUpdateInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   walletTransactions?: Prisma.WalletTransactionUpdateManyWithoutUserNestedInput
   recommendations?: Prisma.AIRecommendationUpdateManyWithoutUserNestedInput
+  openedDisputes?: Prisma.DisputeUpdateManyWithoutOpenedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -368,6 +374,7 @@ export type UserUncheckedUpdateInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   walletTransactions?: Prisma.WalletTransactionUncheckedUpdateManyWithoutUserNestedInput
   recommendations?: Prisma.AIRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  openedDisputes?: Prisma.DisputeUncheckedUpdateManyWithoutOpenedByNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -565,6 +572,20 @@ export type UserUpdateOneRequiredWithoutWalletTransactionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWalletTransactionsInput, Prisma.UserUpdateWithoutWalletTransactionsInput>, Prisma.UserUncheckedUpdateWithoutWalletTransactionsInput>
 }
 
+export type UserCreateNestedOneWithoutOpenedDisputesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOpenedDisputesInput, Prisma.UserUncheckedCreateWithoutOpenedDisputesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOpenedDisputesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutOpenedDisputesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOpenedDisputesInput, Prisma.UserUncheckedCreateWithoutOpenedDisputesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOpenedDisputesInput
+  upsert?: Prisma.UserUpsertWithoutOpenedDisputesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOpenedDisputesInput, Prisma.UserUpdateWithoutOpenedDisputesInput>, Prisma.UserUncheckedUpdateWithoutOpenedDisputesInput>
+}
+
 export type UserCreateWithoutFreelancerProfileInput = {
   id?: string
   name: string
@@ -581,6 +602,7 @@ export type UserCreateWithoutFreelancerProfileInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   walletTransactions?: Prisma.WalletTransactionCreateNestedManyWithoutUserInput
   recommendations?: Prisma.AIRecommendationCreateNestedManyWithoutUserInput
+  openedDisputes?: Prisma.DisputeCreateNestedManyWithoutOpenedByInput
 }
 
 export type UserUncheckedCreateWithoutFreelancerProfileInput = {
@@ -599,6 +621,7 @@ export type UserUncheckedCreateWithoutFreelancerProfileInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   walletTransactions?: Prisma.WalletTransactionUncheckedCreateNestedManyWithoutUserInput
   recommendations?: Prisma.AIRecommendationUncheckedCreateNestedManyWithoutUserInput
+  openedDisputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutOpenedByInput
 }
 
 export type UserCreateOrConnectWithoutFreelancerProfileInput = {
@@ -633,6 +656,7 @@ export type UserUpdateWithoutFreelancerProfileInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   walletTransactions?: Prisma.WalletTransactionUpdateManyWithoutUserNestedInput
   recommendations?: Prisma.AIRecommendationUpdateManyWithoutUserNestedInput
+  openedDisputes?: Prisma.DisputeUpdateManyWithoutOpenedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFreelancerProfileInput = {
@@ -651,6 +675,7 @@ export type UserUncheckedUpdateWithoutFreelancerProfileInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   walletTransactions?: Prisma.WalletTransactionUncheckedUpdateManyWithoutUserNestedInput
   recommendations?: Prisma.AIRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  openedDisputes?: Prisma.DisputeUncheckedUpdateManyWithoutOpenedByNestedInput
 }
 
 export type UserCreateWithoutClientProfileInput = {
@@ -669,6 +694,7 @@ export type UserCreateWithoutClientProfileInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   walletTransactions?: Prisma.WalletTransactionCreateNestedManyWithoutUserInput
   recommendations?: Prisma.AIRecommendationCreateNestedManyWithoutUserInput
+  openedDisputes?: Prisma.DisputeCreateNestedManyWithoutOpenedByInput
 }
 
 export type UserUncheckedCreateWithoutClientProfileInput = {
@@ -687,6 +713,7 @@ export type UserUncheckedCreateWithoutClientProfileInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   walletTransactions?: Prisma.WalletTransactionUncheckedCreateNestedManyWithoutUserInput
   recommendations?: Prisma.AIRecommendationUncheckedCreateNestedManyWithoutUserInput
+  openedDisputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutOpenedByInput
 }
 
 export type UserCreateOrConnectWithoutClientProfileInput = {
@@ -721,6 +748,7 @@ export type UserUpdateWithoutClientProfileInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   walletTransactions?: Prisma.WalletTransactionUpdateManyWithoutUserNestedInput
   recommendations?: Prisma.AIRecommendationUpdateManyWithoutUserNestedInput
+  openedDisputes?: Prisma.DisputeUpdateManyWithoutOpenedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutClientProfileInput = {
@@ -739,6 +767,7 @@ export type UserUncheckedUpdateWithoutClientProfileInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   walletTransactions?: Prisma.WalletTransactionUncheckedUpdateManyWithoutUserNestedInput
   recommendations?: Prisma.AIRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  openedDisputes?: Prisma.DisputeUncheckedUpdateManyWithoutOpenedByNestedInput
 }
 
 export type UserCreateWithoutSentMessagesInput = {
@@ -757,6 +786,7 @@ export type UserCreateWithoutSentMessagesInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   walletTransactions?: Prisma.WalletTransactionCreateNestedManyWithoutUserInput
   recommendations?: Prisma.AIRecommendationCreateNestedManyWithoutUserInput
+  openedDisputes?: Prisma.DisputeCreateNestedManyWithoutOpenedByInput
 }
 
 export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -775,6 +805,7 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   walletTransactions?: Prisma.WalletTransactionUncheckedCreateNestedManyWithoutUserInput
   recommendations?: Prisma.AIRecommendationUncheckedCreateNestedManyWithoutUserInput
+  openedDisputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutOpenedByInput
 }
 
 export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -798,6 +829,7 @@ export type UserCreateWithoutReceivedMessagesInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   walletTransactions?: Prisma.WalletTransactionCreateNestedManyWithoutUserInput
   recommendations?: Prisma.AIRecommendationCreateNestedManyWithoutUserInput
+  openedDisputes?: Prisma.DisputeCreateNestedManyWithoutOpenedByInput
 }
 
 export type UserUncheckedCreateWithoutReceivedMessagesInput = {
@@ -816,6 +848,7 @@ export type UserUncheckedCreateWithoutReceivedMessagesInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   walletTransactions?: Prisma.WalletTransactionUncheckedCreateNestedManyWithoutUserInput
   recommendations?: Prisma.AIRecommendationUncheckedCreateNestedManyWithoutUserInput
+  openedDisputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutOpenedByInput
 }
 
 export type UserCreateOrConnectWithoutReceivedMessagesInput = {
@@ -850,6 +883,7 @@ export type UserUpdateWithoutSentMessagesInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   walletTransactions?: Prisma.WalletTransactionUpdateManyWithoutUserNestedInput
   recommendations?: Prisma.AIRecommendationUpdateManyWithoutUserNestedInput
+  openedDisputes?: Prisma.DisputeUpdateManyWithoutOpenedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -868,6 +902,7 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   walletTransactions?: Prisma.WalletTransactionUncheckedUpdateManyWithoutUserNestedInput
   recommendations?: Prisma.AIRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  openedDisputes?: Prisma.DisputeUncheckedUpdateManyWithoutOpenedByNestedInput
 }
 
 export type UserUpsertWithoutReceivedMessagesInput = {
@@ -897,6 +932,7 @@ export type UserUpdateWithoutReceivedMessagesInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   walletTransactions?: Prisma.WalletTransactionUpdateManyWithoutUserNestedInput
   recommendations?: Prisma.AIRecommendationUpdateManyWithoutUserNestedInput
+  openedDisputes?: Prisma.DisputeUpdateManyWithoutOpenedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReceivedMessagesInput = {
@@ -915,6 +951,7 @@ export type UserUncheckedUpdateWithoutReceivedMessagesInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   walletTransactions?: Prisma.WalletTransactionUncheckedUpdateManyWithoutUserNestedInput
   recommendations?: Prisma.AIRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  openedDisputes?: Prisma.DisputeUncheckedUpdateManyWithoutOpenedByNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -933,6 +970,7 @@ export type UserCreateWithoutNotificationsInput = {
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   walletTransactions?: Prisma.WalletTransactionCreateNestedManyWithoutUserInput
   recommendations?: Prisma.AIRecommendationCreateNestedManyWithoutUserInput
+  openedDisputes?: Prisma.DisputeCreateNestedManyWithoutOpenedByInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -951,6 +989,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   walletTransactions?: Prisma.WalletTransactionUncheckedCreateNestedManyWithoutUserInput
   recommendations?: Prisma.AIRecommendationUncheckedCreateNestedManyWithoutUserInput
+  openedDisputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutOpenedByInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -985,6 +1024,7 @@ export type UserUpdateWithoutNotificationsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   walletTransactions?: Prisma.WalletTransactionUpdateManyWithoutUserNestedInput
   recommendations?: Prisma.AIRecommendationUpdateManyWithoutUserNestedInput
+  openedDisputes?: Prisma.DisputeUpdateManyWithoutOpenedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -1003,6 +1043,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   walletTransactions?: Prisma.WalletTransactionUncheckedUpdateManyWithoutUserNestedInput
   recommendations?: Prisma.AIRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  openedDisputes?: Prisma.DisputeUncheckedUpdateManyWithoutOpenedByNestedInput
 }
 
 export type UserCreateWithoutRecommendationsInput = {
@@ -1021,6 +1062,7 @@ export type UserCreateWithoutRecommendationsInput = {
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   walletTransactions?: Prisma.WalletTransactionCreateNestedManyWithoutUserInput
+  openedDisputes?: Prisma.DisputeCreateNestedManyWithoutOpenedByInput
 }
 
 export type UserUncheckedCreateWithoutRecommendationsInput = {
@@ -1039,6 +1081,7 @@ export type UserUncheckedCreateWithoutRecommendationsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   walletTransactions?: Prisma.WalletTransactionUncheckedCreateNestedManyWithoutUserInput
+  openedDisputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutOpenedByInput
 }
 
 export type UserCreateOrConnectWithoutRecommendationsInput = {
@@ -1073,6 +1116,7 @@ export type UserUpdateWithoutRecommendationsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   walletTransactions?: Prisma.WalletTransactionUpdateManyWithoutUserNestedInput
+  openedDisputes?: Prisma.DisputeUpdateManyWithoutOpenedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRecommendationsInput = {
@@ -1091,6 +1135,7 @@ export type UserUncheckedUpdateWithoutRecommendationsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   walletTransactions?: Prisma.WalletTransactionUncheckedUpdateManyWithoutUserNestedInput
+  openedDisputes?: Prisma.DisputeUncheckedUpdateManyWithoutOpenedByNestedInput
 }
 
 export type UserCreateWithoutWalletTransactionsInput = {
@@ -1109,6 +1154,7 @@ export type UserCreateWithoutWalletTransactionsInput = {
   freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   recommendations?: Prisma.AIRecommendationCreateNestedManyWithoutUserInput
+  openedDisputes?: Prisma.DisputeCreateNestedManyWithoutOpenedByInput
 }
 
 export type UserUncheckedCreateWithoutWalletTransactionsInput = {
@@ -1127,6 +1173,7 @@ export type UserUncheckedCreateWithoutWalletTransactionsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   recommendations?: Prisma.AIRecommendationUncheckedCreateNestedManyWithoutUserInput
+  openedDisputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutOpenedByInput
 }
 
 export type UserCreateOrConnectWithoutWalletTransactionsInput = {
@@ -1161,6 +1208,7 @@ export type UserUpdateWithoutWalletTransactionsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   recommendations?: Prisma.AIRecommendationUpdateManyWithoutUserNestedInput
+  openedDisputes?: Prisma.DisputeUpdateManyWithoutOpenedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutWalletTransactionsInput = {
@@ -1179,6 +1227,99 @@ export type UserUncheckedUpdateWithoutWalletTransactionsInput = {
   freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   recommendations?: Prisma.AIRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  openedDisputes?: Prisma.DisputeUncheckedUpdateManyWithoutOpenedByNestedInput
+}
+
+export type UserCreateWithoutOpenedDisputesInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  role: $Enums.Role
+  walletAddress?: string | null
+  isVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  receivedMessages?: Prisma.MessageCreateNestedManyWithoutReceiverInput
+  clientProfile?: Prisma.ClientProfileCreateNestedOneWithoutUserInput
+  freelancerProfile?: Prisma.FreelancerProfileCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  walletTransactions?: Prisma.WalletTransactionCreateNestedManyWithoutUserInput
+  recommendations?: Prisma.AIRecommendationCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutOpenedDisputesInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  role: $Enums.Role
+  walletAddress?: string | null
+  isVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  receivedMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutReceiverInput
+  clientProfile?: Prisma.ClientProfileUncheckedCreateNestedOneWithoutUserInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  walletTransactions?: Prisma.WalletTransactionUncheckedCreateNestedManyWithoutUserInput
+  recommendations?: Prisma.AIRecommendationUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutOpenedDisputesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutOpenedDisputesInput, Prisma.UserUncheckedCreateWithoutOpenedDisputesInput>
+}
+
+export type UserUpsertWithoutOpenedDisputesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutOpenedDisputesInput, Prisma.UserUncheckedUpdateWithoutOpenedDisputesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOpenedDisputesInput, Prisma.UserUncheckedCreateWithoutOpenedDisputesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutOpenedDisputesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutOpenedDisputesInput, Prisma.UserUncheckedUpdateWithoutOpenedDisputesInput>
+}
+
+export type UserUpdateWithoutOpenedDisputesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  receivedMessages?: Prisma.MessageUpdateManyWithoutReceiverNestedInput
+  clientProfile?: Prisma.ClientProfileUpdateOneWithoutUserNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  walletTransactions?: Prisma.WalletTransactionUpdateManyWithoutUserNestedInput
+  recommendations?: Prisma.AIRecommendationUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutOpenedDisputesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  receivedMessages?: Prisma.MessageUncheckedUpdateManyWithoutReceiverNestedInput
+  clientProfile?: Prisma.ClientProfileUncheckedUpdateOneWithoutUserNestedInput
+  freelancerProfile?: Prisma.FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  walletTransactions?: Prisma.WalletTransactionUncheckedUpdateManyWithoutUserNestedInput
+  recommendations?: Prisma.AIRecommendationUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1192,6 +1333,7 @@ export type UserCountOutputType = {
   notifications: number
   walletTransactions: number
   recommendations: number
+  openedDisputes: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1200,6 +1342,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   walletTransactions?: boolean | UserCountOutputTypeCountWalletTransactionsArgs
   recommendations?: boolean | UserCountOutputTypeCountRecommendationsArgs
+  openedDisputes?: boolean | UserCountOutputTypeCountOpenedDisputesArgs
 }
 
 /**
@@ -1247,6 +1390,13 @@ export type UserCountOutputTypeCountRecommendationsArgs<ExtArgs extends runtime.
   where?: Prisma.AIRecommendationWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountOpenedDisputesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DisputeWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1265,6 +1415,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   walletTransactions?: boolean | Prisma.User$walletTransactionsArgs<ExtArgs>
   recommendations?: boolean | Prisma.User$recommendationsArgs<ExtArgs>
+  openedDisputes?: boolean | Prisma.User$openedDisputesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1313,6 +1464,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   walletTransactions?: boolean | Prisma.User$walletTransactionsArgs<ExtArgs>
   recommendations?: boolean | Prisma.User$recommendationsArgs<ExtArgs>
+  openedDisputes?: boolean | Prisma.User$openedDisputesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1328,6 +1480,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     walletTransactions: Prisma.$WalletTransactionPayload<ExtArgs>[]
     recommendations: Prisma.$AIRecommendationPayload<ExtArgs>[]
+    openedDisputes: Prisma.$DisputePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1740,6 +1893,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   walletTransactions<T extends Prisma.User$walletTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$walletTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WalletTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   recommendations<T extends Prisma.User$recommendationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$recommendationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AIRecommendationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  openedDisputes<T extends Prisma.User$openedDisputesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$openedDisputesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DisputePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2326,6 +2480,30 @@ export type User$recommendationsArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.AIRecommendationScalarFieldEnum | Prisma.AIRecommendationScalarFieldEnum[]
+}
+
+/**
+ * User.openedDisputes
+ */
+export type User$openedDisputesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Dispute
+   */
+  select?: Prisma.DisputeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Dispute
+   */
+  omit?: Prisma.DisputeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DisputeInclude<ExtArgs> | null
+  where?: Prisma.DisputeWhereInput
+  orderBy?: Prisma.DisputeOrderByWithRelationInput | Prisma.DisputeOrderByWithRelationInput[]
+  cursor?: Prisma.DisputeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DisputeScalarFieldEnum | Prisma.DisputeScalarFieldEnum[]
 }
 
 /**

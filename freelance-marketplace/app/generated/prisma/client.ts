@@ -136,3 +136,8 @@ export type Experience = Prisma.ExperienceModel
  * 
  */
 export type JobSkill = Prisma.JobSkillModel
+/**
+ * Model Dispute
+ * 
+ */
+export type Dispute = Prisma.DisputeModel

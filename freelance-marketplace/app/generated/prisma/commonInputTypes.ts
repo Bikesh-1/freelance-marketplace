@@ -361,6 +361,13 @@ export type DateTimeNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
 }
 
+export type EnumMilestoneStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.MilestoneStatus | Prisma.EnumMilestoneStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MilestoneStatus[] | Prisma.ListEnumMilestoneStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MilestoneStatus[] | Prisma.ListEnumMilestoneStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMilestoneStatusFilter<$PrismaModel> | $Enums.MilestoneStatus
+}
+
 export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | null
   in?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -373,6 +380,33 @@ export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
+}
+
+export type EnumMilestoneStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MilestoneStatus | Prisma.EnumMilestoneStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MilestoneStatus[] | Prisma.ListEnumMilestoneStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MilestoneStatus[] | Prisma.ListEnumMilestoneStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMilestoneStatusWithAggregatesFilter<$PrismaModel> | $Enums.MilestoneStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMilestoneStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMilestoneStatusFilter<$PrismaModel>
+}
+
+export type EnumDisputeStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.DisputeStatus | Prisma.EnumDisputeStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DisputeStatus[] | Prisma.ListEnumDisputeStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DisputeStatus[] | Prisma.ListEnumDisputeStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDisputeStatusFilter<$PrismaModel> | $Enums.DisputeStatus
+}
+
+export type EnumDisputeStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DisputeStatus | Prisma.EnumDisputeStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DisputeStatus[] | Prisma.ListEnumDisputeStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DisputeStatus[] | Prisma.ListEnumDisputeStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDisputeStatusWithAggregatesFilter<$PrismaModel> | $Enums.DisputeStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDisputeStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDisputeStatusFilter<$PrismaModel>
 }
 
 export type NestedStringFilter<$PrismaModel = never> = {
@@ -713,6 +747,13 @@ export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
 }
 
+export type NestedEnumMilestoneStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.MilestoneStatus | Prisma.EnumMilestoneStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MilestoneStatus[] | Prisma.ListEnumMilestoneStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MilestoneStatus[] | Prisma.ListEnumMilestoneStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMilestoneStatusFilter<$PrismaModel> | $Enums.MilestoneStatus
+}
+
 export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | null
   in?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -725,6 +766,33 @@ export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumMilestoneStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MilestoneStatus | Prisma.EnumMilestoneStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MilestoneStatus[] | Prisma.ListEnumMilestoneStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MilestoneStatus[] | Prisma.ListEnumMilestoneStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMilestoneStatusWithAggregatesFilter<$PrismaModel> | $Enums.MilestoneStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMilestoneStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMilestoneStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumDisputeStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.DisputeStatus | Prisma.EnumDisputeStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DisputeStatus[] | Prisma.ListEnumDisputeStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DisputeStatus[] | Prisma.ListEnumDisputeStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDisputeStatusFilter<$PrismaModel> | $Enums.DisputeStatus
+}
+
+export type NestedEnumDisputeStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DisputeStatus | Prisma.EnumDisputeStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DisputeStatus[] | Prisma.ListEnumDisputeStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DisputeStatus[] | Prisma.ListEnumDisputeStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDisputeStatusWithAggregatesFilter<$PrismaModel> | $Enums.DisputeStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDisputeStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDisputeStatusFilter<$PrismaModel>
 }
 
 

@@ -9,6 +9,38 @@
 * 🟢 You can import this file directly.
 */
 
+export const DisputeStatus = {
+  OPEN: 'OPEN',
+  UNDER_REVIEW: 'UNDER_REVIEW',
+  CLIENT_WON: 'CLIENT_WON',
+  FREELANCER_WON: 'FREELANCER_WON',
+  RESOLVED: 'RESOLVED'
+} as const
+
+export type DisputeStatus = (typeof DisputeStatus)[keyof typeof DisputeStatus]
+
+
+export const MilestoneStatus = {
+  PENDING: 'PENDING',
+  FUNDED: 'FUNDED',
+  SUBMITTED: 'SUBMITTED',
+  APPROVED: 'APPROVED',
+  RELEASED: 'RELEASED',
+  REFUNDED: 'REFUNDED'
+} as const
+
+export type MilestoneStatus = (typeof MilestoneStatus)[keyof typeof MilestoneStatus]
+
+
+export const ApplicationStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type ApplicationStatus = (typeof ApplicationStatus)[keyof typeof ApplicationStatus]
+
+
 export const Role = {
   CLIENT: 'CLIENT',
   FREELANCER: 'FREELANCER'
@@ -43,15 +75,6 @@ export const JobStatus = {
 } as const
 
 export type JobStatus = (typeof JobStatus)[keyof typeof JobStatus]
-
-
-export const ApplicationStatus = {
-  PENDING: 'PENDING',
-  ACCEPTED: 'ACCEPTED',
-  REJECTED: 'REJECTED'
-} as const
-
-export type ApplicationStatus = (typeof ApplicationStatus)[keyof typeof ApplicationStatus]
 
 
 export const EscrowStatus = {

@@ -425,10 +425,6 @@ export type ExperienceUncheckedUpdateManyWithoutFreelancerNestedInput = {
   deleteMany?: Prisma.ExperienceScalarWhereInput | Prisma.ExperienceScalarWhereInput[]
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type ExperienceCreateWithoutFreelancerInput = {
   id?: string
   companyName: string

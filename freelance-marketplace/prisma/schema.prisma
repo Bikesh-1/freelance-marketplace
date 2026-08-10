@@ -26,6 +26,7 @@ model User {
   notifications      Notification[]
   walletTransactions WalletTransaction[]
   recommendations    AIRecommendation[]
+  openedDisputes     Dispute[]
 
   @@index([role])
   @@index([walletAddress])
@@ -117,7 +118,7 @@ model Job {
   aiEmbedding          String?
   client               ClientProfile @relation(fields: [clientId], references: [id], onDelete: Cascade)
   applications         Application[]
-  escrow               Escrow?
+  escrow               Escrow[]
   createdAt            DateTime      @default(now())
   updatedAt            DateTime      @updatedAt
   skills               JobSkill[]
@@ -189,9 +190,10 @@ model Message {
 
 model Escrow {
   id              String        @id @default(cuid())
-  jobId           String        @unique
+  jobId           String        
   contractAddress String
   transactionHash String?
+  milestone Milestone?
   network         String        @default("sepolia")
   amount          Float
   status          EscrowStatus  @default(CREATED)
@@ -238,22 +240,32 @@ model Notification {
 }
 
 model Milestone {
-  id    String @id @default(cuid())
-  jobId String
+  id        String          @id @default(cuid())
+
+  jobId     String
+  job       Job             @relation(fields: [jobId], references: [id], onDelete: Cascade)
 
   title       String
-  description String @db.Text
+  description String?
 
-  amount Float
+Dispute  Dispute[]
 
-  isCompleted Boolean @default(false)
+  amount      Float
 
-  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  dueDate     DateTime?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  status      MilestoneStatus @default(PENDING)
+
+  escrowId    String?         @unique
+  escrow      Escrow?         @relation(fields: [escrowId], references: [id])
+
+  order       Int
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@index([jobId])
+  @@index([status])
 }
 
 model AIRecommendation {
@@ -325,6 +337,50 @@ model JobSkill {
   skill Skill @relation(fields: [skillId], references: [id], onDelete: Cascade)
 
   @@unique([jobId, skillId])
+}
+model Dispute {
+  id String @id @default(cuid())
+
+  milestoneId String
+  milestone Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+
+  openedById String
+  openedBy User @relation(fields: [openedById], references: [id], onDelete: Cascade)
+
+  reason String
+  evidence String?
+
+  status DisputeStatus @default(OPEN)
+
+  adminNotes String?
+
+  resolvedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([milestoneId])
+  @@index([status])
+}
+
+enum DisputeStatus {
+  OPEN
+  UNDER_REVIEW
+  CLIENT_WON
+  FREELANCER_WON
+  RESOLVED
+}
+
+
+
+
+enum MilestoneStatus {
+  PENDING
+  FUNDED
+  SUBMITTED
+  APPROVED
+  RELEASED
+  REFUNDED
 }
 
 enum ApplicationStatus {
