@@ -7,9 +7,9 @@ import Button from "@/components/ui/button";
 export default function Navbar() {
     const { data: session } = useSession();
     return (
-        <header className="w-full border-b border-slate-800 bg-slate-950/80 backdrop-blur">
+        <header className="w-full  bg-[#0B0B0F] backdrop-blur font-mono">
             <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-                <Link href="/" className="text-xl font-bold text-white"> FreelanceChain
+                <Link href="/" className="text-xl flex items-center justify-center gap-2 text-white font-mono"><h1 className="font-bold text-red-500">&lt;/&gt;</h1> <span>freelanzo</span>
                 </Link>
                 <nav className="flex items-center gap-4">
                     <Link href="/jobs" className="text-slate-300 hover:text-white">

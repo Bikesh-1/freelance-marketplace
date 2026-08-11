@@ -285,6 +285,7 @@ export type JobWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Job"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Job"> | Date | string
   milestones?: Prisma.MilestoneListRelationFilter
+  messages?: Prisma.MessageListRelationFilter
   client?: Prisma.XOR<Prisma.ClientProfileScalarRelationFilter, Prisma.ClientProfileWhereInput>
   applications?: Prisma.ApplicationListRelationFilter
   escrow?: Prisma.EscrowListRelationFilter
@@ -307,6 +308,7 @@ export type JobOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   milestones?: Prisma.MilestoneOrderByRelationAggregateInput
+  messages?: Prisma.MessageOrderByRelationAggregateInput
   client?: Prisma.ClientProfileOrderByWithRelationInput
   applications?: Prisma.ApplicationOrderByRelationAggregateInput
   escrow?: Prisma.EscrowOrderByRelationAggregateInput
@@ -332,6 +334,7 @@ export type JobWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Job"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Job"> | Date | string
   milestones?: Prisma.MilestoneListRelationFilter
+  messages?: Prisma.MessageListRelationFilter
   client?: Prisma.XOR<Prisma.ClientProfileScalarRelationFilter, Prisma.ClientProfileWhereInput>
   applications?: Prisma.ApplicationListRelationFilter
   escrow?: Prisma.EscrowListRelationFilter
@@ -395,6 +398,7 @@ export type JobCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   milestones?: Prisma.MilestoneCreateNestedManyWithoutJobInput
+  messages?: Prisma.MessageCreateNestedManyWithoutJobInput
   client: Prisma.ClientProfileCreateNestedOneWithoutJobsInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutJobInput
   escrow?: Prisma.EscrowCreateNestedManyWithoutJobInput
@@ -417,6 +421,7 @@ export type JobUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   milestones?: Prisma.MilestoneUncheckedCreateNestedManyWithoutJobInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutJobInput
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutJobInput
   escrow?: Prisma.EscrowUncheckedCreateNestedManyWithoutJobInput
   skills?: Prisma.JobSkillUncheckedCreateNestedManyWithoutJobInput
@@ -437,6 +442,7 @@ export type JobUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   milestones?: Prisma.MilestoneUpdateManyWithoutJobNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutJobNestedInput
   client?: Prisma.ClientProfileUpdateOneRequiredWithoutJobsNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutJobNestedInput
   escrow?: Prisma.EscrowUpdateManyWithoutJobNestedInput
@@ -459,6 +465,7 @@ export type JobUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   milestones?: Prisma.MilestoneUncheckedUpdateManyWithoutJobNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutJobNestedInput
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutJobNestedInput
   escrow?: Prisma.EscrowUncheckedUpdateManyWithoutJobNestedInput
   skills?: Prisma.JobSkillUncheckedUpdateManyWithoutJobNestedInput
@@ -667,6 +674,20 @@ export type JobUpdateOneRequiredWithoutApplicationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.JobUpdateToOneWithWhereWithoutApplicationsInput, Prisma.JobUpdateWithoutApplicationsInput>, Prisma.JobUncheckedUpdateWithoutApplicationsInput>
 }
 
+export type JobCreateNestedOneWithoutMessagesInput = {
+  create?: Prisma.XOR<Prisma.JobCreateWithoutMessagesInput, Prisma.JobUncheckedCreateWithoutMessagesInput>
+  connectOrCreate?: Prisma.JobCreateOrConnectWithoutMessagesInput
+  connect?: Prisma.JobWhereUniqueInput
+}
+
+export type JobUpdateOneRequiredWithoutMessagesNestedInput = {
+  create?: Prisma.XOR<Prisma.JobCreateWithoutMessagesInput, Prisma.JobUncheckedCreateWithoutMessagesInput>
+  connectOrCreate?: Prisma.JobCreateOrConnectWithoutMessagesInput
+  upsert?: Prisma.JobUpsertWithoutMessagesInput
+  connect?: Prisma.JobWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.JobUpdateToOneWithWhereWithoutMessagesInput, Prisma.JobUpdateWithoutMessagesInput>, Prisma.JobUncheckedUpdateWithoutMessagesInput>
+}
+
 export type JobCreateNestedOneWithoutEscrowInput = {
   create?: Prisma.XOR<Prisma.JobCreateWithoutEscrowInput, Prisma.JobUncheckedCreateWithoutEscrowInput>
   connectOrCreate?: Prisma.JobCreateOrConnectWithoutEscrowInput
@@ -724,6 +745,7 @@ export type JobCreateWithoutClientInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   milestones?: Prisma.MilestoneCreateNestedManyWithoutJobInput
+  messages?: Prisma.MessageCreateNestedManyWithoutJobInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutJobInput
   escrow?: Prisma.EscrowCreateNestedManyWithoutJobInput
   skills?: Prisma.JobSkillCreateNestedManyWithoutJobInput
@@ -744,6 +766,7 @@ export type JobUncheckedCreateWithoutClientInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   milestones?: Prisma.MilestoneUncheckedCreateNestedManyWithoutJobInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutJobInput
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutJobInput
   escrow?: Prisma.EscrowUncheckedCreateNestedManyWithoutJobInput
   skills?: Prisma.JobSkillUncheckedCreateNestedManyWithoutJobInput
@@ -810,6 +833,7 @@ export type JobCreateWithoutApplicationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   milestones?: Prisma.MilestoneCreateNestedManyWithoutJobInput
+  messages?: Prisma.MessageCreateNestedManyWithoutJobInput
   client: Prisma.ClientProfileCreateNestedOneWithoutJobsInput
   escrow?: Prisma.EscrowCreateNestedManyWithoutJobInput
   skills?: Prisma.JobSkillCreateNestedManyWithoutJobInput
@@ -831,6 +855,7 @@ export type JobUncheckedCreateWithoutApplicationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   milestones?: Prisma.MilestoneUncheckedCreateNestedManyWithoutJobInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutJobInput
   escrow?: Prisma.EscrowUncheckedCreateNestedManyWithoutJobInput
   skills?: Prisma.JobSkillUncheckedCreateNestedManyWithoutJobInput
 }
@@ -866,6 +891,7 @@ export type JobUpdateWithoutApplicationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   milestones?: Prisma.MilestoneUpdateManyWithoutJobNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutJobNestedInput
   client?: Prisma.ClientProfileUpdateOneRequiredWithoutJobsNestedInput
   escrow?: Prisma.EscrowUpdateManyWithoutJobNestedInput
   skills?: Prisma.JobSkillUpdateManyWithoutJobNestedInput
@@ -887,6 +913,107 @@ export type JobUncheckedUpdateWithoutApplicationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   milestones?: Prisma.MilestoneUncheckedUpdateManyWithoutJobNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutJobNestedInput
+  escrow?: Prisma.EscrowUncheckedUpdateManyWithoutJobNestedInput
+  skills?: Prisma.JobSkillUncheckedUpdateManyWithoutJobNestedInput
+}
+
+export type JobCreateWithoutMessagesInput = {
+  id?: string
+  title: string
+  description: string
+  budget: number
+  jobType: $Enums.JobType
+  duration?: string | null
+  requiredSkills?: Prisma.JobCreaterequiredSkillsInput | string[]
+  status?: $Enums.JobStatus
+  deadline: Date | string
+  selectedFreelancerId?: string | null
+  aiEmbedding?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  milestones?: Prisma.MilestoneCreateNestedManyWithoutJobInput
+  client: Prisma.ClientProfileCreateNestedOneWithoutJobsInput
+  applications?: Prisma.ApplicationCreateNestedManyWithoutJobInput
+  escrow?: Prisma.EscrowCreateNestedManyWithoutJobInput
+  skills?: Prisma.JobSkillCreateNestedManyWithoutJobInput
+}
+
+export type JobUncheckedCreateWithoutMessagesInput = {
+  id?: string
+  clientId: string
+  title: string
+  description: string
+  budget: number
+  jobType: $Enums.JobType
+  duration?: string | null
+  requiredSkills?: Prisma.JobCreaterequiredSkillsInput | string[]
+  status?: $Enums.JobStatus
+  deadline: Date | string
+  selectedFreelancerId?: string | null
+  aiEmbedding?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  milestones?: Prisma.MilestoneUncheckedCreateNestedManyWithoutJobInput
+  applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutJobInput
+  escrow?: Prisma.EscrowUncheckedCreateNestedManyWithoutJobInput
+  skills?: Prisma.JobSkillUncheckedCreateNestedManyWithoutJobInput
+}
+
+export type JobCreateOrConnectWithoutMessagesInput = {
+  where: Prisma.JobWhereUniqueInput
+  create: Prisma.XOR<Prisma.JobCreateWithoutMessagesInput, Prisma.JobUncheckedCreateWithoutMessagesInput>
+}
+
+export type JobUpsertWithoutMessagesInput = {
+  update: Prisma.XOR<Prisma.JobUpdateWithoutMessagesInput, Prisma.JobUncheckedUpdateWithoutMessagesInput>
+  create: Prisma.XOR<Prisma.JobCreateWithoutMessagesInput, Prisma.JobUncheckedCreateWithoutMessagesInput>
+  where?: Prisma.JobWhereInput
+}
+
+export type JobUpdateToOneWithWhereWithoutMessagesInput = {
+  where?: Prisma.JobWhereInput
+  data: Prisma.XOR<Prisma.JobUpdateWithoutMessagesInput, Prisma.JobUncheckedUpdateWithoutMessagesInput>
+}
+
+export type JobUpdateWithoutMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  budget?: Prisma.FloatFieldUpdateOperationsInput | number
+  jobType?: Prisma.EnumJobTypeFieldUpdateOperationsInput | $Enums.JobType
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiredSkills?: Prisma.JobUpdaterequiredSkillsInput | string[]
+  status?: Prisma.EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
+  deadline?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  selectedFreelancerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiEmbedding?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  milestones?: Prisma.MilestoneUpdateManyWithoutJobNestedInput
+  client?: Prisma.ClientProfileUpdateOneRequiredWithoutJobsNestedInput
+  applications?: Prisma.ApplicationUpdateManyWithoutJobNestedInput
+  escrow?: Prisma.EscrowUpdateManyWithoutJobNestedInput
+  skills?: Prisma.JobSkillUpdateManyWithoutJobNestedInput
+}
+
+export type JobUncheckedUpdateWithoutMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  budget?: Prisma.FloatFieldUpdateOperationsInput | number
+  jobType?: Prisma.EnumJobTypeFieldUpdateOperationsInput | $Enums.JobType
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiredSkills?: Prisma.JobUpdaterequiredSkillsInput | string[]
+  status?: Prisma.EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
+  deadline?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  selectedFreelancerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiEmbedding?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  milestones?: Prisma.MilestoneUncheckedUpdateManyWithoutJobNestedInput
+  applications?: Prisma.ApplicationUncheckedUpdateManyWithoutJobNestedInput
   escrow?: Prisma.EscrowUncheckedUpdateManyWithoutJobNestedInput
   skills?: Prisma.JobSkillUncheckedUpdateManyWithoutJobNestedInput
 }
@@ -906,6 +1033,7 @@ export type JobCreateWithoutEscrowInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   milestones?: Prisma.MilestoneCreateNestedManyWithoutJobInput
+  messages?: Prisma.MessageCreateNestedManyWithoutJobInput
   client: Prisma.ClientProfileCreateNestedOneWithoutJobsInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutJobInput
   skills?: Prisma.JobSkillCreateNestedManyWithoutJobInput
@@ -927,6 +1055,7 @@ export type JobUncheckedCreateWithoutEscrowInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   milestones?: Prisma.MilestoneUncheckedCreateNestedManyWithoutJobInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutJobInput
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutJobInput
   skills?: Prisma.JobSkillUncheckedCreateNestedManyWithoutJobInput
 }
@@ -962,6 +1091,7 @@ export type JobUpdateWithoutEscrowInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   milestones?: Prisma.MilestoneUpdateManyWithoutJobNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutJobNestedInput
   client?: Prisma.ClientProfileUpdateOneRequiredWithoutJobsNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutJobNestedInput
   skills?: Prisma.JobSkillUpdateManyWithoutJobNestedInput
@@ -983,6 +1113,7 @@ export type JobUncheckedUpdateWithoutEscrowInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   milestones?: Prisma.MilestoneUncheckedUpdateManyWithoutJobNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutJobNestedInput
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutJobNestedInput
   skills?: Prisma.JobSkillUncheckedUpdateManyWithoutJobNestedInput
 }
@@ -1001,6 +1132,7 @@ export type JobCreateWithoutMilestonesInput = {
   aiEmbedding?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  messages?: Prisma.MessageCreateNestedManyWithoutJobInput
   client: Prisma.ClientProfileCreateNestedOneWithoutJobsInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutJobInput
   escrow?: Prisma.EscrowCreateNestedManyWithoutJobInput
@@ -1022,6 +1154,7 @@ export type JobUncheckedCreateWithoutMilestonesInput = {
   aiEmbedding?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutJobInput
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutJobInput
   escrow?: Prisma.EscrowUncheckedCreateNestedManyWithoutJobInput
   skills?: Prisma.JobSkillUncheckedCreateNestedManyWithoutJobInput
@@ -1057,6 +1190,7 @@ export type JobUpdateWithoutMilestonesInput = {
   aiEmbedding?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  messages?: Prisma.MessageUpdateManyWithoutJobNestedInput
   client?: Prisma.ClientProfileUpdateOneRequiredWithoutJobsNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutJobNestedInput
   escrow?: Prisma.EscrowUpdateManyWithoutJobNestedInput
@@ -1078,6 +1212,7 @@ export type JobUncheckedUpdateWithoutMilestonesInput = {
   aiEmbedding?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutJobNestedInput
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutJobNestedInput
   escrow?: Prisma.EscrowUncheckedUpdateManyWithoutJobNestedInput
   skills?: Prisma.JobSkillUncheckedUpdateManyWithoutJobNestedInput
@@ -1098,6 +1233,7 @@ export type JobCreateWithoutSkillsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   milestones?: Prisma.MilestoneCreateNestedManyWithoutJobInput
+  messages?: Prisma.MessageCreateNestedManyWithoutJobInput
   client: Prisma.ClientProfileCreateNestedOneWithoutJobsInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutJobInput
   escrow?: Prisma.EscrowCreateNestedManyWithoutJobInput
@@ -1119,6 +1255,7 @@ export type JobUncheckedCreateWithoutSkillsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   milestones?: Prisma.MilestoneUncheckedCreateNestedManyWithoutJobInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutJobInput
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutJobInput
   escrow?: Prisma.EscrowUncheckedCreateNestedManyWithoutJobInput
 }
@@ -1154,6 +1291,7 @@ export type JobUpdateWithoutSkillsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   milestones?: Prisma.MilestoneUpdateManyWithoutJobNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutJobNestedInput
   client?: Prisma.ClientProfileUpdateOneRequiredWithoutJobsNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutJobNestedInput
   escrow?: Prisma.EscrowUpdateManyWithoutJobNestedInput
@@ -1175,6 +1313,7 @@ export type JobUncheckedUpdateWithoutSkillsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   milestones?: Prisma.MilestoneUncheckedUpdateManyWithoutJobNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutJobNestedInput
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutJobNestedInput
   escrow?: Prisma.EscrowUncheckedUpdateManyWithoutJobNestedInput
 }
@@ -1210,6 +1349,7 @@ export type JobUpdateWithoutClientInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   milestones?: Prisma.MilestoneUpdateManyWithoutJobNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutJobNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutJobNestedInput
   escrow?: Prisma.EscrowUpdateManyWithoutJobNestedInput
   skills?: Prisma.JobSkillUpdateManyWithoutJobNestedInput
@@ -1230,6 +1370,7 @@ export type JobUncheckedUpdateWithoutClientInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   milestones?: Prisma.MilestoneUncheckedUpdateManyWithoutJobNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutJobNestedInput
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutJobNestedInput
   escrow?: Prisma.EscrowUncheckedUpdateManyWithoutJobNestedInput
   skills?: Prisma.JobSkillUncheckedUpdateManyWithoutJobNestedInput
@@ -1258,6 +1399,7 @@ export type JobUncheckedUpdateManyWithoutClientInput = {
 
 export type JobCountOutputType = {
   milestones: number
+  messages: number
   applications: number
   escrow: number
   skills: number
@@ -1265,6 +1407,7 @@ export type JobCountOutputType = {
 
 export type JobCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   milestones?: boolean | JobCountOutputTypeCountMilestonesArgs
+  messages?: boolean | JobCountOutputTypeCountMessagesArgs
   applications?: boolean | JobCountOutputTypeCountApplicationsArgs
   escrow?: boolean | JobCountOutputTypeCountEscrowArgs
   skills?: boolean | JobCountOutputTypeCountSkillsArgs
@@ -1285,6 +1428,13 @@ export type JobCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensio
  */
 export type JobCountOutputTypeCountMilestonesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.MilestoneWhereInput
+}
+
+/**
+ * JobCountOutputType without action
+ */
+export type JobCountOutputTypeCountMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MessageWhereInput
 }
 
 /**
@@ -1325,6 +1475,7 @@ export type JobSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   createdAt?: boolean
   updatedAt?: boolean
   milestones?: boolean | Prisma.Job$milestonesArgs<ExtArgs>
+  messages?: boolean | Prisma.Job$messagesArgs<ExtArgs>
   client?: boolean | Prisma.ClientProfileDefaultArgs<ExtArgs>
   applications?: boolean | Prisma.Job$applicationsArgs<ExtArgs>
   escrow?: boolean | Prisma.Job$escrowArgs<ExtArgs>
@@ -1388,6 +1539,7 @@ export type JobSelectScalar = {
 export type JobOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clientId" | "title" | "description" | "budget" | "jobType" | "duration" | "requiredSkills" | "status" | "deadline" | "selectedFreelancerId" | "aiEmbedding" | "createdAt" | "updatedAt", ExtArgs["result"]["job"]>
 export type JobInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   milestones?: boolean | Prisma.Job$milestonesArgs<ExtArgs>
+  messages?: boolean | Prisma.Job$messagesArgs<ExtArgs>
   client?: boolean | Prisma.ClientProfileDefaultArgs<ExtArgs>
   applications?: boolean | Prisma.Job$applicationsArgs<ExtArgs>
   escrow?: boolean | Prisma.Job$escrowArgs<ExtArgs>
@@ -1405,6 +1557,7 @@ export type $JobPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   name: "Job"
   objects: {
     milestones: Prisma.$MilestonePayload<ExtArgs>[]
+    messages: Prisma.$MessagePayload<ExtArgs>[]
     client: Prisma.$ClientProfilePayload<ExtArgs>
     applications: Prisma.$ApplicationPayload<ExtArgs>[]
     escrow: Prisma.$EscrowPayload<ExtArgs>[]
@@ -1820,6 +1973,7 @@ readonly fields: JobFieldRefs;
 export interface Prisma__JobClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   milestones<T extends Prisma.Job$milestonesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Job$milestonesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MilestonePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  messages<T extends Prisma.Job$messagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Job$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   client<T extends Prisma.ClientProfileDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClientProfileDefaultArgs<ExtArgs>>): Prisma.Prisma__ClientProfileClient<runtime.Types.Result.GetResult<Prisma.$ClientProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   applications<T extends Prisma.Job$applicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Job$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   escrow<T extends Prisma.Job$escrowArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Job$escrowArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EscrowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2289,6 +2443,30 @@ export type Job$milestonesArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.MilestoneScalarFieldEnum | Prisma.MilestoneScalarFieldEnum[]
+}
+
+/**
+ * Job.messages
+ */
+export type Job$messagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Message
+   */
+  select?: Prisma.MessageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Message
+   */
+  omit?: Prisma.MessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageInclude<ExtArgs> | null
+  where?: Prisma.MessageWhereInput
+  orderBy?: Prisma.MessageOrderByWithRelationInput | Prisma.MessageOrderByWithRelationInput[]
+  cursor?: Prisma.MessageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MessageScalarFieldEnum | Prisma.MessageScalarFieldEnum[]
 }
 
 /**

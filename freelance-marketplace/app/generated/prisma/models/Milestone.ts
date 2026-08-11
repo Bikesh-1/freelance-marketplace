@@ -592,10 +592,6 @@ export type MilestoneUncheckedUpdateOneWithoutEscrowNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.MilestoneUpdateToOneWithWhereWithoutEscrowInput, Prisma.MilestoneUpdateWithoutEscrowInput>, Prisma.MilestoneUncheckedUpdateWithoutEscrowInput>
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type EnumMilestoneStatusFieldUpdateOperationsInput = {
   set?: $Enums.MilestoneStatus
 }

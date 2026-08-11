@@ -2093,10 +2093,12 @@ export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof 
 
 export const MessageScalarFieldEnum = {
   id: 'id',
+  jobId: 'jobId',
   senderId: 'senderId',
   receiverId: 'receiverId',
   content: 'content',
   isRead: 'isRead',
+  readAt: 'readAt',
   createdAt: 'createdAt'
 } as const
 
