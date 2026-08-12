@@ -7,29 +7,20 @@ import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { socket } from "@/lib/socket/client";
 import { useNotifications } from "@/hooks/useNotifications";
+import { toast } from "sonner";
 
 export default function NotificationBell() {
     const { data: session } = useSession();
 
-    const userId =
-        session?.user?.id || "";
+    const userId = session?.user?.id || "";
 
-    const {
-        data: notifications,
-    } =
-        useNotifications(userId);
+    const { data: notifications, } = useNotifications(userId);
 
-    const [open, setOpen] =
-        useState(false);
+    const [open, setOpen] = useState(false);
 
-    const unread =
-        notifications?.filter(
-            (n: any) =>
-                !n.isRead
-        ).length || 0;
+    const unread = notifications?.filter((n: any) => !n.isRead).length || 0;
 
-    const queryClient =
-        useQueryClient();
+    const queryClient = useQueryClient();
 
     useEffect(() => {
         if (!userId) return;
@@ -57,6 +48,14 @@ export default function NotificationBell() {
                             notification,
                             ...old,
                         ]
+                );
+
+                toast.success(
+                    notification.title,
+                    {
+                        description:
+                            notification.message,
+                    }
                 );
             }
         );
@@ -110,8 +109,8 @@ export default function NotificationBell() {
                                     <div
                                         key={n.id}
                                         className={`border-b border-slate-800 p-4 ${!n.isRead
-                                                ? "bg-slate-800/40"
-                                                : ""
+                                            ? "bg-slate-800/40"
+                                            : ""
                                             }`}
                                     >
                                         <h4 className="font-medium text-white">

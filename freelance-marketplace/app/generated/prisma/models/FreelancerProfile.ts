@@ -27,6 +27,7 @@ export type AggregateFreelancerProfile = {
 }
 
 export type FreelancerProfileAvgAggregateOutputType = {
+  walletBalance: number | null
   hourlyRate: number | null
   yearsOfExperience: number | null
   totalProjects: number | null
@@ -34,6 +35,7 @@ export type FreelancerProfileAvgAggregateOutputType = {
 }
 
 export type FreelancerProfileSumAggregateOutputType = {
+  walletBalance: number | null
   hourlyRate: number | null
   yearsOfExperience: number | null
   totalProjects: number | null
@@ -47,6 +49,7 @@ export type FreelancerProfileMinAggregateOutputType = {
   bio: string | null
   fullName: string | null
   country: string | null
+  walletBalance: number | null
   isProfileCompleted: boolean | null
   experienceLevel: $Enums.ExperienceLevel | null
   hourlyRate: number | null
@@ -70,6 +73,7 @@ export type FreelancerProfileMaxAggregateOutputType = {
   bio: string | null
   fullName: string | null
   country: string | null
+  walletBalance: number | null
   isProfileCompleted: boolean | null
   experienceLevel: $Enums.ExperienceLevel | null
   hourlyRate: number | null
@@ -93,6 +97,7 @@ export type FreelancerProfileCountAggregateOutputType = {
   bio: number
   fullName: number
   country: number
+  walletBalance: number
   isProfileCompleted: number
   experienceLevel: number
   hourlyRate: number
@@ -112,6 +117,7 @@ export type FreelancerProfileCountAggregateOutputType = {
 
 
 export type FreelancerProfileAvgAggregateInputType = {
+  walletBalance?: true
   hourlyRate?: true
   yearsOfExperience?: true
   totalProjects?: true
@@ -119,6 +125,7 @@ export type FreelancerProfileAvgAggregateInputType = {
 }
 
 export type FreelancerProfileSumAggregateInputType = {
+  walletBalance?: true
   hourlyRate?: true
   yearsOfExperience?: true
   totalProjects?: true
@@ -132,6 +139,7 @@ export type FreelancerProfileMinAggregateInputType = {
   bio?: true
   fullName?: true
   country?: true
+  walletBalance?: true
   isProfileCompleted?: true
   experienceLevel?: true
   hourlyRate?: true
@@ -155,6 +163,7 @@ export type FreelancerProfileMaxAggregateInputType = {
   bio?: true
   fullName?: true
   country?: true
+  walletBalance?: true
   isProfileCompleted?: true
   experienceLevel?: true
   hourlyRate?: true
@@ -178,6 +187,7 @@ export type FreelancerProfileCountAggregateInputType = {
   bio?: true
   fullName?: true
   country?: true
+  walletBalance?: true
   isProfileCompleted?: true
   experienceLevel?: true
   hourlyRate?: true
@@ -288,6 +298,7 @@ export type FreelancerProfileGroupByOutputType = {
   bio: string
   fullName: string | null
   country: string | null
+  walletBalance: number
   isProfileCompleted: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
@@ -334,6 +345,7 @@ export type FreelancerProfileWhereInput = {
   bio?: Prisma.StringFilter<"FreelancerProfile"> | string
   fullName?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
   country?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
+  walletBalance?: Prisma.FloatFilter<"FreelancerProfile"> | number
   isProfileCompleted?: Prisma.BoolFilter<"FreelancerProfile"> | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFilter<"FreelancerProfile"> | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFilter<"FreelancerProfile"> | number
@@ -363,6 +375,7 @@ export type FreelancerProfileOrderByWithRelationInput = {
   bio?: Prisma.SortOrder
   fullName?: Prisma.SortOrderInput | Prisma.SortOrder
   country?: Prisma.SortOrderInput | Prisma.SortOrder
+  walletBalance?: Prisma.SortOrder
   isProfileCompleted?: Prisma.SortOrder
   experienceLevel?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
@@ -395,6 +408,7 @@ export type FreelancerProfileWhereUniqueInput = Prisma.AtLeast<{
   bio?: Prisma.StringFilter<"FreelancerProfile"> | string
   fullName?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
   country?: Prisma.StringNullableFilter<"FreelancerProfile"> | string | null
+  walletBalance?: Prisma.FloatFilter<"FreelancerProfile"> | number
   isProfileCompleted?: Prisma.BoolFilter<"FreelancerProfile"> | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFilter<"FreelancerProfile"> | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFilter<"FreelancerProfile"> | number
@@ -424,6 +438,7 @@ export type FreelancerProfileOrderByWithAggregationInput = {
   bio?: Prisma.SortOrder
   fullName?: Prisma.SortOrderInput | Prisma.SortOrder
   country?: Prisma.SortOrderInput | Prisma.SortOrder
+  walletBalance?: Prisma.SortOrder
   isProfileCompleted?: Prisma.SortOrder
   experienceLevel?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
@@ -455,6 +470,7 @@ export type FreelancerProfileScalarWhereWithAggregatesInput = {
   bio?: Prisma.StringWithAggregatesFilter<"FreelancerProfile"> | string
   fullName?: Prisma.StringNullableWithAggregatesFilter<"FreelancerProfile"> | string | null
   country?: Prisma.StringNullableWithAggregatesFilter<"FreelancerProfile"> | string | null
+  walletBalance?: Prisma.FloatWithAggregatesFilter<"FreelancerProfile"> | number
   isProfileCompleted?: Prisma.BoolWithAggregatesFilter<"FreelancerProfile"> | boolean
   experienceLevel?: Prisma.EnumExperienceLevelWithAggregatesFilter<"FreelancerProfile"> | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatWithAggregatesFilter<"FreelancerProfile"> | number
@@ -477,6 +493,7 @@ export type FreelancerProfileCreateInput = {
   bio: string
   fullName?: string | null
   country?: string | null
+  walletBalance?: number
   isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
@@ -506,6 +523,7 @@ export type FreelancerProfileUncheckedCreateInput = {
   bio: string
   fullName?: string | null
   country?: string | null
+  walletBalance?: number
   isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
@@ -533,6 +551,7 @@ export type FreelancerProfileUpdateInput = {
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  walletBalance?: Prisma.FloatFieldUpdateOperationsInput | number
   isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -562,6 +581,7 @@ export type FreelancerProfileUncheckedUpdateInput = {
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  walletBalance?: Prisma.FloatFieldUpdateOperationsInput | number
   isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -590,6 +610,7 @@ export type FreelancerProfileCreateManyInput = {
   bio: string
   fullName?: string | null
   country?: string | null
+  walletBalance?: number
   isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
@@ -612,6 +633,7 @@ export type FreelancerProfileUpdateManyMutationInput = {
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  walletBalance?: Prisma.FloatFieldUpdateOperationsInput | number
   isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -635,6 +657,7 @@ export type FreelancerProfileUncheckedUpdateManyInput = {
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  walletBalance?: Prisma.FloatFieldUpdateOperationsInput | number
   isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -663,6 +686,7 @@ export type FreelancerProfileCountOrderByAggregateInput = {
   bio?: Prisma.SortOrder
   fullName?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  walletBalance?: Prisma.SortOrder
   isProfileCompleted?: Prisma.SortOrder
   experienceLevel?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
@@ -680,6 +704,7 @@ export type FreelancerProfileCountOrderByAggregateInput = {
 }
 
 export type FreelancerProfileAvgOrderByAggregateInput = {
+  walletBalance?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
   yearsOfExperience?: Prisma.SortOrder
   totalProjects?: Prisma.SortOrder
@@ -693,6 +718,7 @@ export type FreelancerProfileMaxOrderByAggregateInput = {
   bio?: Prisma.SortOrder
   fullName?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  walletBalance?: Prisma.SortOrder
   isProfileCompleted?: Prisma.SortOrder
   experienceLevel?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
@@ -716,6 +742,7 @@ export type FreelancerProfileMinOrderByAggregateInput = {
   bio?: Prisma.SortOrder
   fullName?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  walletBalance?: Prisma.SortOrder
   isProfileCompleted?: Prisma.SortOrder
   experienceLevel?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
@@ -733,6 +760,7 @@ export type FreelancerProfileMinOrderByAggregateInput = {
 }
 
 export type FreelancerProfileSumOrderByAggregateInput = {
+  walletBalance?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
   yearsOfExperience?: Prisma.SortOrder
   totalProjects?: Prisma.SortOrder
@@ -776,16 +804,16 @@ export type FreelancerProfileUncheckedUpdateOneWithoutUserNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.FreelancerProfileUpdateToOneWithWhereWithoutUserInput, Prisma.FreelancerProfileUpdateWithoutUserInput>, Prisma.FreelancerProfileUncheckedUpdateWithoutUserInput>
 }
 
-export type EnumExperienceLevelFieldUpdateOperationsInput = {
-  set?: $Enums.ExperienceLevel
-}
-
 export type FloatFieldUpdateOperationsInput = {
   set?: number
   increment?: number
   decrement?: number
   multiply?: number
   divide?: number
+}
+
+export type EnumExperienceLevelFieldUpdateOperationsInput = {
+  set?: $Enums.ExperienceLevel
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -872,6 +900,7 @@ export type FreelancerProfileCreateWithoutUserInput = {
   bio: string
   fullName?: string | null
   country?: string | null
+  walletBalance?: number
   isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
@@ -899,6 +928,7 @@ export type FreelancerProfileUncheckedCreateWithoutUserInput = {
   bio: string
   fullName?: string | null
   country?: string | null
+  walletBalance?: number
   isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
@@ -942,6 +972,7 @@ export type FreelancerProfileUpdateWithoutUserInput = {
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  walletBalance?: Prisma.FloatFieldUpdateOperationsInput | number
   isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -969,6 +1000,7 @@ export type FreelancerProfileUncheckedUpdateWithoutUserInput = {
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  walletBalance?: Prisma.FloatFieldUpdateOperationsInput | number
   isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -996,6 +1028,7 @@ export type FreelancerProfileCreateWithoutSkillsInput = {
   bio: string
   fullName?: string | null
   country?: string | null
+  walletBalance?: number
   isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
@@ -1024,6 +1057,7 @@ export type FreelancerProfileUncheckedCreateWithoutSkillsInput = {
   bio: string
   fullName?: string | null
   country?: string | null
+  walletBalance?: number
   isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
@@ -1066,6 +1100,7 @@ export type FreelancerProfileUpdateWithoutSkillsInput = {
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  walletBalance?: Prisma.FloatFieldUpdateOperationsInput | number
   isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1094,6 +1129,7 @@ export type FreelancerProfileUncheckedUpdateWithoutSkillsInput = {
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  walletBalance?: Prisma.FloatFieldUpdateOperationsInput | number
   isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1120,6 +1156,7 @@ export type FreelancerProfileCreateWithoutPortfoliosInput = {
   bio: string
   fullName?: string | null
   country?: string | null
+  walletBalance?: number
   isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
@@ -1148,6 +1185,7 @@ export type FreelancerProfileUncheckedCreateWithoutPortfoliosInput = {
   bio: string
   fullName?: string | null
   country?: string | null
+  walletBalance?: number
   isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
@@ -1190,6 +1228,7 @@ export type FreelancerProfileUpdateWithoutPortfoliosInput = {
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  walletBalance?: Prisma.FloatFieldUpdateOperationsInput | number
   isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1218,6 +1257,7 @@ export type FreelancerProfileUncheckedUpdateWithoutPortfoliosInput = {
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  walletBalance?: Prisma.FloatFieldUpdateOperationsInput | number
   isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1244,6 +1284,7 @@ export type FreelancerProfileCreateWithoutApplicationsInput = {
   bio: string
   fullName?: string | null
   country?: string | null
+  walletBalance?: number
   isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
@@ -1272,6 +1313,7 @@ export type FreelancerProfileUncheckedCreateWithoutApplicationsInput = {
   bio: string
   fullName?: string | null
   country?: string | null
+  walletBalance?: number
   isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
@@ -1314,6 +1356,7 @@ export type FreelancerProfileUpdateWithoutApplicationsInput = {
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  walletBalance?: Prisma.FloatFieldUpdateOperationsInput | number
   isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1342,6 +1385,7 @@ export type FreelancerProfileUncheckedUpdateWithoutApplicationsInput = {
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  walletBalance?: Prisma.FloatFieldUpdateOperationsInput | number
   isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1368,6 +1412,7 @@ export type FreelancerProfileCreateWithoutReviewsInput = {
   bio: string
   fullName?: string | null
   country?: string | null
+  walletBalance?: number
   isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
@@ -1396,6 +1441,7 @@ export type FreelancerProfileUncheckedCreateWithoutReviewsInput = {
   bio: string
   fullName?: string | null
   country?: string | null
+  walletBalance?: number
   isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
@@ -1438,6 +1484,7 @@ export type FreelancerProfileUpdateWithoutReviewsInput = {
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  walletBalance?: Prisma.FloatFieldUpdateOperationsInput | number
   isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1466,6 +1513,7 @@ export type FreelancerProfileUncheckedUpdateWithoutReviewsInput = {
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  walletBalance?: Prisma.FloatFieldUpdateOperationsInput | number
   isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1492,6 +1540,7 @@ export type FreelancerProfileCreateWithoutExperiencesInput = {
   bio: string
   fullName?: string | null
   country?: string | null
+  walletBalance?: number
   isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
@@ -1520,6 +1569,7 @@ export type FreelancerProfileUncheckedCreateWithoutExperiencesInput = {
   bio: string
   fullName?: string | null
   country?: string | null
+  walletBalance?: number
   isProfileCompleted?: boolean
   experienceLevel: $Enums.ExperienceLevel
   hourlyRate: number
@@ -1562,6 +1612,7 @@ export type FreelancerProfileUpdateWithoutExperiencesInput = {
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  walletBalance?: Prisma.FloatFieldUpdateOperationsInput | number
   isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1590,6 +1641,7 @@ export type FreelancerProfileUncheckedUpdateWithoutExperiencesInput = {
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  walletBalance?: Prisma.FloatFieldUpdateOperationsInput | number
   isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
   hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1684,6 +1736,7 @@ export type FreelancerProfileSelect<ExtArgs extends runtime.Types.Extensions.Int
   bio?: boolean
   fullName?: boolean
   country?: boolean
+  walletBalance?: boolean
   isProfileCompleted?: boolean
   experienceLevel?: boolean
   hourlyRate?: boolean
@@ -1714,6 +1767,7 @@ export type FreelancerProfileSelectCreateManyAndReturn<ExtArgs extends runtime.T
   bio?: boolean
   fullName?: boolean
   country?: boolean
+  walletBalance?: boolean
   isProfileCompleted?: boolean
   experienceLevel?: boolean
   hourlyRate?: boolean
@@ -1738,6 +1792,7 @@ export type FreelancerProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   bio?: boolean
   fullName?: boolean
   country?: boolean
+  walletBalance?: boolean
   isProfileCompleted?: boolean
   experienceLevel?: boolean
   hourlyRate?: boolean
@@ -1762,6 +1817,7 @@ export type FreelancerProfileSelectScalar = {
   bio?: boolean
   fullName?: boolean
   country?: boolean
+  walletBalance?: boolean
   isProfileCompleted?: boolean
   experienceLevel?: boolean
   hourlyRate?: boolean
@@ -1778,7 +1834,7 @@ export type FreelancerProfileSelectScalar = {
   updatedAt?: boolean
 }
 
-export type FreelancerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "title" | "bio" | "fullName" | "country" | "isProfileCompleted" | "experienceLevel" | "hourlyRate" | "location" | "github" | "linkedin" | "portfolio" | "yearsOfExperience" | "totalProjects" | "averageRating" | "aiEmbedding" | "isAvailable" | "createdAt" | "updatedAt", ExtArgs["result"]["freelancerProfile"]>
+export type FreelancerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "title" | "bio" | "fullName" | "country" | "walletBalance" | "isProfileCompleted" | "experienceLevel" | "hourlyRate" | "location" | "github" | "linkedin" | "portfolio" | "yearsOfExperience" | "totalProjects" | "averageRating" | "aiEmbedding" | "isAvailable" | "createdAt" | "updatedAt", ExtArgs["result"]["freelancerProfile"]>
 export type FreelancerProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   skills?: boolean | Prisma.FreelancerProfile$skillsArgs<ExtArgs>
@@ -1812,6 +1868,7 @@ export type $FreelancerProfilePayload<ExtArgs extends runtime.Types.Extensions.I
     bio: string
     fullName: string | null
     country: string | null
+    walletBalance: number
     isProfileCompleted: boolean
     experienceLevel: $Enums.ExperienceLevel
     hourlyRate: number
@@ -2261,6 +2318,7 @@ export interface FreelancerProfileFieldRefs {
   readonly bio: Prisma.FieldRef<"FreelancerProfile", 'String'>
   readonly fullName: Prisma.FieldRef<"FreelancerProfile", 'String'>
   readonly country: Prisma.FieldRef<"FreelancerProfile", 'String'>
+  readonly walletBalance: Prisma.FieldRef<"FreelancerProfile", 'Float'>
   readonly isProfileCompleted: Prisma.FieldRef<"FreelancerProfile", 'Boolean'>
   readonly experienceLevel: Prisma.FieldRef<"FreelancerProfile", 'ExperienceLevel'>
   readonly hourlyRate: Prisma.FieldRef<"FreelancerProfile", 'Float'>

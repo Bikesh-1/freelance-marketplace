@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Providers from "@/lib/providers";
 import AuthProvider from "@/components/providers/session-provider";
+import { Toaster } from "sonner";
 
 
 export const metadata: Metadata = {
@@ -19,6 +20,7 @@ export default function RootLayout({
   <body className="bg-slate-950 text-white"> 
     <Providers>
       <AuthProvider>{children}</AuthProvider>
+      <Toaster richColors position="top-right" />
       </Providers> 
     </body> 
     </html> 

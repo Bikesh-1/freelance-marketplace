@@ -1977,6 +1977,7 @@ export const FreelancerProfileScalarFieldEnum = {
   bio: 'bio',
   fullName: 'fullName',
   country: 'country',
+  walletBalance: 'walletBalance',
   isProfileCompleted: 'isProfileCompleted',
   experienceLevel: 'experienceLevel',
   hourlyRate: 'hourlyRate',
@@ -2084,6 +2085,10 @@ export const ReviewScalarFieldEnum = {
   clientId: 'clientId',
   freelancerId: 'freelancerId',
   rating: 'rating',
+  isVisible: 'isVisible',
+  isVerified: 'isVerified',
+  reply: 'reply',
+  repliedAt: 'repliedAt',
   comment: 'comment',
   createdAt: 'createdAt'
 } as const
@@ -2128,6 +2133,7 @@ export const TransactionScalarFieldEnum = {
   fromAddress: 'fromAddress',
   toAddress: 'toAddress',
   blockNumber: 'blockNumber',
+  status: 'status',
   gasUsed: 'gasUsed',
   network: 'network',
   createdAt: 'createdAt'
@@ -2326,20 +2332,6 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
- * Reference to a field of type 'ExperienceLevel'
- */
-export type EnumExperienceLevelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExperienceLevel'>
-    
-
-
-/**
- * Reference to a field of type 'ExperienceLevel[]'
- */
-export type ListEnumExperienceLevelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExperienceLevel[]'>
-    
-
-
-/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -2350,6 +2342,20 @@ export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, '
  * Reference to a field of type 'Float[]'
  */
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ExperienceLevel'
+ */
+export type EnumExperienceLevelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExperienceLevel'>
+    
+
+
+/**
+ * Reference to a field of type 'ExperienceLevel[]'
+ */
+export type ListEnumExperienceLevelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExperienceLevel[]'>
     
 
 
@@ -2420,6 +2426,20 @@ export type EnumEscrowStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
  * Reference to a field of type 'EscrowStatus[]'
  */
 export type ListEnumEscrowStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EscrowStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TransactionStatus'
+ */
+export type EnumTransactionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'TransactionStatus[]'
+ */
+export type ListEnumTransactionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionStatus[]'>
     
 
 

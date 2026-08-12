@@ -44,6 +44,7 @@ export type TransactionMinAggregateOutputType = {
   fromAddress: string | null
   toAddress: string | null
   blockNumber: number | null
+  status: $Enums.TransactionStatus | null
   gasUsed: string | null
   network: string | null
   createdAt: Date | null
@@ -57,6 +58,7 @@ export type TransactionMaxAggregateOutputType = {
   fromAddress: string | null
   toAddress: string | null
   blockNumber: number | null
+  status: $Enums.TransactionStatus | null
   gasUsed: string | null
   network: string | null
   createdAt: Date | null
@@ -70,6 +72,7 @@ export type TransactionCountAggregateOutputType = {
   fromAddress: number
   toAddress: number
   blockNumber: number
+  status: number
   gasUsed: number
   network: number
   createdAt: number
@@ -95,6 +98,7 @@ export type TransactionMinAggregateInputType = {
   fromAddress?: true
   toAddress?: true
   blockNumber?: true
+  status?: true
   gasUsed?: true
   network?: true
   createdAt?: true
@@ -108,6 +112,7 @@ export type TransactionMaxAggregateInputType = {
   fromAddress?: true
   toAddress?: true
   blockNumber?: true
+  status?: true
   gasUsed?: true
   network?: true
   createdAt?: true
@@ -121,6 +126,7 @@ export type TransactionCountAggregateInputType = {
   fromAddress?: true
   toAddress?: true
   blockNumber?: true
+  status?: true
   gasUsed?: true
   network?: true
   createdAt?: true
@@ -215,12 +221,13 @@ export type TransactionGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
 
 export type TransactionGroupByOutputType = {
   id: string
-  escrowId: string
+  escrowId: string | null
   txHash: string
   amount: number
   fromAddress: string
   toAddress: string
   blockNumber: number | null
+  status: $Enums.TransactionStatus
   gasUsed: string | null
   network: string
   createdAt: Date
@@ -251,26 +258,28 @@ export type TransactionWhereInput = {
   OR?: Prisma.TransactionWhereInput[]
   NOT?: Prisma.TransactionWhereInput | Prisma.TransactionWhereInput[]
   id?: Prisma.StringFilter<"Transaction"> | string
-  escrowId?: Prisma.StringFilter<"Transaction"> | string
+  escrowId?: Prisma.StringNullableFilter<"Transaction"> | string | null
   txHash?: Prisma.StringFilter<"Transaction"> | string
   amount?: Prisma.FloatFilter<"Transaction"> | number
   fromAddress?: Prisma.StringFilter<"Transaction"> | string
   toAddress?: Prisma.StringFilter<"Transaction"> | string
   blockNumber?: Prisma.IntNullableFilter<"Transaction"> | number | null
+  status?: Prisma.EnumTransactionStatusFilter<"Transaction"> | $Enums.TransactionStatus
   gasUsed?: Prisma.StringNullableFilter<"Transaction"> | string | null
   network?: Prisma.StringFilter<"Transaction"> | string
   createdAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
-  escrow?: Prisma.XOR<Prisma.EscrowScalarRelationFilter, Prisma.EscrowWhereInput>
+  escrow?: Prisma.XOR<Prisma.EscrowNullableScalarRelationFilter, Prisma.EscrowWhereInput> | null
 }
 
 export type TransactionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  escrowId?: Prisma.SortOrder
+  escrowId?: Prisma.SortOrderInput | Prisma.SortOrder
   txHash?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   fromAddress?: Prisma.SortOrder
   toAddress?: Prisma.SortOrder
   blockNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   gasUsed?: Prisma.SortOrderInput | Prisma.SortOrder
   network?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -282,26 +291,28 @@ export type TransactionWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.TransactionWhereInput | Prisma.TransactionWhereInput[]
   OR?: Prisma.TransactionWhereInput[]
   NOT?: Prisma.TransactionWhereInput | Prisma.TransactionWhereInput[]
-  escrowId?: Prisma.StringFilter<"Transaction"> | string
+  escrowId?: Prisma.StringNullableFilter<"Transaction"> | string | null
   txHash?: Prisma.StringFilter<"Transaction"> | string
   amount?: Prisma.FloatFilter<"Transaction"> | number
   fromAddress?: Prisma.StringFilter<"Transaction"> | string
   toAddress?: Prisma.StringFilter<"Transaction"> | string
   blockNumber?: Prisma.IntNullableFilter<"Transaction"> | number | null
+  status?: Prisma.EnumTransactionStatusFilter<"Transaction"> | $Enums.TransactionStatus
   gasUsed?: Prisma.StringNullableFilter<"Transaction"> | string | null
   network?: Prisma.StringFilter<"Transaction"> | string
   createdAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
-  escrow?: Prisma.XOR<Prisma.EscrowScalarRelationFilter, Prisma.EscrowWhereInput>
+  escrow?: Prisma.XOR<Prisma.EscrowNullableScalarRelationFilter, Prisma.EscrowWhereInput> | null
 }, "id">
 
 export type TransactionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  escrowId?: Prisma.SortOrder
+  escrowId?: Prisma.SortOrderInput | Prisma.SortOrder
   txHash?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   fromAddress?: Prisma.SortOrder
   toAddress?: Prisma.SortOrder
   blockNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   gasUsed?: Prisma.SortOrderInput | Prisma.SortOrder
   network?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -317,12 +328,13 @@ export type TransactionScalarWhereWithAggregatesInput = {
   OR?: Prisma.TransactionScalarWhereWithAggregatesInput[]
   NOT?: Prisma.TransactionScalarWhereWithAggregatesInput | Prisma.TransactionScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
-  escrowId?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
+  escrowId?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
   txHash?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
   amount?: Prisma.FloatWithAggregatesFilter<"Transaction"> | number
   fromAddress?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
   toAddress?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
   blockNumber?: Prisma.IntNullableWithAggregatesFilter<"Transaction"> | number | null
+  status?: Prisma.EnumTransactionStatusWithAggregatesFilter<"Transaction"> | $Enums.TransactionStatus
   gasUsed?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
   network?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Transaction"> | Date | string
@@ -335,20 +347,22 @@ export type TransactionCreateInput = {
   fromAddress: string
   toAddress: string
   blockNumber?: number | null
+  status?: $Enums.TransactionStatus
   gasUsed?: string | null
   network?: string
   createdAt?: Date | string
-  escrow: Prisma.EscrowCreateNestedOneWithoutTransactionsInput
+  escrow?: Prisma.EscrowCreateNestedOneWithoutTransactionsInput
 }
 
 export type TransactionUncheckedCreateInput = {
   id?: string
-  escrowId: string
+  escrowId?: string | null
   txHash: string
   amount: number
   fromAddress: string
   toAddress: string
   blockNumber?: number | null
+  status?: $Enums.TransactionStatus
   gasUsed?: string | null
   network?: string
   createdAt?: Date | string
@@ -361,20 +375,22 @@ export type TransactionUpdateInput = {
   fromAddress?: Prisma.StringFieldUpdateOperationsInput | string
   toAddress?: Prisma.StringFieldUpdateOperationsInput | string
   blockNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   gasUsed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   network?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  escrow?: Prisma.EscrowUpdateOneRequiredWithoutTransactionsNestedInput
+  escrow?: Prisma.EscrowUpdateOneWithoutTransactionsNestedInput
 }
 
 export type TransactionUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  escrowId?: Prisma.StringFieldUpdateOperationsInput | string
+  escrowId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   txHash?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   fromAddress?: Prisma.StringFieldUpdateOperationsInput | string
   toAddress?: Prisma.StringFieldUpdateOperationsInput | string
   blockNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   gasUsed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   network?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -382,12 +398,13 @@ export type TransactionUncheckedUpdateInput = {
 
 export type TransactionCreateManyInput = {
   id?: string
-  escrowId: string
+  escrowId?: string | null
   txHash: string
   amount: number
   fromAddress: string
   toAddress: string
   blockNumber?: number | null
+  status?: $Enums.TransactionStatus
   gasUsed?: string | null
   network?: string
   createdAt?: Date | string
@@ -400,6 +417,7 @@ export type TransactionUpdateManyMutationInput = {
   fromAddress?: Prisma.StringFieldUpdateOperationsInput | string
   toAddress?: Prisma.StringFieldUpdateOperationsInput | string
   blockNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   gasUsed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   network?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -407,12 +425,13 @@ export type TransactionUpdateManyMutationInput = {
 
 export type TransactionUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  escrowId?: Prisma.StringFieldUpdateOperationsInput | string
+  escrowId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   txHash?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   fromAddress?: Prisma.StringFieldUpdateOperationsInput | string
   toAddress?: Prisma.StringFieldUpdateOperationsInput | string
   blockNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   gasUsed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   network?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -436,6 +455,7 @@ export type TransactionCountOrderByAggregateInput = {
   fromAddress?: Prisma.SortOrder
   toAddress?: Prisma.SortOrder
   blockNumber?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   gasUsed?: Prisma.SortOrder
   network?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -454,6 +474,7 @@ export type TransactionMaxOrderByAggregateInput = {
   fromAddress?: Prisma.SortOrder
   toAddress?: Prisma.SortOrder
   blockNumber?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   gasUsed?: Prisma.SortOrder
   network?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -467,6 +488,7 @@ export type TransactionMinOrderByAggregateInput = {
   fromAddress?: Prisma.SortOrder
   toAddress?: Prisma.SortOrder
   blockNumber?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   gasUsed?: Prisma.SortOrder
   network?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -527,6 +549,10 @@ export type NullableIntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type EnumTransactionStatusFieldUpdateOperationsInput = {
+  set?: $Enums.TransactionStatus
+}
+
 export type TransactionCreateWithoutEscrowInput = {
   id?: string
   txHash: string
@@ -534,6 +560,7 @@ export type TransactionCreateWithoutEscrowInput = {
   fromAddress: string
   toAddress: string
   blockNumber?: number | null
+  status?: $Enums.TransactionStatus
   gasUsed?: string | null
   network?: string
   createdAt?: Date | string
@@ -546,6 +573,7 @@ export type TransactionUncheckedCreateWithoutEscrowInput = {
   fromAddress: string
   toAddress: string
   blockNumber?: number | null
+  status?: $Enums.TransactionStatus
   gasUsed?: string | null
   network?: string
   createdAt?: Date | string
@@ -582,12 +610,13 @@ export type TransactionScalarWhereInput = {
   OR?: Prisma.TransactionScalarWhereInput[]
   NOT?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
   id?: Prisma.StringFilter<"Transaction"> | string
-  escrowId?: Prisma.StringFilter<"Transaction"> | string
+  escrowId?: Prisma.StringNullableFilter<"Transaction"> | string | null
   txHash?: Prisma.StringFilter<"Transaction"> | string
   amount?: Prisma.FloatFilter<"Transaction"> | number
   fromAddress?: Prisma.StringFilter<"Transaction"> | string
   toAddress?: Prisma.StringFilter<"Transaction"> | string
   blockNumber?: Prisma.IntNullableFilter<"Transaction"> | number | null
+  status?: Prisma.EnumTransactionStatusFilter<"Transaction"> | $Enums.TransactionStatus
   gasUsed?: Prisma.StringNullableFilter<"Transaction"> | string | null
   network?: Prisma.StringFilter<"Transaction"> | string
   createdAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
@@ -600,6 +629,7 @@ export type TransactionCreateManyEscrowInput = {
   fromAddress: string
   toAddress: string
   blockNumber?: number | null
+  status?: $Enums.TransactionStatus
   gasUsed?: string | null
   network?: string
   createdAt?: Date | string
@@ -612,6 +642,7 @@ export type TransactionUpdateWithoutEscrowInput = {
   fromAddress?: Prisma.StringFieldUpdateOperationsInput | string
   toAddress?: Prisma.StringFieldUpdateOperationsInput | string
   blockNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   gasUsed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   network?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -624,6 +655,7 @@ export type TransactionUncheckedUpdateWithoutEscrowInput = {
   fromAddress?: Prisma.StringFieldUpdateOperationsInput | string
   toAddress?: Prisma.StringFieldUpdateOperationsInput | string
   blockNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   gasUsed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   network?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -636,6 +668,7 @@ export type TransactionUncheckedUpdateManyWithoutEscrowInput = {
   fromAddress?: Prisma.StringFieldUpdateOperationsInput | string
   toAddress?: Prisma.StringFieldUpdateOperationsInput | string
   blockNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   gasUsed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   network?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -651,10 +684,11 @@ export type TransactionSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   fromAddress?: boolean
   toAddress?: boolean
   blockNumber?: boolean
+  status?: boolean
   gasUsed?: boolean
   network?: boolean
   createdAt?: boolean
-  escrow?: boolean | Prisma.EscrowDefaultArgs<ExtArgs>
+  escrow?: boolean | Prisma.Transaction$escrowArgs<ExtArgs>
 }, ExtArgs["result"]["transaction"]>
 
 export type TransactionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -665,10 +699,11 @@ export type TransactionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   fromAddress?: boolean
   toAddress?: boolean
   blockNumber?: boolean
+  status?: boolean
   gasUsed?: boolean
   network?: boolean
   createdAt?: boolean
-  escrow?: boolean | Prisma.EscrowDefaultArgs<ExtArgs>
+  escrow?: boolean | Prisma.Transaction$escrowArgs<ExtArgs>
 }, ExtArgs["result"]["transaction"]>
 
 export type TransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -679,10 +714,11 @@ export type TransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   fromAddress?: boolean
   toAddress?: boolean
   blockNumber?: boolean
+  status?: boolean
   gasUsed?: boolean
   network?: boolean
   createdAt?: boolean
-  escrow?: boolean | Prisma.EscrowDefaultArgs<ExtArgs>
+  escrow?: boolean | Prisma.Transaction$escrowArgs<ExtArgs>
 }, ExtArgs["result"]["transaction"]>
 
 export type TransactionSelectScalar = {
@@ -693,35 +729,37 @@ export type TransactionSelectScalar = {
   fromAddress?: boolean
   toAddress?: boolean
   blockNumber?: boolean
+  status?: boolean
   gasUsed?: boolean
   network?: boolean
   createdAt?: boolean
 }
 
-export type TransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "escrowId" | "txHash" | "amount" | "fromAddress" | "toAddress" | "blockNumber" | "gasUsed" | "network" | "createdAt", ExtArgs["result"]["transaction"]>
+export type TransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "escrowId" | "txHash" | "amount" | "fromAddress" | "toAddress" | "blockNumber" | "status" | "gasUsed" | "network" | "createdAt", ExtArgs["result"]["transaction"]>
 export type TransactionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  escrow?: boolean | Prisma.EscrowDefaultArgs<ExtArgs>
+  escrow?: boolean | Prisma.Transaction$escrowArgs<ExtArgs>
 }
 export type TransactionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  escrow?: boolean | Prisma.EscrowDefaultArgs<ExtArgs>
+  escrow?: boolean | Prisma.Transaction$escrowArgs<ExtArgs>
 }
 export type TransactionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  escrow?: boolean | Prisma.EscrowDefaultArgs<ExtArgs>
+  escrow?: boolean | Prisma.Transaction$escrowArgs<ExtArgs>
 }
 
 export type $TransactionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Transaction"
   objects: {
-    escrow: Prisma.$EscrowPayload<ExtArgs>
+    escrow: Prisma.$EscrowPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    escrowId: string
+    escrowId: string | null
     txHash: string
     amount: number
     fromAddress: string
     toAddress: string
     blockNumber: number | null
+    status: $Enums.TransactionStatus
     gasUsed: string | null
     network: string
     createdAt: Date
@@ -1119,7 +1157,7 @@ readonly fields: TransactionFieldRefs;
  */
 export interface Prisma__TransactionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  escrow<T extends Prisma.EscrowDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EscrowDefaultArgs<ExtArgs>>): Prisma.Prisma__EscrowClient<runtime.Types.Result.GetResult<Prisma.$EscrowPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  escrow<T extends Prisma.Transaction$escrowArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$escrowArgs<ExtArgs>>): Prisma.Prisma__EscrowClient<runtime.Types.Result.GetResult<Prisma.$EscrowPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1156,6 +1194,7 @@ export interface TransactionFieldRefs {
   readonly fromAddress: Prisma.FieldRef<"Transaction", 'String'>
   readonly toAddress: Prisma.FieldRef<"Transaction", 'String'>
   readonly blockNumber: Prisma.FieldRef<"Transaction", 'Int'>
+  readonly status: Prisma.FieldRef<"Transaction", 'TransactionStatus'>
   readonly gasUsed: Prisma.FieldRef<"Transaction", 'String'>
   readonly network: Prisma.FieldRef<"Transaction", 'String'>
   readonly createdAt: Prisma.FieldRef<"Transaction", 'DateTime'>
@@ -1557,6 +1596,25 @@ export type TransactionDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many Transactions to delete.
    */
   limit?: number
+}
+
+/**
+ * Transaction.escrow
+ */
+export type Transaction$escrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Escrow
+   */
+  select?: Prisma.EscrowSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Escrow
+   */
+  omit?: Prisma.EscrowOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EscrowInclude<ExtArgs> | null
+  where?: Prisma.EscrowWhereInput
 }
 
 /**

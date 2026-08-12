@@ -111,6 +111,7 @@ export const FreelancerProfileScalarFieldEnum = {
   bio: 'bio',
   fullName: 'fullName',
   country: 'country',
+  walletBalance: 'walletBalance',
   isProfileCompleted: 'isProfileCompleted',
   experienceLevel: 'experienceLevel',
   hourlyRate: 'hourlyRate',
@@ -218,6 +219,10 @@ export const ReviewScalarFieldEnum = {
   clientId: 'clientId',
   freelancerId: 'freelancerId',
   rating: 'rating',
+  isVisible: 'isVisible',
+  isVerified: 'isVerified',
+  reply: 'reply',
+  repliedAt: 'repliedAt',
   comment: 'comment',
   createdAt: 'createdAt'
 } as const
@@ -262,6 +267,7 @@ export const TransactionScalarFieldEnum = {
   fromAddress: 'fromAddress',
   toAddress: 'toAddress',
   blockNumber: 'blockNumber',
+  status: 'status',
   gasUsed: 'gasUsed',
   network: 'network',
   createdAt: 'createdAt'

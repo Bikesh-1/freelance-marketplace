@@ -513,10 +513,6 @@ export type MessageUncheckedUpdateManyWithoutJobNestedInput = {
   deleteMany?: Prisma.MessageScalarWhereInput | Prisma.MessageScalarWhereInput[]
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type MessageCreateWithoutSenderInput = {
   id?: string
   content: string

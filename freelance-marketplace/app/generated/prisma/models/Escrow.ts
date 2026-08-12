@@ -463,11 +463,6 @@ export type EscrowSumOrderByAggregateInput = {
   amount?: Prisma.SortOrder
 }
 
-export type EscrowScalarRelationFilter = {
-  is?: Prisma.EscrowWhereInput
-  isNot?: Prisma.EscrowWhereInput
-}
-
 export type EscrowNullableScalarRelationFilter = {
   is?: Prisma.EscrowWhereInput | null
   isNot?: Prisma.EscrowWhereInput | null
@@ -525,10 +520,12 @@ export type EscrowCreateNestedOneWithoutTransactionsInput = {
   connect?: Prisma.EscrowWhereUniqueInput
 }
 
-export type EscrowUpdateOneRequiredWithoutTransactionsNestedInput = {
+export type EscrowUpdateOneWithoutTransactionsNestedInput = {
   create?: Prisma.XOR<Prisma.EscrowCreateWithoutTransactionsInput, Prisma.EscrowUncheckedCreateWithoutTransactionsInput>
   connectOrCreate?: Prisma.EscrowCreateOrConnectWithoutTransactionsInput
   upsert?: Prisma.EscrowUpsertWithoutTransactionsInput
+  disconnect?: Prisma.EscrowWhereInput | boolean
+  delete?: Prisma.EscrowWhereInput | boolean
   connect?: Prisma.EscrowWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.EscrowUpdateToOneWithWhereWithoutTransactionsInput, Prisma.EscrowUpdateWithoutTransactionsInput>, Prisma.EscrowUncheckedUpdateWithoutTransactionsInput>
 }

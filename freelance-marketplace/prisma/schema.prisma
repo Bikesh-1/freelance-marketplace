@@ -39,6 +39,7 @@ model FreelancerProfile {
   bio                String
   fullName           String?
   country            String?
+  walletBalance Float    @default(0)
   isProfileCompleted Boolean           @default(false)
   experienceLevel    ExperienceLevel
   hourlyRate         Float
@@ -112,7 +113,7 @@ model Job {
   duration             String?
   requiredSkills       String[]
   milestones           Milestone[]
-  messages Message[]
+  messages             Message[]
   status               JobStatus     @default(OPEN)
   deadline             DateTime
   selectedFreelancerId String?
@@ -170,43 +171,49 @@ model Review {
 
   rating Int
 
+isVisible    Boolean @default(true)
+  isVerified   Boolean @default(false)
+  reply        String?
+  repliedAt    DateTime?
+
   comment    String            @db.Text
   client     ClientProfile     @relation(fields: [clientId], references: [id], onDelete: Cascade)
   freelancer FreelancerProfile @relation(fields: [freelancerId], references: [id], onDelete: Cascade)
   createdAt  DateTime          @default(now())
 
   @@index([rating])
+  @@index([isVisible])
 }
 
 model Message {
-  id         String   @id @default(cuid())
+  id         String  @id @default(cuid())
   jobId      String
   senderId   String
   receiverId String
-  content    String   @db.Text
-  isRead     Boolean  @default(false)
+  content    String  @db.Text
+  isRead     Boolean @default(false)
 
-readAt     DateTime?
+  readAt DateTime?
 
-job        Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
 
-  sender     User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  sender User @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
 
-  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+  receiver User @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
 
-  createdAt  DateTime @default(now())
+  createdAt DateTime @default(now())
 
-    @@index([jobId])
+  @@index([jobId])
   @@index([senderId])
   @@index([receiverId])
 }
 
 model Escrow {
   id              String        @id @default(cuid())
-  jobId           String        
+  jobId           String
   contractAddress String
   transactionHash String?
-  milestone Milestone?
+  milestone       Milestone?
   network         String        @default("sepolia")
   amount          Float
   status          EscrowStatus  @default(CREATED)
@@ -221,15 +228,24 @@ model Escrow {
 
 model Transaction {
   id          String   @id @default(cuid())
-  escrowId    String
+
+  escrowId    String?
+  escrow      Escrow?  @relation(fields: [escrowId], references: [id], onDelete: Cascade)
+
   txHash      String
   amount      Float
+
   fromAddress String
   toAddress   String
+
   blockNumber Int?
+
+  status      TransactionStatus @default(PENDING)
+
   gasUsed     String?
+
   network     String   @default("sepolia")
-  escrow      Escrow   @relation(fields: [escrowId], references: [id], onDelete: Cascade)
+
   createdAt   DateTime @default(now())
 
   @@index([txHash])
@@ -253,29 +269,29 @@ model Notification {
 }
 
 model Milestone {
-  id        String          @id @default(cuid())
+  id String @id @default(cuid())
 
-  jobId     String
-  job       Job             @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  jobId String
+  job   Job    @relation(fields: [jobId], references: [id], onDelete: Cascade)
 
   title       String
   description String?
 
-Dispute  Dispute[]
+  Dispute Dispute[]
 
-  amount      Float
+  amount Float
 
-  dueDate     DateTime?
+  dueDate DateTime?
 
-  status      MilestoneStatus @default(PENDING)
+  status MilestoneStatus @default(PENDING)
 
-  escrowId    String?         @unique
-  escrow      Escrow?         @relation(fields: [escrowId], references: [id])
+  escrowId String? @unique
+  escrow   Escrow? @relation(fields: [escrowId], references: [id])
 
-  order       Int
+  order Int
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([jobId])
   @@index([status])
@@ -351,16 +367,17 @@ model JobSkill {
 
   @@unique([jobId, skillId])
 }
+
 model Dispute {
   id String @id @default(cuid())
 
   milestoneId String
-  milestone Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+  milestone   Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
 
   openedById String
-  openedBy User @relation(fields: [openedById], references: [id], onDelete: Cascade)
+  openedBy   User   @relation(fields: [openedById], references: [id], onDelete: Cascade)
 
-  reason String
+  reason   String
   evidence String?
 
   status DisputeStatus @default(OPEN)
@@ -383,9 +400,11 @@ enum DisputeStatus {
   FREELANCER_WON
   RESOLVED
 }
-
-
-
+enum TransactionStatus {
+  PENDING
+  CONFIRMED
+  FAILED
+}
 
 enum MilestoneStatus {
   PENDING

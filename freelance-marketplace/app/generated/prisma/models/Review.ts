@@ -39,6 +39,10 @@ export type ReviewMinAggregateOutputType = {
   clientId: string | null
   freelancerId: string | null
   rating: number | null
+  isVisible: boolean | null
+  isVerified: boolean | null
+  reply: string | null
+  repliedAt: Date | null
   comment: string | null
   createdAt: Date | null
 }
@@ -48,6 +52,10 @@ export type ReviewMaxAggregateOutputType = {
   clientId: string | null
   freelancerId: string | null
   rating: number | null
+  isVisible: boolean | null
+  isVerified: boolean | null
+  reply: string | null
+  repliedAt: Date | null
   comment: string | null
   createdAt: Date | null
 }
@@ -57,6 +65,10 @@ export type ReviewCountAggregateOutputType = {
   clientId: number
   freelancerId: number
   rating: number
+  isVisible: number
+  isVerified: number
+  reply: number
+  repliedAt: number
   comment: number
   createdAt: number
   _all: number
@@ -76,6 +88,10 @@ export type ReviewMinAggregateInputType = {
   clientId?: true
   freelancerId?: true
   rating?: true
+  isVisible?: true
+  isVerified?: true
+  reply?: true
+  repliedAt?: true
   comment?: true
   createdAt?: true
 }
@@ -85,6 +101,10 @@ export type ReviewMaxAggregateInputType = {
   clientId?: true
   freelancerId?: true
   rating?: true
+  isVisible?: true
+  isVerified?: true
+  reply?: true
+  repliedAt?: true
   comment?: true
   createdAt?: true
 }
@@ -94,6 +114,10 @@ export type ReviewCountAggregateInputType = {
   clientId?: true
   freelancerId?: true
   rating?: true
+  isVisible?: true
+  isVerified?: true
+  reply?: true
+  repliedAt?: true
   comment?: true
   createdAt?: true
   _all?: true
@@ -190,6 +214,10 @@ export type ReviewGroupByOutputType = {
   clientId: string
   freelancerId: string
   rating: number
+  isVisible: boolean
+  isVerified: boolean
+  reply: string | null
+  repliedAt: Date | null
   comment: string
   createdAt: Date
   _count: ReviewCountAggregateOutputType | null
@@ -222,6 +250,10 @@ export type ReviewWhereInput = {
   clientId?: Prisma.StringFilter<"Review"> | string
   freelancerId?: Prisma.StringFilter<"Review"> | string
   rating?: Prisma.IntFilter<"Review"> | number
+  isVisible?: Prisma.BoolFilter<"Review"> | boolean
+  isVerified?: Prisma.BoolFilter<"Review"> | boolean
+  reply?: Prisma.StringNullableFilter<"Review"> | string | null
+  repliedAt?: Prisma.DateTimeNullableFilter<"Review"> | Date | string | null
   comment?: Prisma.StringFilter<"Review"> | string
   createdAt?: Prisma.DateTimeFilter<"Review"> | Date | string
   client?: Prisma.XOR<Prisma.ClientProfileScalarRelationFilter, Prisma.ClientProfileWhereInput>
@@ -233,6 +265,10 @@ export type ReviewOrderByWithRelationInput = {
   clientId?: Prisma.SortOrder
   freelancerId?: Prisma.SortOrder
   rating?: Prisma.SortOrder
+  isVisible?: Prisma.SortOrder
+  isVerified?: Prisma.SortOrder
+  reply?: Prisma.SortOrderInput | Prisma.SortOrder
+  repliedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   comment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   client?: Prisma.ClientProfileOrderByWithRelationInput
@@ -247,6 +283,10 @@ export type ReviewWhereUniqueInput = Prisma.AtLeast<{
   clientId?: Prisma.StringFilter<"Review"> | string
   freelancerId?: Prisma.StringFilter<"Review"> | string
   rating?: Prisma.IntFilter<"Review"> | number
+  isVisible?: Prisma.BoolFilter<"Review"> | boolean
+  isVerified?: Prisma.BoolFilter<"Review"> | boolean
+  reply?: Prisma.StringNullableFilter<"Review"> | string | null
+  repliedAt?: Prisma.DateTimeNullableFilter<"Review"> | Date | string | null
   comment?: Prisma.StringFilter<"Review"> | string
   createdAt?: Prisma.DateTimeFilter<"Review"> | Date | string
   client?: Prisma.XOR<Prisma.ClientProfileScalarRelationFilter, Prisma.ClientProfileWhereInput>
@@ -258,6 +298,10 @@ export type ReviewOrderByWithAggregationInput = {
   clientId?: Prisma.SortOrder
   freelancerId?: Prisma.SortOrder
   rating?: Prisma.SortOrder
+  isVisible?: Prisma.SortOrder
+  isVerified?: Prisma.SortOrder
+  reply?: Prisma.SortOrderInput | Prisma.SortOrder
+  repliedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   comment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.ReviewCountOrderByAggregateInput
@@ -275,6 +319,10 @@ export type ReviewScalarWhereWithAggregatesInput = {
   clientId?: Prisma.StringWithAggregatesFilter<"Review"> | string
   freelancerId?: Prisma.StringWithAggregatesFilter<"Review"> | string
   rating?: Prisma.IntWithAggregatesFilter<"Review"> | number
+  isVisible?: Prisma.BoolWithAggregatesFilter<"Review"> | boolean
+  isVerified?: Prisma.BoolWithAggregatesFilter<"Review"> | boolean
+  reply?: Prisma.StringNullableWithAggregatesFilter<"Review"> | string | null
+  repliedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Review"> | Date | string | null
   comment?: Prisma.StringWithAggregatesFilter<"Review"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Review"> | Date | string
 }
@@ -282,6 +330,10 @@ export type ReviewScalarWhereWithAggregatesInput = {
 export type ReviewCreateInput = {
   id?: string
   rating: number
+  isVisible?: boolean
+  isVerified?: boolean
+  reply?: string | null
+  repliedAt?: Date | string | null
   comment: string
   createdAt?: Date | string
   client: Prisma.ClientProfileCreateNestedOneWithoutReviewsInput
@@ -293,6 +345,10 @@ export type ReviewUncheckedCreateInput = {
   clientId: string
   freelancerId: string
   rating: number
+  isVisible?: boolean
+  isVerified?: boolean
+  reply?: string | null
+  repliedAt?: Date | string | null
   comment: string
   createdAt?: Date | string
 }
@@ -300,6 +356,10 @@ export type ReviewUncheckedCreateInput = {
 export type ReviewUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
+  isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reply?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  repliedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   comment?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   client?: Prisma.ClientProfileUpdateOneRequiredWithoutReviewsNestedInput
@@ -311,6 +371,10 @@ export type ReviewUncheckedUpdateInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   freelancerId?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
+  isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reply?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  repliedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   comment?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -320,6 +384,10 @@ export type ReviewCreateManyInput = {
   clientId: string
   freelancerId: string
   rating: number
+  isVisible?: boolean
+  isVerified?: boolean
+  reply?: string | null
+  repliedAt?: Date | string | null
   comment: string
   createdAt?: Date | string
 }
@@ -327,6 +395,10 @@ export type ReviewCreateManyInput = {
 export type ReviewUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
+  isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reply?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  repliedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   comment?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -336,6 +408,10 @@ export type ReviewUncheckedUpdateManyInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   freelancerId?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
+  isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reply?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  repliedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   comment?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -355,6 +431,10 @@ export type ReviewCountOrderByAggregateInput = {
   clientId?: Prisma.SortOrder
   freelancerId?: Prisma.SortOrder
   rating?: Prisma.SortOrder
+  isVisible?: Prisma.SortOrder
+  isVerified?: Prisma.SortOrder
+  reply?: Prisma.SortOrder
+  repliedAt?: Prisma.SortOrder
   comment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -368,6 +448,10 @@ export type ReviewMaxOrderByAggregateInput = {
   clientId?: Prisma.SortOrder
   freelancerId?: Prisma.SortOrder
   rating?: Prisma.SortOrder
+  isVisible?: Prisma.SortOrder
+  isVerified?: Prisma.SortOrder
+  reply?: Prisma.SortOrder
+  repliedAt?: Prisma.SortOrder
   comment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -377,6 +461,10 @@ export type ReviewMinOrderByAggregateInput = {
   clientId?: Prisma.SortOrder
   freelancerId?: Prisma.SortOrder
   rating?: Prisma.SortOrder
+  isVisible?: Prisma.SortOrder
+  isVerified?: Prisma.SortOrder
+  reply?: Prisma.SortOrder
+  repliedAt?: Prisma.SortOrder
   comment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -469,9 +557,17 @@ export type ReviewUncheckedUpdateManyWithoutClientNestedInput = {
   deleteMany?: Prisma.ReviewScalarWhereInput | Prisma.ReviewScalarWhereInput[]
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type ReviewCreateWithoutFreelancerInput = {
   id?: string
   rating: number
+  isVisible?: boolean
+  isVerified?: boolean
+  reply?: string | null
+  repliedAt?: Date | string | null
   comment: string
   createdAt?: Date | string
   client: Prisma.ClientProfileCreateNestedOneWithoutReviewsInput
@@ -481,6 +577,10 @@ export type ReviewUncheckedCreateWithoutFreelancerInput = {
   id?: string
   clientId: string
   rating: number
+  isVisible?: boolean
+  isVerified?: boolean
+  reply?: string | null
+  repliedAt?: Date | string | null
   comment: string
   createdAt?: Date | string
 }
@@ -519,6 +619,10 @@ export type ReviewScalarWhereInput = {
   clientId?: Prisma.StringFilter<"Review"> | string
   freelancerId?: Prisma.StringFilter<"Review"> | string
   rating?: Prisma.IntFilter<"Review"> | number
+  isVisible?: Prisma.BoolFilter<"Review"> | boolean
+  isVerified?: Prisma.BoolFilter<"Review"> | boolean
+  reply?: Prisma.StringNullableFilter<"Review"> | string | null
+  repliedAt?: Prisma.DateTimeNullableFilter<"Review"> | Date | string | null
   comment?: Prisma.StringFilter<"Review"> | string
   createdAt?: Prisma.DateTimeFilter<"Review"> | Date | string
 }
@@ -526,6 +630,10 @@ export type ReviewScalarWhereInput = {
 export type ReviewCreateWithoutClientInput = {
   id?: string
   rating: number
+  isVisible?: boolean
+  isVerified?: boolean
+  reply?: string | null
+  repliedAt?: Date | string | null
   comment: string
   createdAt?: Date | string
   freelancer: Prisma.FreelancerProfileCreateNestedOneWithoutReviewsInput
@@ -535,6 +643,10 @@ export type ReviewUncheckedCreateWithoutClientInput = {
   id?: string
   freelancerId: string
   rating: number
+  isVisible?: boolean
+  isVerified?: boolean
+  reply?: string | null
+  repliedAt?: Date | string | null
   comment: string
   createdAt?: Date | string
 }
@@ -569,6 +681,10 @@ export type ReviewCreateManyFreelancerInput = {
   id?: string
   clientId: string
   rating: number
+  isVisible?: boolean
+  isVerified?: boolean
+  reply?: string | null
+  repliedAt?: Date | string | null
   comment: string
   createdAt?: Date | string
 }
@@ -576,6 +692,10 @@ export type ReviewCreateManyFreelancerInput = {
 export type ReviewUpdateWithoutFreelancerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
+  isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reply?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  repliedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   comment?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   client?: Prisma.ClientProfileUpdateOneRequiredWithoutReviewsNestedInput
@@ -585,6 +705,10 @@ export type ReviewUncheckedUpdateWithoutFreelancerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
+  isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reply?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  repliedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   comment?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -593,6 +717,10 @@ export type ReviewUncheckedUpdateManyWithoutFreelancerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
+  isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reply?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  repliedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   comment?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -601,6 +729,10 @@ export type ReviewCreateManyClientInput = {
   id?: string
   freelancerId: string
   rating: number
+  isVisible?: boolean
+  isVerified?: boolean
+  reply?: string | null
+  repliedAt?: Date | string | null
   comment: string
   createdAt?: Date | string
 }
@@ -608,6 +740,10 @@ export type ReviewCreateManyClientInput = {
 export type ReviewUpdateWithoutClientInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
+  isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reply?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  repliedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   comment?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   freelancer?: Prisma.FreelancerProfileUpdateOneRequiredWithoutReviewsNestedInput
@@ -617,6 +753,10 @@ export type ReviewUncheckedUpdateWithoutClientInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   freelancerId?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
+  isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reply?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  repliedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   comment?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -625,6 +765,10 @@ export type ReviewUncheckedUpdateManyWithoutClientInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   freelancerId?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
+  isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reply?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  repliedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   comment?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -636,6 +780,10 @@ export type ReviewSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   clientId?: boolean
   freelancerId?: boolean
   rating?: boolean
+  isVisible?: boolean
+  isVerified?: boolean
+  reply?: boolean
+  repliedAt?: boolean
   comment?: boolean
   createdAt?: boolean
   client?: boolean | Prisma.ClientProfileDefaultArgs<ExtArgs>
@@ -647,6 +795,10 @@ export type ReviewSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   clientId?: boolean
   freelancerId?: boolean
   rating?: boolean
+  isVisible?: boolean
+  isVerified?: boolean
+  reply?: boolean
+  repliedAt?: boolean
   comment?: boolean
   createdAt?: boolean
   client?: boolean | Prisma.ClientProfileDefaultArgs<ExtArgs>
@@ -658,6 +810,10 @@ export type ReviewSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   clientId?: boolean
   freelancerId?: boolean
   rating?: boolean
+  isVisible?: boolean
+  isVerified?: boolean
+  reply?: boolean
+  repliedAt?: boolean
   comment?: boolean
   createdAt?: boolean
   client?: boolean | Prisma.ClientProfileDefaultArgs<ExtArgs>
@@ -669,11 +825,15 @@ export type ReviewSelectScalar = {
   clientId?: boolean
   freelancerId?: boolean
   rating?: boolean
+  isVisible?: boolean
+  isVerified?: boolean
+  reply?: boolean
+  repliedAt?: boolean
   comment?: boolean
   createdAt?: boolean
 }
 
-export type ReviewOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clientId" | "freelancerId" | "rating" | "comment" | "createdAt", ExtArgs["result"]["review"]>
+export type ReviewOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clientId" | "freelancerId" | "rating" | "isVisible" | "isVerified" | "reply" | "repliedAt" | "comment" | "createdAt", ExtArgs["result"]["review"]>
 export type ReviewInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   client?: boolean | Prisma.ClientProfileDefaultArgs<ExtArgs>
   freelancer?: boolean | Prisma.FreelancerProfileDefaultArgs<ExtArgs>
@@ -698,6 +858,10 @@ export type $ReviewPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     clientId: string
     freelancerId: string
     rating: number
+    isVisible: boolean
+    isVerified: boolean
+    reply: string | null
+    repliedAt: Date | null
     comment: string
     createdAt: Date
   }, ExtArgs["result"]["review"]>
@@ -1129,6 +1293,10 @@ export interface ReviewFieldRefs {
   readonly clientId: Prisma.FieldRef<"Review", 'String'>
   readonly freelancerId: Prisma.FieldRef<"Review", 'String'>
   readonly rating: Prisma.FieldRef<"Review", 'Int'>
+  readonly isVisible: Prisma.FieldRef<"Review", 'Boolean'>
+  readonly isVerified: Prisma.FieldRef<"Review", 'Boolean'>
+  readonly reply: Prisma.FieldRef<"Review", 'String'>
+  readonly repliedAt: Prisma.FieldRef<"Review", 'DateTime'>
   readonly comment: Prisma.FieldRef<"Review", 'String'>
   readonly createdAt: Prisma.FieldRef<"Review", 'DateTime'>
 }

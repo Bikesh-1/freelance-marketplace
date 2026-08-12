@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 import { useNotificationInfinite } from "@/hooks/useNotificationInfinite";
 import NotificationItem from "./NotificationItem";
@@ -31,7 +31,38 @@ export default function NotificationList({
         ) || [],
       [data]
     );
+  const loadMoreRef =
+    useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (
+      !loadMoreRef.current ||
+      !hasNextPage
+    )
+      return;
+
+    const observer =
+      new IntersectionObserver(
+        (entries) => {
+          if (
+            entries[0]
+              .isIntersecting
+          ) {
+            fetchNextPage();
+          }
+        }
+      );
+
+    observer.observe(
+      loadMoreRef.current
+    );
+
+    return () =>
+      observer.disconnect();
+  }, [
+    hasNextPage,
+    fetchNextPage,
+  ]);
   const markAll = async () => {
     await markNotificationsRead(
       userId
@@ -67,19 +98,14 @@ export default function NotificationList({
       )}
 
       {hasNextPage && (
-        <button
-          onClick={() =>
-            fetchNextPage()
-          }
-          disabled={
-            isFetchingNextPage
-          }
-          className="w-full rounded-lg bg-indigo-600 py-3 text-white hover:bg-indigo-500"
+        <div
+          ref={loadMoreRef}
+          className="h-10 flex items-center justify-center text-slate-400"
         >
           {isFetchingNextPage
             ? "Loading..."
-            : "Load More"}
-        </button>
+            : "Scroll for more"}
+        </div>
       )}
     </div>
   );

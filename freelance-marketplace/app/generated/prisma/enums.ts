@@ -20,6 +20,15 @@ export const DisputeStatus = {
 export type DisputeStatus = (typeof DisputeStatus)[keyof typeof DisputeStatus]
 
 
+export const TransactionStatus = {
+  PENDING: 'PENDING',
+  CONFIRMED: 'CONFIRMED',
+  FAILED: 'FAILED'
+} as const
+
+export type TransactionStatus = (typeof TransactionStatus)[keyof typeof TransactionStatus]
+
+
 export const MilestoneStatus = {
   PENDING: 'PENDING',
   FUNDED: 'FUNDED',
