@@ -29,73 +29,75 @@ const router = useRouter();
 const [loading, setLoading] = useState(false);
 
 const handleAccept = async () => {
-try {
-setLoading(true);
+  try {
+    setLoading(true);
 
-
-  const res = await fetch(
-    `/api/applications/${application.id}/accept`,
-    {
-      method: "POST",
-    }
-  );
-
-  const data = await res.json();
-
-  if (!res.ok) {
-    throw new Error(
-      data.message || "Failed to accept application"
+    const res = await fetch(
+      `/api/jobs/${jobId}/accept`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ applicationId: application.id }),
+      }
     );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(
+        data.message || "Failed to accept application"
+      );
+    }
+
+    alert("Freelancer accepted successfully");
+
+    router.refresh();
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error
+        ? error.message
+        : "Failed to accept application";
+
+    alert(message);
+  } finally {
+    setLoading(false);
   }
-
-  alert("Freelancer accepted successfully");
-
-  router.refresh();
-} catch (error: unknown) {
-  const message =
-    error instanceof Error
-      ? error.message
-      : "Failed to accept application";
-
-  alert(message);
-} finally {
-  setLoading(false);
-}
-
-
 };
 
 const handleReject = async () => {
-try {
-setLoading(true);
-  const res = await fetch(
-    `/api/applications/${application.id}/reject`,
-    {
-      method: "POST",
-    }
-  );
+  try {
+    setLoading(true);
 
-  const data = await res.json();
-
-  if (!res.ok) {
-    throw new Error(
-      data.message || "Failed to reject application"
+    const res = await fetch(
+      `/api/jobs/${jobId}/reject`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ applicationId: application.id }),
+      }
     );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(
+        data.message || "Failed to reject application"
+      );
+    }
+
+    alert("Application rejected");
+
+    router.refresh();
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error
+        ? error.message
+        : "Failed to reject application";
+
+    alert(message);
+  } finally {
+    setLoading(false);
   }
-
-  alert("Application rejected");
-
-  router.refresh();
-} catch (error: unknown) {
-  const message =
-    error instanceof Error
-      ? error.message
-      : "Failed to reject application";
-
-  alert(message);
-} finally {
-  setLoading(false);
-}
 };
 
 return ( <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6"> <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between"> <div className="flex-1"> <h2 className="text-2xl font-semibold text-white">

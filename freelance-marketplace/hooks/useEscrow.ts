@@ -14,7 +14,7 @@ export function useEscrow() {
   // Create Escrow on Blockchain + Save in Prisma
   const createEscrow = async (
     freelancerAddress: string,
-    jobId: string
+    jobId: string = ""
   ) => {
     try {
       setLoading(true);
@@ -27,21 +27,24 @@ export function useEscrow() {
       const tx = await contract.createEscrow(freelancerAddress);
       const receipt = await tx.wait();
 
-      // Save escrow in database
-      await axios.post("/api/escrow/create", {
-        jobId,
-        contractAddress:
-          process.env.NEXT_PUBLIC_ESCROW_CONTRACT_ADDRESS,
-        amount: 0,
-      });
+      // Save escrow in database if jobId provided
+      if (jobId) {
+        await axios.post("/api/escrow/create", {
+          jobId,
+          contractAddress:
+            process.env.NEXT_PUBLIC_ESCROW_CONTRACT_ADDRESS,
+          amount: 0,
+        });
+      }
 
       return receipt;
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
+      const errorObj = err as { shortMessage?: string; message?: string };
 
       setError(
-        err?.shortMessage ||
-        err?.message ||
+        errorObj?.shortMessage ||
+        errorObj?.message ||
         "Transaction failed"
       );
 
@@ -55,7 +58,7 @@ export function useEscrow() {
   const fundEscrow = async (
     escrowId: number,
     amount: string,
-    prismaEscrowId: string
+    prismaEscrowId: string = ""
   ) => {
     try {
       setLoading(true);
@@ -73,22 +76,25 @@ export function useEscrow() {
 
       const receipt = await tx.wait();
 
-      await axios.post("/api/escrow/fund", {
-        escrowId: prismaEscrowId,
-        txHash: receipt.hash,
-        amount: Number(amount),
-        fromAddress: await signer.getAddress(),
-        toAddress:
-          process.env.NEXT_PUBLIC_ESCROW_CONTRACT_ADDRESS,
-      });
+      if (prismaEscrowId) {
+        await axios.post("/api/escrow/fund", {
+          escrowId: prismaEscrowId,
+          txHash: receipt.hash,
+          amount: Number(amount),
+          fromAddress: await signer.getAddress(),
+          toAddress:
+            process.env.NEXT_PUBLIC_ESCROW_CONTRACT_ADDRESS,
+        });
+      }
 
       return receipt;
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
+      const errorObj = err as { shortMessage?: string; message?: string };
 
       setError(
-        err?.shortMessage ||
-        err?.message ||
+        errorObj?.shortMessage ||
+        errorObj?.message ||
         "Funding failed"
       );
 
@@ -101,9 +107,9 @@ export function useEscrow() {
   // Release Payment + Sync Prisma
   const releasePayment = async (
     escrowId: number,
-    prismaEscrowId: string,
-    freelancerAddress: string,
-    amount: number
+    prismaEscrowId: string = "",
+    freelancerAddress: string = "",
+    amount: number = 0
   ) => {
     try {
       setLoading(true);
@@ -116,21 +122,24 @@ export function useEscrow() {
       const tx = await contract.releasePayment(escrowId);
       const receipt = await tx.wait();
 
-      await axios.post("/api/escrow/release", {
-        escrowId: prismaEscrowId,
-        txHash: receipt.hash,
-        amount,
-        fromAddress: await signer.getAddress(),
-        toAddress: freelancerAddress,
-      });
+      if (prismaEscrowId) {
+        await axios.post("/api/escrow/release", {
+          escrowId: prismaEscrowId,
+          txHash: receipt.hash,
+          amount,
+          fromAddress: await signer.getAddress(),
+          toAddress: freelancerAddress,
+        });
+      }
 
       return receipt;
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
+      const errorObj = err as { shortMessage?: string; message?: string };
 
       setError(
-        err?.shortMessage ||
-        err?.message ||
+        errorObj?.shortMessage ||
+        errorObj?.message ||
         "Payment release failed"
       );
 
@@ -143,50 +152,39 @@ export function useEscrow() {
   // Refund Escrow
   const refundPayment = async (
     escrowId: number,
-    prismaEscrowId: string
+    prismaEscrowId: string = ""
   ) => {
     try {
       setLoading(true);
       setError(null);
 
       // 1. Connect wallet
-      const provider =
-        getBrowserProvider();
-
-      const signer =
-        await provider.getSigner();
+      const provider = getBrowserProvider();
+      const signer = await provider.getSigner();
 
       // 2. Load contract
-      const contract =
-        getEscrowContract(signer);
+      const contract = getEscrowContract(signer);
 
       // 3. Blockchain refund
-      const tx =
-        await contract.refundClient(
-          escrowId
-        );
-
-      const receipt =
-        await tx.wait();
+      const tx = await contract.refundClient(escrowId);
+      const receipt = await tx.wait();
 
       // 4. Sync database
-      await axios.post(
-        "/api/dispute/refund",
-        {
-          escrowId:
-            prismaEscrowId,
-          txHash:
-            receipt.hash,
-        }
-      );
+      if (prismaEscrowId) {
+        await axios.post("/api/dispute/refund", {
+          escrowId: prismaEscrowId,
+          txHash: receipt.hash,
+        });
+      }
 
       return receipt;
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
+      const errorObj = err as { shortMessage?: string; message?: string };
 
       setError(
-        err?.shortMessage ||
-        err?.message ||
+        errorObj?.shortMessage ||
+        errorObj?.message ||
         "Refund failed"
       );
 

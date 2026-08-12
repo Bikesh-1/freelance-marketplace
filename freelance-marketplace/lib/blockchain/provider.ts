@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { BrowserProvider, Eip1193Provider } from "ethers";
 
 export function getBrowserProvider() {
   if (typeof window === "undefined") {
@@ -7,9 +7,7 @@ export function getBrowserProvider() {
     );
   }
 
-  const ethereum = (
-    window as any
-  ).ethereum;
+  const ethereum = (window as unknown as { ethereum?: Eip1193Provider }).ethereum;
 
   if (!ethereum) {
     throw new Error(
@@ -17,7 +15,5 @@ export function getBrowserProvider() {
     );
   }
 
-  return new ethers.BrowserProvider(
-    ethereum
-  );
+  return new BrowserProvider(ethereum);
 }

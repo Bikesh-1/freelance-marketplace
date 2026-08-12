@@ -1,8 +1,28 @@
 
 import Link from "next/link"
 
+interface JobSkillItem {
+  id: string;
+  skill: {
+    name: string;
+  };
+}
+
+interface JobItem {
+  id: string;
+  title: string;
+  jobType: string;
+  description: string;
+  budget: number;
+  createdAt: string | Date;
+  client: {
+    companyName: string;
+  };
+  skills?: JobSkillItem[];
+}
+
 interface Props {
-  job: any
+  job: JobItem;
 }
 
 export default function JobCard({
@@ -26,7 +46,7 @@ export default function JobCard({
         </p>
 
         <div className="mt-4 flex flex-wrap gap-2">
-          {job.skills?.map((item: any) => (
+          {job.skills?.map((item: JobSkillItem) => (
             <span
               key={item.id}
               className="rounded-full bg-slate-800 px-3 py-1 text-sm text-slate-300"

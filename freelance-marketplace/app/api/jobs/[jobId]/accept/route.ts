@@ -6,9 +6,10 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { jobId: string } }
+  { params }: { params: Promise<{ jobId: string }> }
 ) {
   try {
+    const { jobId } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.id) {
@@ -37,7 +38,7 @@ export async function POST(
 
     const job = await prisma.job.findUnique({
       where: {
-        id: params.jobId,
+        id: jobId,
       },
     });
 
@@ -72,7 +73,7 @@ export async function POST(
 
     await prisma.application.updateMany({
       where: {
-        jobId: params.jobId,
+        jobId,
         id: {
           not: applicationId,
         },
@@ -84,7 +85,7 @@ export async function POST(
 
     await prisma.job.update({
       where: {
-        id: params.jobId,
+        id: jobId,
       },
       data: {
         status: "IN_PROGRESS",
@@ -93,16 +94,16 @@ export async function POST(
       },
     });
     await prisma.escrow.create({
-  data: {
-    jobId: params.jobId,
-    contractAddress:
-      process.env
-        .NEXT_PUBLIC_ESCROW_CONTRACT_ADDRESS || "",
-    amount: job.budget,
-    network: "hardhat-local",
-    status: "CREATED",
-  },
-});
+      data: {
+        jobId,
+        contractAddress:
+          process.env
+            .NEXT_PUBLIC_ESCROW_CONTRACT_ADDRESS || "",
+        amount: job.budget,
+        network: "hardhat-local",
+        status: "CREATED",
+      },
+    });
     return NextResponse.json({
       success: true,
       message: "Freelancer selected successfully",

@@ -65,7 +65,7 @@ export default function EscrowFlowCard({
   };
 
   const handleRefund = async () => {
-    await refundPayment(escrowId);
+    await refundPayment(escrowId, prismaEscrowId);
 
     alert(
       "Refund completed successfully"

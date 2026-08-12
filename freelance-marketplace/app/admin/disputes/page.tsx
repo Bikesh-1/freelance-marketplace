@@ -1,5 +1,14 @@
 import { getDisputes } from "@/services/dispute.service";
 
+interface DisputeItem {
+  id: string;
+  reason: string;
+  status: string;
+  milestone: {
+    title: string;
+  };
+}
+
 export default async function AdminDisputesPage() {
   const disputes =
     await getDisputes();
@@ -12,7 +21,7 @@ export default async function AdminDisputesPage() {
         </h1>
 
         {disputes.map(
-          (dispute: any) => (
+          (dispute: DisputeItem) => (
             <div
               key={dispute.id}
               className="rounded-2xl border border-slate-800 bg-slate-900 p-5 space-y-3"

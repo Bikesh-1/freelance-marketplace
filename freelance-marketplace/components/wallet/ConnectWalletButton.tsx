@@ -1,6 +1,6 @@
 "use client"
 
-import { useWallet } from "@/hooks/useWallet"
+import { useWalletConnection } from "@/hooks/useWallet"
 
 export default function ConnectWalletButton() {
   const {
@@ -8,7 +8,7 @@ export default function ConnectWalletButton() {
     loading,
     connect,
     disconnect,
-  } = useWallet()
+  } = useWalletConnection()
 
   if (walletAddress) {
     return (

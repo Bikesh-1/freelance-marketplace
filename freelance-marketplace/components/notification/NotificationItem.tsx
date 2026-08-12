@@ -2,10 +2,18 @@
 
 import { markNotificationRead } from "@/services/notification.service";
 
+interface NotificationData {
+  id: string;
+  title: string;
+  message: string;
+  isRead: boolean;
+  createdAt: string | Date;
+}
+
 export default function NotificationItem({
   notification,
 }: {
-  notification: any;
+  notification: NotificationData;
 }) {
   const handleRead = async () => {
     if (

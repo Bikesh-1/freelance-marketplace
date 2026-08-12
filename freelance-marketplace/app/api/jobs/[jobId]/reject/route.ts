@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-export async function GET(
+export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ jobId: string }> }
 ) {
@@ -18,6 +18,9 @@ export async function GET(
         { status: 401 }
       );
     }
+
+    const body = await req.json();
+    const { applicationId } = body;
 
     const clientProfile = await prisma.clientProfile.findUnique({
       where: {
@@ -45,28 +48,19 @@ export async function GET(
       );
     }
 
-    const applications = await prisma.application.findMany({
+    await prisma.application.update({
       where: {
-        jobId,
+        id: applicationId,
       },
-      include: {
-        freelancer: {
-          include: {
-            user: true,
-            skills: {
-              include: {
-                skill: true,
-              },
-            },
-          },
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
+      data: {
+        status: "REJECTED",
       },
     });
 
-    return NextResponse.json(applications);
+    return NextResponse.json({
+      success: true,
+      message: "Application rejected successfully",
+    });
   } catch (error) {
     console.error(error);
 
