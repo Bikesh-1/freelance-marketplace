@@ -14,7 +14,6 @@ export default function LoginPage() {
 
     async function handleLogin(e: React.FormEvent) {
         e.preventDefault();
-
         setLoading(true);
 
         const res = await signIn("credentials", {
@@ -27,7 +26,6 @@ export default function LoginPage() {
 
         if (!res?.error) {
             const session = await fetch("/api/auth/session").then((r) => r.json());
-
             if (session?.user?.role === "CLIENT") {
                 router.push("/client/dashboard");
             } else {
@@ -37,20 +35,64 @@ export default function LoginPage() {
             alert("Invalid credentials");
         }
     }
-    return (
-        <main className="min-h-screen flex items-center justify-center px-6">
-            <Card className="w-full max-w-md">
-                <h1 className="text-3xl font-bold mb-6">
-                    Login
-                </h1>
-                <form onSubmit={handleLogin} className="space-y-4">
-                    <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full rounded-xl bg-slate-800 px-4 py-3 outline-none" />
 
-                    <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full rounded-xl bg-slate-800 px-4 py-3 outline-none" />
-                    <Button className="w-full"
-                        disabled={loading}> {loading ? "Signing in..." : "Login"}
+    return (
+        <main className="min-h-screen flex items-center justify-center px-6 bg-[#0B0B0F]">
+            <span className="absolute top-0 left-0 p-4 text-xl flex items-center justify-center gap-2 text-white font-mono">
+                <h1 className="font-bold text-red-500">&lt;/&gt;</h1>
+                <span>freelanzo</span>
+            </span>
+
+            <Card className="w-full max-w-md bg-[#0B0B0F]">
+                <h1 className="text-3xl font-bold mb-2">Welcome back</h1>
+                <p className="text-sm text-gray-400 mb-6">
+                    Sign in to continue managing projects, proposals, and payments.
+                </p>
+
+                <form onSubmit={handleLogin} className="space-y-4">
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full border rounded-md bg-[#0B0B0F] px-2 py-1 outline-none"
+                    />
+
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full border rounded-md bg-[#0B0B0F] px-2 py-1 outline-none"
+                    />
+
+                    <div className="text-right">
+                        <a href="/forgot-password" className="text-sm text-gray-400 hover:text-white">
+                            Forgot password?
+                        </a>
+                    </div>
+
+                    <Button className="w-full" disabled={loading}>
+                        {loading ? "Signing in..." : "Login"}
                     </Button>
                 </form>
+
+                <div className="my-6 flex items-center">
+                    <div className="flex-1 border-t border-gray-800" />
+                    <span className="px-3 text-xs text-gray-500">OR</span>
+                    <div className="flex-1 border-t border-gray-800" />
+                </div>
+
+                <p className="text-center text-sm text-gray-400">
+                    Don't have an account?{" "}
+                    <a href="/signup" className="text-white hover:underline">
+                        Create one
+                    </a>
+                </p>
+
+                <p className="text-center text-xs text-gray-500 mt-6">
+                    By continuing, you agree to Freelanzo's Terms of Service and Privacy Policy.
+                </p>
             </Card>
         </main>
     );
