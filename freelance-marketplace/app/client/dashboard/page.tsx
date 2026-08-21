@@ -236,7 +236,7 @@ export default async function ClientDashboard() {
 
             <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
               <Link
-                href="/jobs/create"
+                href="/client/jobs/create"
                 className="rounded-xl bg-indigo-600 px-4 py-3 text-center font-medium text-white hover:bg-indigo-500"
               >
                 Post a Job
