@@ -6,9 +6,9 @@ import Link from "next/link";
 import Navbar from "@/components/layout/navbar";
 import ConnectWalletButton from "@/components/wallet/ConnectWalletButton";
 
+
 export default async function ClientDashboard() {
   const session = await getServerSession(authOptions);
-
   if (!session || !session.user) {
     redirect("/login");
   }
@@ -257,7 +257,7 @@ export default async function ClientDashboard() {
               </Link>
 
               <Link
-                href="/messages"
+                href={recentJobs.length ? `/jobs/${recentJobs[0].id}/chat` : "/client/jobs"}
                 className="rounded-xl border border-slate-700 px-4 py-3 text-center font-medium text-white hover:border-slate-600"
               >
                 Messages
@@ -421,7 +421,7 @@ export default async function ClientDashboard() {
               </h2>
 
               <Link
-                href="/messages"
+                href="/client/applications"
                 className="text-sm text-indigo-400 hover:text-indigo-300"
               >
                 Open inbox

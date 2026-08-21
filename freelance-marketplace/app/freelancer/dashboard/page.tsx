@@ -148,7 +148,7 @@ export default async function FreelancerDashboard() {
   const walletBalance = profile.walletBalance || 0;
   const escrowBalance = escrowSum._sum.amount || 0;
   const averageRating = profile.averageRating || 0;
-  const walletConnected = true;
+  const walletConnected = !!profile.user.walletAddress;
 
   return (
     <>

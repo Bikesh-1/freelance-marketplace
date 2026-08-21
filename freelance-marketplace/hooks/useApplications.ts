@@ -3,7 +3,7 @@ import axios from "axios";
 
 const getApplications = async (jobId: string) => {
   const { data } = await axios.get(
-    `/api/client/jobs/${jobId}/applications`
+    `/api/jobs/${jobId}/applications`
   );
 
   return data;
