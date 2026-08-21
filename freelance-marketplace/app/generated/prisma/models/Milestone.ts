@@ -44,6 +44,9 @@ export type MilestoneMinAggregateOutputType = {
   amount: number | null
   dueDate: Date | null
   status: $Enums.MilestoneStatus | null
+  submissionNote: string | null
+  submissionUrl: string | null
+  submittedAt: Date | null
   escrowId: string | null
   order: number | null
   createdAt: Date | null
@@ -58,6 +61,9 @@ export type MilestoneMaxAggregateOutputType = {
   amount: number | null
   dueDate: Date | null
   status: $Enums.MilestoneStatus | null
+  submissionNote: string | null
+  submissionUrl: string | null
+  submittedAt: Date | null
   escrowId: string | null
   order: number | null
   createdAt: Date | null
@@ -72,6 +78,9 @@ export type MilestoneCountAggregateOutputType = {
   amount: number
   dueDate: number
   status: number
+  submissionNote: number
+  submissionUrl: number
+  submittedAt: number
   escrowId: number
   order: number
   createdAt: number
@@ -98,6 +107,9 @@ export type MilestoneMinAggregateInputType = {
   amount?: true
   dueDate?: true
   status?: true
+  submissionNote?: true
+  submissionUrl?: true
+  submittedAt?: true
   escrowId?: true
   order?: true
   createdAt?: true
@@ -112,6 +124,9 @@ export type MilestoneMaxAggregateInputType = {
   amount?: true
   dueDate?: true
   status?: true
+  submissionNote?: true
+  submissionUrl?: true
+  submittedAt?: true
   escrowId?: true
   order?: true
   createdAt?: true
@@ -126,6 +141,9 @@ export type MilestoneCountAggregateInputType = {
   amount?: true
   dueDate?: true
   status?: true
+  submissionNote?: true
+  submissionUrl?: true
+  submittedAt?: true
   escrowId?: true
   order?: true
   createdAt?: true
@@ -227,6 +245,9 @@ export type MilestoneGroupByOutputType = {
   amount: number
   dueDate: Date | null
   status: $Enums.MilestoneStatus
+  submissionNote: string | null
+  submissionUrl: string | null
+  submittedAt: Date | null
   escrowId: string | null
   order: number
   createdAt: Date
@@ -264,6 +285,9 @@ export type MilestoneWhereInput = {
   amount?: Prisma.FloatFilter<"Milestone"> | number
   dueDate?: Prisma.DateTimeNullableFilter<"Milestone"> | Date | string | null
   status?: Prisma.EnumMilestoneStatusFilter<"Milestone"> | $Enums.MilestoneStatus
+  submissionNote?: Prisma.StringNullableFilter<"Milestone"> | string | null
+  submissionUrl?: Prisma.StringNullableFilter<"Milestone"> | string | null
+  submittedAt?: Prisma.DateTimeNullableFilter<"Milestone"> | Date | string | null
   escrowId?: Prisma.StringNullableFilter<"Milestone"> | string | null
   order?: Prisma.IntFilter<"Milestone"> | number
   createdAt?: Prisma.DateTimeFilter<"Milestone"> | Date | string
@@ -281,6 +305,9 @@ export type MilestoneOrderByWithRelationInput = {
   amount?: Prisma.SortOrder
   dueDate?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
+  submissionNote?: Prisma.SortOrderInput | Prisma.SortOrder
+  submissionUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  submittedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   escrowId?: Prisma.SortOrderInput | Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -302,6 +329,9 @@ export type MilestoneWhereUniqueInput = Prisma.AtLeast<{
   amount?: Prisma.FloatFilter<"Milestone"> | number
   dueDate?: Prisma.DateTimeNullableFilter<"Milestone"> | Date | string | null
   status?: Prisma.EnumMilestoneStatusFilter<"Milestone"> | $Enums.MilestoneStatus
+  submissionNote?: Prisma.StringNullableFilter<"Milestone"> | string | null
+  submissionUrl?: Prisma.StringNullableFilter<"Milestone"> | string | null
+  submittedAt?: Prisma.DateTimeNullableFilter<"Milestone"> | Date | string | null
   order?: Prisma.IntFilter<"Milestone"> | number
   createdAt?: Prisma.DateTimeFilter<"Milestone"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Milestone"> | Date | string
@@ -318,6 +348,9 @@ export type MilestoneOrderByWithAggregationInput = {
   amount?: Prisma.SortOrder
   dueDate?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
+  submissionNote?: Prisma.SortOrderInput | Prisma.SortOrder
+  submissionUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  submittedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   escrowId?: Prisma.SortOrderInput | Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -340,6 +373,9 @@ export type MilestoneScalarWhereWithAggregatesInput = {
   amount?: Prisma.FloatWithAggregatesFilter<"Milestone"> | number
   dueDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Milestone"> | Date | string | null
   status?: Prisma.EnumMilestoneStatusWithAggregatesFilter<"Milestone"> | $Enums.MilestoneStatus
+  submissionNote?: Prisma.StringNullableWithAggregatesFilter<"Milestone"> | string | null
+  submissionUrl?: Prisma.StringNullableWithAggregatesFilter<"Milestone"> | string | null
+  submittedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Milestone"> | Date | string | null
   escrowId?: Prisma.StringNullableWithAggregatesFilter<"Milestone"> | string | null
   order?: Prisma.IntWithAggregatesFilter<"Milestone"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Milestone"> | Date | string
@@ -353,6 +389,9 @@ export type MilestoneCreateInput = {
   amount: number
   dueDate?: Date | string | null
   status?: $Enums.MilestoneStatus
+  submissionNote?: string | null
+  submissionUrl?: string | null
+  submittedAt?: Date | string | null
   order: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -369,6 +408,9 @@ export type MilestoneUncheckedCreateInput = {
   amount: number
   dueDate?: Date | string | null
   status?: $Enums.MilestoneStatus
+  submissionNote?: string | null
+  submissionUrl?: string | null
+  submittedAt?: Date | string | null
   escrowId?: string | null
   order: number
   createdAt?: Date | string
@@ -383,6 +425,9 @@ export type MilestoneUpdateInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
+  submissionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submissionUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -399,6 +444,9 @@ export type MilestoneUncheckedUpdateInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
+  submissionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submissionUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   escrowId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -414,6 +462,9 @@ export type MilestoneCreateManyInput = {
   amount: number
   dueDate?: Date | string | null
   status?: $Enums.MilestoneStatus
+  submissionNote?: string | null
+  submissionUrl?: string | null
+  submittedAt?: Date | string | null
   escrowId?: string | null
   order: number
   createdAt?: Date | string
@@ -427,6 +478,9 @@ export type MilestoneUpdateManyMutationInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
+  submissionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submissionUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -440,6 +494,9 @@ export type MilestoneUncheckedUpdateManyInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
+  submissionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submissionUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   escrowId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -469,6 +526,9 @@ export type MilestoneCountOrderByAggregateInput = {
   amount?: Prisma.SortOrder
   dueDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  submissionNote?: Prisma.SortOrder
+  submissionUrl?: Prisma.SortOrder
+  submittedAt?: Prisma.SortOrder
   escrowId?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -488,6 +548,9 @@ export type MilestoneMaxOrderByAggregateInput = {
   amount?: Prisma.SortOrder
   dueDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  submissionNote?: Prisma.SortOrder
+  submissionUrl?: Prisma.SortOrder
+  submittedAt?: Prisma.SortOrder
   escrowId?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -502,6 +565,9 @@ export type MilestoneMinOrderByAggregateInput = {
   amount?: Prisma.SortOrder
   dueDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  submissionNote?: Prisma.SortOrder
+  submissionUrl?: Prisma.SortOrder
+  submittedAt?: Prisma.SortOrder
   escrowId?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -617,6 +683,9 @@ export type MilestoneCreateWithoutJobInput = {
   amount: number
   dueDate?: Date | string | null
   status?: $Enums.MilestoneStatus
+  submissionNote?: string | null
+  submissionUrl?: string | null
+  submittedAt?: Date | string | null
   order: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -631,6 +700,9 @@ export type MilestoneUncheckedCreateWithoutJobInput = {
   amount: number
   dueDate?: Date | string | null
   status?: $Enums.MilestoneStatus
+  submissionNote?: string | null
+  submissionUrl?: string | null
+  submittedAt?: Date | string | null
   escrowId?: string | null
   order: number
   createdAt?: Date | string
@@ -675,6 +747,9 @@ export type MilestoneScalarWhereInput = {
   amount?: Prisma.FloatFilter<"Milestone"> | number
   dueDate?: Prisma.DateTimeNullableFilter<"Milestone"> | Date | string | null
   status?: Prisma.EnumMilestoneStatusFilter<"Milestone"> | $Enums.MilestoneStatus
+  submissionNote?: Prisma.StringNullableFilter<"Milestone"> | string | null
+  submissionUrl?: Prisma.StringNullableFilter<"Milestone"> | string | null
+  submittedAt?: Prisma.DateTimeNullableFilter<"Milestone"> | Date | string | null
   escrowId?: Prisma.StringNullableFilter<"Milestone"> | string | null
   order?: Prisma.IntFilter<"Milestone"> | number
   createdAt?: Prisma.DateTimeFilter<"Milestone"> | Date | string
@@ -688,6 +763,9 @@ export type MilestoneCreateWithoutEscrowInput = {
   amount: number
   dueDate?: Date | string | null
   status?: $Enums.MilestoneStatus
+  submissionNote?: string | null
+  submissionUrl?: string | null
+  submittedAt?: Date | string | null
   order: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -703,6 +781,9 @@ export type MilestoneUncheckedCreateWithoutEscrowInput = {
   amount: number
   dueDate?: Date | string | null
   status?: $Enums.MilestoneStatus
+  submissionNote?: string | null
+  submissionUrl?: string | null
+  submittedAt?: Date | string | null
   order: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -732,6 +813,9 @@ export type MilestoneUpdateWithoutEscrowInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
+  submissionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submissionUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -747,6 +831,9 @@ export type MilestoneUncheckedUpdateWithoutEscrowInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
+  submissionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submissionUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -760,6 +847,9 @@ export type MilestoneCreateWithoutDisputeInput = {
   amount: number
   dueDate?: Date | string | null
   status?: $Enums.MilestoneStatus
+  submissionNote?: string | null
+  submissionUrl?: string | null
+  submittedAt?: Date | string | null
   order: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -775,6 +865,9 @@ export type MilestoneUncheckedCreateWithoutDisputeInput = {
   amount: number
   dueDate?: Date | string | null
   status?: $Enums.MilestoneStatus
+  submissionNote?: string | null
+  submissionUrl?: string | null
+  submittedAt?: Date | string | null
   escrowId?: string | null
   order: number
   createdAt?: Date | string
@@ -804,6 +897,9 @@ export type MilestoneUpdateWithoutDisputeInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
+  submissionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submissionUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -819,6 +915,9 @@ export type MilestoneUncheckedUpdateWithoutDisputeInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
+  submissionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submissionUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   escrowId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -832,6 +931,9 @@ export type MilestoneCreateManyJobInput = {
   amount: number
   dueDate?: Date | string | null
   status?: $Enums.MilestoneStatus
+  submissionNote?: string | null
+  submissionUrl?: string | null
+  submittedAt?: Date | string | null
   escrowId?: string | null
   order: number
   createdAt?: Date | string
@@ -845,6 +947,9 @@ export type MilestoneUpdateWithoutJobInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
+  submissionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submissionUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -859,6 +964,9 @@ export type MilestoneUncheckedUpdateWithoutJobInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
+  submissionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submissionUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   escrowId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -873,6 +981,9 @@ export type MilestoneUncheckedUpdateManyWithoutJobInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
+  submissionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submissionUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   escrowId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -918,6 +1029,9 @@ export type MilestoneSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   amount?: boolean
   dueDate?: boolean
   status?: boolean
+  submissionNote?: boolean
+  submissionUrl?: boolean
+  submittedAt?: boolean
   escrowId?: boolean
   order?: boolean
   createdAt?: boolean
@@ -936,6 +1050,9 @@ export type MilestoneSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   amount?: boolean
   dueDate?: boolean
   status?: boolean
+  submissionNote?: boolean
+  submissionUrl?: boolean
+  submittedAt?: boolean
   escrowId?: boolean
   order?: boolean
   createdAt?: boolean
@@ -952,6 +1069,9 @@ export type MilestoneSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   amount?: boolean
   dueDate?: boolean
   status?: boolean
+  submissionNote?: boolean
+  submissionUrl?: boolean
+  submittedAt?: boolean
   escrowId?: boolean
   order?: boolean
   createdAt?: boolean
@@ -968,13 +1088,16 @@ export type MilestoneSelectScalar = {
   amount?: boolean
   dueDate?: boolean
   status?: boolean
+  submissionNote?: boolean
+  submissionUrl?: boolean
+  submittedAt?: boolean
   escrowId?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type MilestoneOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "jobId" | "title" | "description" | "amount" | "dueDate" | "status" | "escrowId" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["milestone"]>
+export type MilestoneOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "jobId" | "title" | "description" | "amount" | "dueDate" | "status" | "submissionNote" | "submissionUrl" | "submittedAt" | "escrowId" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["milestone"]>
 export type MilestoneInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   job?: boolean | Prisma.JobDefaultArgs<ExtArgs>
   Dispute?: boolean | Prisma.Milestone$DisputeArgs<ExtArgs>
@@ -1005,6 +1128,9 @@ export type $MilestonePayload<ExtArgs extends runtime.Types.Extensions.InternalA
     amount: number
     dueDate: Date | null
     status: $Enums.MilestoneStatus
+    submissionNote: string | null
+    submissionUrl: string | null
+    submittedAt: Date | null
     escrowId: string | null
     order: number
     createdAt: Date
@@ -1442,6 +1568,9 @@ export interface MilestoneFieldRefs {
   readonly amount: Prisma.FieldRef<"Milestone", 'Float'>
   readonly dueDate: Prisma.FieldRef<"Milestone", 'DateTime'>
   readonly status: Prisma.FieldRef<"Milestone", 'MilestoneStatus'>
+  readonly submissionNote: Prisma.FieldRef<"Milestone", 'String'>
+  readonly submissionUrl: Prisma.FieldRef<"Milestone", 'String'>
+  readonly submittedAt: Prisma.FieldRef<"Milestone", 'DateTime'>
   readonly escrowId: Prisma.FieldRef<"Milestone", 'String'>
   readonly order: Prisma.FieldRef<"Milestone", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Milestone", 'DateTime'>

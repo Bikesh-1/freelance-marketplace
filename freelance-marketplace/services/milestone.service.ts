@@ -1,12 +1,9 @@
 import axios from "axios";
 
-export async function getMilestones(
-  jobId: string
-) {
-  const { data } =
-    await axios.get(
-      `/api/job/${jobId}/milestones`
-    );
+export async function getMilestones(jobId: string) {
+  const { data } = await axios.get(
+    `/api/jobs/${jobId}/milestones`
+  );
 
   return data.milestones;
 }
@@ -21,11 +18,10 @@ export async function createMilestone(
     order: number;
   }
 ) {
-  const { data } =
-    await axios.post(
-      `/api/job/${jobId}/milestone/create`,
-      payload
-    );
+  const { data } = await axios.post(
+    `/api/jobs/${jobId}/milestone/create`,
+    payload
+  );
 
   return data.milestone;
 }

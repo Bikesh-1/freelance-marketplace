@@ -376,54 +376,147 @@ export default async function FreelancerDashboard() {
           </div>
 
           {/* Milestones */}
-          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-white">
-                Milestone Progress
-              </h2>
+          {/* Milestones */}
+<div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
+  <div className="mb-4 flex items-center justify-between">
+    <div>
+      <h2 className="text-xl font-semibold text-white">
+        Milestone Progress
+      </h2>
 
-              <Link
-                href="/milestones"
-                className="text-sm text-indigo-400 hover:text-indigo-300"
+      <p className="mt-1 text-sm text-slate-400">
+        Track your active work and submit completed milestones
+      </p>
+    </div>
+
+    <Link
+      href="/milestones"
+      className="text-sm text-indigo-400 hover:text-indigo-300"
+    >
+      View all
+    </Link>
+  </div>
+
+  {milestones.length === 0 ? (
+    <div className="rounded-xl border border-slate-800 p-6 text-center">
+      <p className="text-sm text-slate-400">
+        No active milestones at this time.
+      </p>
+    </div>
+  ) : (
+    <div className="space-y-5">
+      {milestones.map((m) => {
+        const progress = getProgress(m.status);
+
+        return (
+          <div
+            key={m.id}
+            className="rounded-xl border border-slate-800 p-5"
+          >
+            {/* Header */}
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h3 className="font-semibold text-white">
+                  {m.title}
+                </h3>
+
+                <p className="mt-1 text-sm text-slate-400">
+                  Job: {m.job.title}
+                </p>
+              </div>
+
+              <span
+                className={`w-fit rounded-full px-3 py-1 text-xs font-medium ${
+                  m.status === "PENDING"
+                    ? "bg-slate-800 text-slate-300"
+                    : m.status === "FUNDED"
+                    ? "bg-blue-500/20 text-blue-400"
+                    : m.status === "SUBMITTED"
+                    ? "bg-yellow-500/20 text-yellow-400"
+                    : m.status === "APPROVED"
+                    ? "bg-indigo-500/20 text-indigo-400"
+                    : m.status === "RELEASED"
+                    ? "bg-green-500/20 text-green-400"
+                    : "bg-red-500/20 text-red-400"
+                }`}
               >
-                View all
-              </Link>
+                {m.status}
+              </span>
             </div>
 
-            {milestones.length === 0 ? (
-              <p className="text-slate-400 text-sm py-4">
-                No active milestones at this time.
-              </p>
-            ) : (
-              <div className="space-y-4">
-                {milestones.map((m) => (
-                  <div key={m.id}>
-                    <div className="mb-2 flex items-center justify-between">
-                      <div>
-                        <span className="font-medium text-white">
-                          {m.title}
-                        </span>
-                        <span className="text-xs text-slate-400 ml-2">
-                          ({m.job.title})
-                        </span>
-                      </div>
+            {/* Amount + Progress */}
+            <div className="mt-5">
+              <div className="mb-2 flex items-center justify-between">
+                <span className="text-sm text-slate-400">
+                  Progress
+                </span>
 
-                      <span className="text-sm text-slate-400">
-                        {getProgress(m.status)}% • {m.status} • ${m.amount}
-                      </span>
-                    </div>
-
-                    <div className="h-2 rounded-full bg-slate-800">
-                      <div
-                        className="h-2 rounded-full bg-indigo-500"
-                        style={{ width: `${getProgress(m.status)}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
+                <span className="text-sm font-medium text-white">
+                  {progress}%
+                </span>
               </div>
-            )}
+
+              <div className="h-2 overflow-hidden rounded-full bg-slate-800">
+                <div
+                  className="h-full rounded-full bg-indigo-500 transition-all"
+                  style={{
+                    width: `${progress}%`,
+                  }}
+                />
+              </div>
+
+              <div className="mt-2 flex justify-between text-xs text-slate-500">
+                <span>
+                  Amount: ${m.amount}
+                </span>
+
+                {m.dueDate && (
+                  <span>
+                    Due:{" "}
+                    {new Date(
+                      m.dueDate
+                    ).toLocaleDateString()}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Action */}
+            <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+              <Link
+                href={`/freelancer/milestones/${m.job.id}`}
+                className="flex-1 rounded-lg border border-slate-700 px-4 py-2.5 text-center text-sm font-medium text-white hover:border-slate-600 hover:bg-slate-800"
+              >
+                View Milestones
+              </Link>
+
+              {m.status === "FUNDED" && (
+                <Link
+                  href={`/freelancer/milestones/${m.job.id}`}
+                  className="flex-1 rounded-lg bg-indigo-600 px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-indigo-500"
+                >
+                  Submit Work
+                </Link>
+              )}
+
+              {m.status === "SUBMITTED" && (
+                <div className="flex-1 rounded-lg border border-yellow-700 bg-yellow-900/20 px-4 py-2.5 text-center text-sm font-medium text-yellow-400">
+                  Waiting for Client Approval
+                </div>
+              )}
+
+              {m.status === "RELEASED" && (
+                <div className="flex-1 rounded-lg border border-green-700 bg-green-900/20 px-4 py-2.5 text-center text-sm font-medium text-green-400">
+                  Payment Released
+                </div>
+              )}
+            </div>
           </div>
+        );
+      })}
+    </div>
+  )}
+</div>
 
           {/* Recent Messages */}
           <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">

@@ -277,13 +277,18 @@ model Milestone {
   title       String
   description String?
 
-  Dispute Dispute[]
-
   amount Float
 
   dueDate DateTime?
 
   status MilestoneStatus @default(PENDING)
+
+  // Work submission
+  submissionNote String? @db.Text
+  submissionUrl  String?
+  submittedAt   DateTime?
+
+  Dispute Dispute[]
 
   escrowId String? @unique
   escrow   Escrow? @relation(fields: [escrowId], references: [id])
