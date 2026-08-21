@@ -25,11 +25,11 @@ export default function MilestoneCard({
   milestone: Milestone;
 }) {
   const {
-    fundEscrow,
-    releasePayment,
-    loading,
-    error,
-  } = useEscrow();
+  createAndFundEscrow,
+  releasePayment,
+  loading,
+  error,
+} = useEscrow();
 
   // Blockchain escrow index
   // Abhi demo ke liye 0 use kar rahe hain
@@ -41,21 +41,23 @@ export default function MilestoneCard({
     "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
 
   // Fund milestone
-  const handleFund = async () => {
-    try {
-      await fundEscrow(
-        escrowIndex,
-        milestone.amount.toString(),
-        milestone.escrowId || ""
-      );
+ const handleFund = async () => {
+  try {
+    await createAndFundEscrow(
+      freelancerAddress,
+      milestone.amount.toString(),
+      milestone.escrowId || ""
+    );
 
-      alert(
-        "Milestone funded successfully"
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    alert(
+      "Milestone funded successfully"
+    );
+
+    window.location.reload();
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   // Approve milestone + release payment
   const handleApprove = async () => {

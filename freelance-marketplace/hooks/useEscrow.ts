@@ -193,11 +193,93 @@ export function useEscrow() {
       setLoading(false);
     }
   };
+
+  const createAndFundEscrow = async (
+  freelancerAddress: string,
+  amount: string,
+  prismaEscrowId: string = ""
+) => {
+  try {
+    setLoading(true);
+    setError(null);
+
+    const provider = getBrowserProvider();
+    const signer = await provider.getSigner();
+    const contract = getEscrowContract(signer);
+
+    // Next blockchain escrow ID
+    const escrowIndex =
+      Number(await contract.getEscrowCount());
+
+    // Create escrow
+    const createTx =
+      await contract.createEscrow(
+        freelancerAddress
+      );
+
+    await createTx.wait();
+
+    // Fund escrow
+    const value =
+      ethers.parseEther(amount);
+
+    const fundTx =
+      await contract.fundEscrow(
+        escrowIndex,
+        {
+          value,
+        }
+      );
+
+    const receipt =
+      await fundTx.wait();
+
+    if (prismaEscrowId) {
+      await axios.post(
+        "/api/escrow/fund",
+        {
+          escrowId: prismaEscrowId,
+          txHash: receipt.hash,
+          amount: Number(amount),
+          fromAddress:
+            await signer.getAddress(),
+          toAddress:
+            process.env
+              .NEXT_PUBLIC_ESCROW_CONTRACT_ADDRESS,
+        }
+      );
+    }
+
+    return {
+      receipt,
+      escrowIndex,
+    };
+  } catch (err: unknown) {
+    console.error(err);
+
+    const errorObj = err as {
+      shortMessage?: string;
+      message?: string;
+    };
+
+    setError(
+      errorObj?.shortMessage ||
+        errorObj?.message ||
+        "Funding failed"
+    );
+
+    throw err;
+  } finally {
+    setLoading(false);
+  }
+};
+
   return {
     createEscrow,
     fundEscrow,
     releasePayment,
     refundPayment,
+    createAndFundEscrow,
     loading,
     error,
   };
