@@ -39,8 +39,7 @@ export default async function FreelancerMilestonesPage({
   const job = await prisma.job.findFirst({
     where: {
       id: jobId,
-      selectedFreelancerId:
-        profile.id,
+      selectedFreelancerId:profile.id,
     },
     include: {
       milestones: {

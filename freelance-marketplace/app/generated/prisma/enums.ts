@@ -12,9 +12,8 @@
 export const DisputeStatus = {
   OPEN: 'OPEN',
   UNDER_REVIEW: 'UNDER_REVIEW',
-  CLIENT_WON: 'CLIENT_WON',
-  FREELANCER_WON: 'FREELANCER_WON',
-  RESOLVED: 'RESOLVED'
+  RESOLVED: 'RESOLVED',
+  REJECTED: 'REJECTED'
 } as const
 
 export type DisputeStatus = (typeof DisputeStatus)[keyof typeof DisputeStatus]
@@ -33,6 +32,7 @@ export const MilestoneStatus = {
   PENDING: 'PENDING',
   FUNDED: 'FUNDED',
   SUBMITTED: 'SUBMITTED',
+  DISPUTED: 'DISPUTED',
   APPROVED: 'APPROVED',
   RELEASED: 'RELEASED',
   REFUNDED: 'REFUNDED'
@@ -52,7 +52,8 @@ export type ApplicationStatus = (typeof ApplicationStatus)[keyof typeof Applicat
 
 export const Role = {
   CLIENT: 'CLIENT',
-  FREELANCER: 'FREELANCER'
+  FREELANCER: 'FREELANCER',
+  ADMIN: 'ADMIN'
 } as const
 
 export type Role = (typeof Role)[keyof typeof Role]

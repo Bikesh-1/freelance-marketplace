@@ -39,7 +39,7 @@ model FreelancerProfile {
   bio                String
   fullName           String?
   country            String?
-  walletBalance Float    @default(0)
+  walletBalance      Float             @default(0)
   isProfileCompleted Boolean           @default(false)
   experienceLevel    ExperienceLevel
   hourlyRate         Float
@@ -60,6 +60,7 @@ model FreelancerProfile {
   applications       Application[]
   reviews            Review[]
   experiences        Experience[]
+  selectedJobs       Job[]
 
   @@index([hourlyRate])
   @@index([experienceLevel])
@@ -101,33 +102,35 @@ model FreelancerSkill {
 }
 
 model Job {
-  id String @id @default(cuid())
-
-  clientId String
-
-  title       String
-  description String @db.Text
-
+  id                   String      @id @default(cuid())
+  clientId             String
+  title                String
+  description          String      @db.Text
   budget               Float
   jobType              JobType
   duration             String?
   requiredSkills       String[]
   milestones           Milestone[]
   messages             Message[]
-  status               JobStatus     @default(OPEN)
+  status               JobStatus   @default(OPEN)
   deadline             DateTime
   selectedFreelancerId String?
   aiEmbedding          String?
-  client               ClientProfile @relation(fields: [clientId], references: [id], onDelete: Cascade)
-  applications         Application[]
-  escrow               Escrow[]
-  createdAt            DateTime      @default(now())
-  updatedAt            DateTime      @updatedAt
-  skills               JobSkill[]
+
+  client ClientProfile @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  selectedFreelancer FreelancerProfile? @relation(fields: [selectedFreelancerId], references: [id], onDelete: SetNull)
+
+  applications Application[]
+  escrow       Escrow[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  skills       JobSkill[]
 
   @@index([status])
   @@index([budget])
   @@index([deadline])
+  @@index([selectedFreelancerId])
 }
 
 model Portfolio {
@@ -171,10 +174,10 @@ model Review {
 
   rating Int
 
-isVisible    Boolean @default(true)
-  isVerified   Boolean @default(false)
-  reply        String?
-  repliedAt    DateTime?
+  isVisible  Boolean   @default(true)
+  isVerified Boolean   @default(false)
+  reply      String?
+  repliedAt  DateTime?
 
   comment    String            @db.Text
   client     ClientProfile     @relation(fields: [clientId], references: [id], onDelete: Cascade)
@@ -209,44 +212,48 @@ model Message {
 }
 
 model Escrow {
-  id              String        @id @default(cuid())
+  id              String       @id @default(cuid())
   jobId           String
   contractAddress String
   transactionHash String?
   milestone       Milestone?
-  network         String        @default("sepolia")
+  network         String       @default("sepolia")
   amount          Float
-  status          EscrowStatus  @default(CREATED)
-  job             Job           @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  transactions    Transaction[]
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  status          EscrowStatus @default(CREATED)
+
+  blockchainEscrowId Int?
+
+  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  transactions Transaction[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 
   @@index([status])
   @@index([network])
 }
 
 model Transaction {
-  id          String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  escrowId    String?
-  escrow      Escrow?  @relation(fields: [escrowId], references: [id], onDelete: Cascade)
+  escrowId String?
+  escrow   Escrow? @relation(fields: [escrowId], references: [id], onDelete: Cascade)
 
-  txHash      String
-  amount      Float
+  txHash String
+  amount Float
 
   fromAddress String
   toAddress   String
 
   blockNumber Int?
 
-  status      TransactionStatus @default(PENDING)
+  status TransactionStatus @default(PENDING)
 
-  gasUsed     String?
+  gasUsed String?
 
-  network     String   @default("sepolia")
+  network String @default("sepolia")
 
-  createdAt   DateTime @default(now())
+  createdAt DateTime @default(now())
 
   @@index([txHash])
   @@index([network])
@@ -283,12 +290,11 @@ model Milestone {
 
   status MilestoneStatus @default(PENDING)
 
-  // Work submission
-  submissionNote String? @db.Text
+  submissionNote String?   @db.Text
   submissionUrl  String?
-  submittedAt   DateTime?
+  submittedAt    DateTime?
 
-  Dispute Dispute[]
+  disputes Dispute[]
 
   escrowId String? @unique
   escrow   Escrow? @relation(fields: [escrowId], references: [id])
@@ -377,12 +383,12 @@ model Dispute {
   id String @id @default(cuid())
 
   milestoneId String
-  milestone   Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+  milestone Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
 
   openedById String
-  openedBy   User   @relation(fields: [openedById], references: [id], onDelete: Cascade)
+  openedBy User @relation(fields: [openedById], references: [id], onDelete: Cascade)
 
-  reason   String
+  reason String
   evidence String?
 
   status DisputeStatus @default(OPEN)
@@ -401,10 +407,10 @@ model Dispute {
 enum DisputeStatus {
   OPEN
   UNDER_REVIEW
-  CLIENT_WON
-  FREELANCER_WON
   RESOLVED
+  REJECTED
 }
+
 enum TransactionStatus {
   PENDING
   CONFIRMED
@@ -415,6 +421,7 @@ enum MilestoneStatus {
   PENDING
   FUNDED
   SUBMITTED
+  DISPUTED
   APPROVED
   RELEASED
   REFUNDED
@@ -429,6 +436,7 @@ enum ApplicationStatus {
 enum Role {
   CLIENT
   FREELANCER
+  ADMIN
 }
 
 enum JobType {

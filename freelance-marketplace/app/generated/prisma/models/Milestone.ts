@@ -293,7 +293,7 @@ export type MilestoneWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Milestone"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Milestone"> | Date | string
   job?: Prisma.XOR<Prisma.JobScalarRelationFilter, Prisma.JobWhereInput>
-  Dispute?: Prisma.DisputeListRelationFilter
+  disputes?: Prisma.DisputeListRelationFilter
   escrow?: Prisma.XOR<Prisma.EscrowNullableScalarRelationFilter, Prisma.EscrowWhereInput> | null
 }
 
@@ -313,7 +313,7 @@ export type MilestoneOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   job?: Prisma.JobOrderByWithRelationInput
-  Dispute?: Prisma.DisputeOrderByRelationAggregateInput
+  disputes?: Prisma.DisputeOrderByRelationAggregateInput
   escrow?: Prisma.EscrowOrderByWithRelationInput
 }
 
@@ -336,7 +336,7 @@ export type MilestoneWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Milestone"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Milestone"> | Date | string
   job?: Prisma.XOR<Prisma.JobScalarRelationFilter, Prisma.JobWhereInput>
-  Dispute?: Prisma.DisputeListRelationFilter
+  disputes?: Prisma.DisputeListRelationFilter
   escrow?: Prisma.XOR<Prisma.EscrowNullableScalarRelationFilter, Prisma.EscrowWhereInput> | null
 }, "id" | "escrowId">
 
@@ -396,7 +396,7 @@ export type MilestoneCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   job: Prisma.JobCreateNestedOneWithoutMilestonesInput
-  Dispute?: Prisma.DisputeCreateNestedManyWithoutMilestoneInput
+  disputes?: Prisma.DisputeCreateNestedManyWithoutMilestoneInput
   escrow?: Prisma.EscrowCreateNestedOneWithoutMilestoneInput
 }
 
@@ -415,7 +415,7 @@ export type MilestoneUncheckedCreateInput = {
   order: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  Dispute?: Prisma.DisputeUncheckedCreateNestedManyWithoutMilestoneInput
+  disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutMilestoneInput
 }
 
 export type MilestoneUpdateInput = {
@@ -432,7 +432,7 @@ export type MilestoneUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   job?: Prisma.JobUpdateOneRequiredWithoutMilestonesNestedInput
-  Dispute?: Prisma.DisputeUpdateManyWithoutMilestoneNestedInput
+  disputes?: Prisma.DisputeUpdateManyWithoutMilestoneNestedInput
   escrow?: Prisma.EscrowUpdateOneWithoutMilestoneNestedInput
 }
 
@@ -451,7 +451,7 @@ export type MilestoneUncheckedUpdateInput = {
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  Dispute?: Prisma.DisputeUncheckedUpdateManyWithoutMilestoneNestedInput
+  disputes?: Prisma.DisputeUncheckedUpdateManyWithoutMilestoneNestedInput
 }
 
 export type MilestoneCreateManyInput = {
@@ -662,18 +662,18 @@ export type EnumMilestoneStatusFieldUpdateOperationsInput = {
   set?: $Enums.MilestoneStatus
 }
 
-export type MilestoneCreateNestedOneWithoutDisputeInput = {
-  create?: Prisma.XOR<Prisma.MilestoneCreateWithoutDisputeInput, Prisma.MilestoneUncheckedCreateWithoutDisputeInput>
-  connectOrCreate?: Prisma.MilestoneCreateOrConnectWithoutDisputeInput
+export type MilestoneCreateNestedOneWithoutDisputesInput = {
+  create?: Prisma.XOR<Prisma.MilestoneCreateWithoutDisputesInput, Prisma.MilestoneUncheckedCreateWithoutDisputesInput>
+  connectOrCreate?: Prisma.MilestoneCreateOrConnectWithoutDisputesInput
   connect?: Prisma.MilestoneWhereUniqueInput
 }
 
-export type MilestoneUpdateOneRequiredWithoutDisputeNestedInput = {
-  create?: Prisma.XOR<Prisma.MilestoneCreateWithoutDisputeInput, Prisma.MilestoneUncheckedCreateWithoutDisputeInput>
-  connectOrCreate?: Prisma.MilestoneCreateOrConnectWithoutDisputeInput
-  upsert?: Prisma.MilestoneUpsertWithoutDisputeInput
+export type MilestoneUpdateOneRequiredWithoutDisputesNestedInput = {
+  create?: Prisma.XOR<Prisma.MilestoneCreateWithoutDisputesInput, Prisma.MilestoneUncheckedCreateWithoutDisputesInput>
+  connectOrCreate?: Prisma.MilestoneCreateOrConnectWithoutDisputesInput
+  upsert?: Prisma.MilestoneUpsertWithoutDisputesInput
   connect?: Prisma.MilestoneWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MilestoneUpdateToOneWithWhereWithoutDisputeInput, Prisma.MilestoneUpdateWithoutDisputeInput>, Prisma.MilestoneUncheckedUpdateWithoutDisputeInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MilestoneUpdateToOneWithWhereWithoutDisputesInput, Prisma.MilestoneUpdateWithoutDisputesInput>, Prisma.MilestoneUncheckedUpdateWithoutDisputesInput>
 }
 
 export type MilestoneCreateWithoutJobInput = {
@@ -689,7 +689,7 @@ export type MilestoneCreateWithoutJobInput = {
   order: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  Dispute?: Prisma.DisputeCreateNestedManyWithoutMilestoneInput
+  disputes?: Prisma.DisputeCreateNestedManyWithoutMilestoneInput
   escrow?: Prisma.EscrowCreateNestedOneWithoutMilestoneInput
 }
 
@@ -707,7 +707,7 @@ export type MilestoneUncheckedCreateWithoutJobInput = {
   order: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  Dispute?: Prisma.DisputeUncheckedCreateNestedManyWithoutMilestoneInput
+  disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutMilestoneInput
 }
 
 export type MilestoneCreateOrConnectWithoutJobInput = {
@@ -770,7 +770,7 @@ export type MilestoneCreateWithoutEscrowInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   job: Prisma.JobCreateNestedOneWithoutMilestonesInput
-  Dispute?: Prisma.DisputeCreateNestedManyWithoutMilestoneInput
+  disputes?: Prisma.DisputeCreateNestedManyWithoutMilestoneInput
 }
 
 export type MilestoneUncheckedCreateWithoutEscrowInput = {
@@ -787,7 +787,7 @@ export type MilestoneUncheckedCreateWithoutEscrowInput = {
   order: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  Dispute?: Prisma.DisputeUncheckedCreateNestedManyWithoutMilestoneInput
+  disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutMilestoneInput
 }
 
 export type MilestoneCreateOrConnectWithoutEscrowInput = {
@@ -820,7 +820,7 @@ export type MilestoneUpdateWithoutEscrowInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   job?: Prisma.JobUpdateOneRequiredWithoutMilestonesNestedInput
-  Dispute?: Prisma.DisputeUpdateManyWithoutMilestoneNestedInput
+  disputes?: Prisma.DisputeUpdateManyWithoutMilestoneNestedInput
 }
 
 export type MilestoneUncheckedUpdateWithoutEscrowInput = {
@@ -837,10 +837,10 @@ export type MilestoneUncheckedUpdateWithoutEscrowInput = {
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  Dispute?: Prisma.DisputeUncheckedUpdateManyWithoutMilestoneNestedInput
+  disputes?: Prisma.DisputeUncheckedUpdateManyWithoutMilestoneNestedInput
 }
 
-export type MilestoneCreateWithoutDisputeInput = {
+export type MilestoneCreateWithoutDisputesInput = {
   id?: string
   title: string
   description?: string | null
@@ -857,7 +857,7 @@ export type MilestoneCreateWithoutDisputeInput = {
   escrow?: Prisma.EscrowCreateNestedOneWithoutMilestoneInput
 }
 
-export type MilestoneUncheckedCreateWithoutDisputeInput = {
+export type MilestoneUncheckedCreateWithoutDisputesInput = {
   id?: string
   jobId: string
   title: string
@@ -874,23 +874,23 @@ export type MilestoneUncheckedCreateWithoutDisputeInput = {
   updatedAt?: Date | string
 }
 
-export type MilestoneCreateOrConnectWithoutDisputeInput = {
+export type MilestoneCreateOrConnectWithoutDisputesInput = {
   where: Prisma.MilestoneWhereUniqueInput
-  create: Prisma.XOR<Prisma.MilestoneCreateWithoutDisputeInput, Prisma.MilestoneUncheckedCreateWithoutDisputeInput>
+  create: Prisma.XOR<Prisma.MilestoneCreateWithoutDisputesInput, Prisma.MilestoneUncheckedCreateWithoutDisputesInput>
 }
 
-export type MilestoneUpsertWithoutDisputeInput = {
-  update: Prisma.XOR<Prisma.MilestoneUpdateWithoutDisputeInput, Prisma.MilestoneUncheckedUpdateWithoutDisputeInput>
-  create: Prisma.XOR<Prisma.MilestoneCreateWithoutDisputeInput, Prisma.MilestoneUncheckedCreateWithoutDisputeInput>
+export type MilestoneUpsertWithoutDisputesInput = {
+  update: Prisma.XOR<Prisma.MilestoneUpdateWithoutDisputesInput, Prisma.MilestoneUncheckedUpdateWithoutDisputesInput>
+  create: Prisma.XOR<Prisma.MilestoneCreateWithoutDisputesInput, Prisma.MilestoneUncheckedCreateWithoutDisputesInput>
   where?: Prisma.MilestoneWhereInput
 }
 
-export type MilestoneUpdateToOneWithWhereWithoutDisputeInput = {
+export type MilestoneUpdateToOneWithWhereWithoutDisputesInput = {
   where?: Prisma.MilestoneWhereInput
-  data: Prisma.XOR<Prisma.MilestoneUpdateWithoutDisputeInput, Prisma.MilestoneUncheckedUpdateWithoutDisputeInput>
+  data: Prisma.XOR<Prisma.MilestoneUpdateWithoutDisputesInput, Prisma.MilestoneUncheckedUpdateWithoutDisputesInput>
 }
 
-export type MilestoneUpdateWithoutDisputeInput = {
+export type MilestoneUpdateWithoutDisputesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -907,7 +907,7 @@ export type MilestoneUpdateWithoutDisputeInput = {
   escrow?: Prisma.EscrowUpdateOneWithoutMilestoneNestedInput
 }
 
-export type MilestoneUncheckedUpdateWithoutDisputeInput = {
+export type MilestoneUncheckedUpdateWithoutDisputesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   jobId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
@@ -953,7 +953,7 @@ export type MilestoneUpdateWithoutJobInput = {
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  Dispute?: Prisma.DisputeUpdateManyWithoutMilestoneNestedInput
+  disputes?: Prisma.DisputeUpdateManyWithoutMilestoneNestedInput
   escrow?: Prisma.EscrowUpdateOneWithoutMilestoneNestedInput
 }
 
@@ -971,7 +971,7 @@ export type MilestoneUncheckedUpdateWithoutJobInput = {
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  Dispute?: Prisma.DisputeUncheckedUpdateManyWithoutMilestoneNestedInput
+  disputes?: Prisma.DisputeUncheckedUpdateManyWithoutMilestoneNestedInput
 }
 
 export type MilestoneUncheckedUpdateManyWithoutJobInput = {
@@ -996,11 +996,11 @@ export type MilestoneUncheckedUpdateManyWithoutJobInput = {
  */
 
 export type MilestoneCountOutputType = {
-  Dispute: number
+  disputes: number
 }
 
 export type MilestoneCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  Dispute?: boolean | MilestoneCountOutputTypeCountDisputeArgs
+  disputes?: boolean | MilestoneCountOutputTypeCountDisputesArgs
 }
 
 /**
@@ -1016,7 +1016,7 @@ export type MilestoneCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ex
 /**
  * MilestoneCountOutputType without action
  */
-export type MilestoneCountOutputTypeCountDisputeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type MilestoneCountOutputTypeCountDisputesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.DisputeWhereInput
 }
 
@@ -1037,7 +1037,7 @@ export type MilestoneSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   createdAt?: boolean
   updatedAt?: boolean
   job?: boolean | Prisma.JobDefaultArgs<ExtArgs>
-  Dispute?: boolean | Prisma.Milestone$DisputeArgs<ExtArgs>
+  disputes?: boolean | Prisma.Milestone$disputesArgs<ExtArgs>
   escrow?: boolean | Prisma.Milestone$escrowArgs<ExtArgs>
   _count?: boolean | Prisma.MilestoneCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["milestone"]>
@@ -1100,7 +1100,7 @@ export type MilestoneSelectScalar = {
 export type MilestoneOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "jobId" | "title" | "description" | "amount" | "dueDate" | "status" | "submissionNote" | "submissionUrl" | "submittedAt" | "escrowId" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["milestone"]>
 export type MilestoneInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   job?: boolean | Prisma.JobDefaultArgs<ExtArgs>
-  Dispute?: boolean | Prisma.Milestone$DisputeArgs<ExtArgs>
+  disputes?: boolean | Prisma.Milestone$disputesArgs<ExtArgs>
   escrow?: boolean | Prisma.Milestone$escrowArgs<ExtArgs>
   _count?: boolean | Prisma.MilestoneCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1117,7 +1117,7 @@ export type $MilestonePayload<ExtArgs extends runtime.Types.Extensions.InternalA
   name: "Milestone"
   objects: {
     job: Prisma.$JobPayload<ExtArgs>
-    Dispute: Prisma.$DisputePayload<ExtArgs>[]
+    disputes: Prisma.$DisputePayload<ExtArgs>[]
     escrow: Prisma.$EscrowPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1530,7 +1530,7 @@ readonly fields: MilestoneFieldRefs;
 export interface Prisma__MilestoneClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   job<T extends Prisma.JobDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobDefaultArgs<ExtArgs>>): Prisma.Prisma__JobClient<runtime.Types.Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  Dispute<T extends Prisma.Milestone$DisputeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Milestone$DisputeArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DisputePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  disputes<T extends Prisma.Milestone$disputesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Milestone$disputesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DisputePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   escrow<T extends Prisma.Milestone$escrowArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Milestone$escrowArgs<ExtArgs>>): Prisma.Prisma__EscrowClient<runtime.Types.Result.GetResult<Prisma.$EscrowPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1976,9 +1976,9 @@ export type MilestoneDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
- * Milestone.Dispute
+ * Milestone.disputes
  */
-export type Milestone$DisputeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Milestone$disputesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Dispute
    */

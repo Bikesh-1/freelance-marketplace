@@ -7,6 +7,10 @@ export const escrowAbi = [
 
   "function refundClient(uint256 escrowId)",
 
+  "function adminReleasePayment(uint256 escrowId)",
+
+  "function adminRefundClient(uint256 escrowId)",
+
   "function getEscrow(uint256 escrowId) view returns (address client, address freelancer, uint256 amount, uint8 status)",
 
   "function getEscrowCount() view returns (uint256)",

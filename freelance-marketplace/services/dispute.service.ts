@@ -1,35 +1,29 @@
 import axios from "axios";
 
-export async function createDispute(
-  payload: {
-    milestoneId: string;
-    userId: string;
-    reason: string;
-    evidence?: string;
-  }
-) {
-  const { data } = await axios.post(
-    "/api/dispute/create",
-    payload
-  );
-
-  return data.dispute;
-}
-
-export async function getDisputes() {
-  const { data } = await axios.get(
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/dispute`
-  );
+export async function getAdminDisputes() {
+  const { data } =
+    await axios.get(
+      "/api/admin/disputes"
+    );
 
   return data.disputes;
 }
 
-export async function refundDispute(
-  disputeId: string
+export async function resolveDispute(
+  disputeId: string,
+  decision:
+    | "CLIENT_WON"
+    | "FREELANCER_WON",
+  note?: string
 ) {
-  const { data } = await axios.post(
-    `/api/dispute/${disputeId}/refund`
-  );
+  const { data } =
+    await axios.post(
+      `/api/admin/disputes/${disputeId}/resolve`,
+      {
+        decision,
+        note,
+      }
+    );
 
   return data;
 }

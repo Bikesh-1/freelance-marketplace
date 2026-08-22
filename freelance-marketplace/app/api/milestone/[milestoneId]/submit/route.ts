@@ -6,11 +6,16 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: Promise<{ milestoneId: string }> }
+  {
+    params,
+  }: {
+    params: Promise<{ milestoneId: string }>;
+  }
 ) {
   try {
     const { milestoneId } = await params;
 
+    // 1. Authentication
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.id) {
@@ -20,62 +25,66 @@ export async function POST(
       );
     }
 
+    // 2. Only freelancer can submit
     if (session.user.role !== "FREELANCER") {
       return NextResponse.json(
-        { message: "Only freelancers can submit work" },
+        {
+          message:
+            "Only freelancers can submit milestone work",
+        },
         { status: 403 }
       );
     }
 
-    const body = await req.json();
-
-    const submissionNote = body.submissionNote?.trim();
-    const submissionUrl = body.submissionUrl?.trim();
-
-    if (!submissionNote && !submissionUrl) {
-      return NextResponse.json(
-        {
-          message:
-            "Submission note or work URL is required",
-        },
-        { status: 400 }
-      );
-    }
-
-    const profile =
+    // 3. Get freelancer profile
+    const freelancerProfile =
       await prisma.freelancerProfile.findUnique({
         where: {
           userId: session.user.id,
         },
+        select: {
+          id: true,
+        },
       });
 
-    if (!profile) {
+    if (!freelancerProfile) {
       return NextResponse.json(
-        { message: "Freelancer profile not found" },
+        {
+          message: "Freelancer profile not found",
+        },
         { status: 404 }
       );
     }
 
+    // 4. Get milestone + job
     const milestone =
       await prisma.milestone.findUnique({
         where: {
           id: milestoneId,
         },
         include: {
-          job: true,
+          job: {
+            select: {
+              id: true,
+              selectedFreelancerId: true,
+            },
+          },
         },
       });
 
     if (!milestone) {
       return NextResponse.json(
-        { message: "Milestone not found" },
+        {
+          message: "Milestone not found",
+        },
         { status: 404 }
       );
     }
 
+    // 5. Verify freelancer assignment
     if (
       milestone.job.selectedFreelancerId !==
-      profile.id
+      freelancerProfile.id
     ) {
       return NextResponse.json(
         {
@@ -86,6 +95,7 @@ export async function POST(
       );
     }
 
+    // 6. Only FUNDED milestone can be submitted
     if (milestone.status !== "FUNDED") {
       return NextResponse.json(
         {
@@ -96,6 +106,42 @@ export async function POST(
       );
     }
 
+    // 7. Request body
+    const body = await req.json();
+
+    const {
+      submissionUrl,
+      submissionNote,
+    } = body;
+
+    // 8. Validate submission URL
+    if (
+      typeof submissionUrl !== "string" ||
+      !submissionUrl.trim()
+    ) {
+      return NextResponse.json(
+        {
+          message:
+            "Submission URL is required",
+        },
+        { status: 400 }
+      );
+    }
+
+    // 9. Validate URL
+    try {
+      new URL(submissionUrl);
+    } catch {
+      return NextResponse.json(
+        {
+          message:
+            "Invalid submission URL",
+        },
+        { status: 400 }
+      );
+    }
+
+    // 10. Update milestone
     const updatedMilestone =
       await prisma.milestone.update({
         where: {
@@ -103,18 +149,29 @@ export async function POST(
         },
         data: {
           status: "SUBMITTED",
-          submissionNote:
-            submissionNote || null,
           submissionUrl:
-            submissionUrl || null,
-          submittedAt: new Date(),
+            submissionUrl.trim(),
+          submissionNote:
+            typeof submissionNote ===
+              "string" &&
+            submissionNote.trim()
+              ? submissionNote.trim()
+              : null,
+        },
+        include: {
+          escrow: true,
         },
       });
 
-    return NextResponse.json({
-      success: true,
-      milestone: updatedMilestone,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        message:
+          "Milestone submitted successfully",
+        milestone: updatedMilestone,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error(
       "Submit milestone error:",
@@ -122,7 +179,9 @@ export async function POST(
     );
 
     return NextResponse.json(
-      { message: "Server Error" },
+      {
+        message: "Server Error",
+      },
       { status: 500 }
     );
   }

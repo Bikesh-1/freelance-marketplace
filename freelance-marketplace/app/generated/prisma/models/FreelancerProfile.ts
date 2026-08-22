@@ -366,6 +366,7 @@ export type FreelancerProfileWhereInput = {
   applications?: Prisma.ApplicationListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
   experiences?: Prisma.ExperienceListRelationFilter
+  selectedJobs?: Prisma.JobListRelationFilter
 }
 
 export type FreelancerProfileOrderByWithRelationInput = {
@@ -396,6 +397,7 @@ export type FreelancerProfileOrderByWithRelationInput = {
   applications?: Prisma.ApplicationOrderByRelationAggregateInput
   reviews?: Prisma.ReviewOrderByRelationAggregateInput
   experiences?: Prisma.ExperienceOrderByRelationAggregateInput
+  selectedJobs?: Prisma.JobOrderByRelationAggregateInput
 }
 
 export type FreelancerProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -429,6 +431,7 @@ export type FreelancerProfileWhereUniqueInput = Prisma.AtLeast<{
   applications?: Prisma.ApplicationListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
   experiences?: Prisma.ExperienceListRelationFilter
+  selectedJobs?: Prisma.JobListRelationFilter
 }, "id" | "userId">
 
 export type FreelancerProfileOrderByWithAggregationInput = {
@@ -514,6 +517,7 @@ export type FreelancerProfileCreateInput = {
   applications?: Prisma.ApplicationCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutFreelancerInput
   experiences?: Prisma.ExperienceCreateNestedManyWithoutFreelancerInput
+  selectedJobs?: Prisma.JobCreateNestedManyWithoutSelectedFreelancerInput
 }
 
 export type FreelancerProfileUncheckedCreateInput = {
@@ -543,6 +547,7 @@ export type FreelancerProfileUncheckedCreateInput = {
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutFreelancerInput
   experiences?: Prisma.ExperienceUncheckedCreateNestedManyWithoutFreelancerInput
+  selectedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutSelectedFreelancerInput
 }
 
 export type FreelancerProfileUpdateInput = {
@@ -572,6 +577,7 @@ export type FreelancerProfileUpdateInput = {
   applications?: Prisma.ApplicationUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutFreelancerNestedInput
   experiences?: Prisma.ExperienceUpdateManyWithoutFreelancerNestedInput
+  selectedJobs?: Prisma.JobUpdateManyWithoutSelectedFreelancerNestedInput
 }
 
 export type FreelancerProfileUncheckedUpdateInput = {
@@ -601,6 +607,7 @@ export type FreelancerProfileUncheckedUpdateInput = {
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutFreelancerNestedInput
   experiences?: Prisma.ExperienceUncheckedUpdateManyWithoutFreelancerNestedInput
+  selectedJobs?: Prisma.JobUncheckedUpdateManyWithoutSelectedFreelancerNestedInput
 }
 
 export type FreelancerProfileCreateManyInput = {
@@ -838,6 +845,22 @@ export type FreelancerProfileUpdateOneRequiredWithoutSkillsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.FreelancerProfileUpdateToOneWithWhereWithoutSkillsInput, Prisma.FreelancerProfileUpdateWithoutSkillsInput>, Prisma.FreelancerProfileUncheckedUpdateWithoutSkillsInput>
 }
 
+export type FreelancerProfileCreateNestedOneWithoutSelectedJobsInput = {
+  create?: Prisma.XOR<Prisma.FreelancerProfileCreateWithoutSelectedJobsInput, Prisma.FreelancerProfileUncheckedCreateWithoutSelectedJobsInput>
+  connectOrCreate?: Prisma.FreelancerProfileCreateOrConnectWithoutSelectedJobsInput
+  connect?: Prisma.FreelancerProfileWhereUniqueInput
+}
+
+export type FreelancerProfileUpdateOneWithoutSelectedJobsNestedInput = {
+  create?: Prisma.XOR<Prisma.FreelancerProfileCreateWithoutSelectedJobsInput, Prisma.FreelancerProfileUncheckedCreateWithoutSelectedJobsInput>
+  connectOrCreate?: Prisma.FreelancerProfileCreateOrConnectWithoutSelectedJobsInput
+  upsert?: Prisma.FreelancerProfileUpsertWithoutSelectedJobsInput
+  disconnect?: Prisma.FreelancerProfileWhereInput | boolean
+  delete?: Prisma.FreelancerProfileWhereInput | boolean
+  connect?: Prisma.FreelancerProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FreelancerProfileUpdateToOneWithWhereWithoutSelectedJobsInput, Prisma.FreelancerProfileUpdateWithoutSelectedJobsInput>, Prisma.FreelancerProfileUncheckedUpdateWithoutSelectedJobsInput>
+}
+
 export type FreelancerProfileCreateNestedOneWithoutPortfoliosInput = {
   create?: Prisma.XOR<Prisma.FreelancerProfileCreateWithoutPortfoliosInput, Prisma.FreelancerProfileUncheckedCreateWithoutPortfoliosInput>
   connectOrCreate?: Prisma.FreelancerProfileCreateOrConnectWithoutPortfoliosInput
@@ -920,6 +943,7 @@ export type FreelancerProfileCreateWithoutUserInput = {
   applications?: Prisma.ApplicationCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutFreelancerInput
   experiences?: Prisma.ExperienceCreateNestedManyWithoutFreelancerInput
+  selectedJobs?: Prisma.JobCreateNestedManyWithoutSelectedFreelancerInput
 }
 
 export type FreelancerProfileUncheckedCreateWithoutUserInput = {
@@ -948,6 +972,7 @@ export type FreelancerProfileUncheckedCreateWithoutUserInput = {
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutFreelancerInput
   experiences?: Prisma.ExperienceUncheckedCreateNestedManyWithoutFreelancerInput
+  selectedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutSelectedFreelancerInput
 }
 
 export type FreelancerProfileCreateOrConnectWithoutUserInput = {
@@ -992,6 +1017,7 @@ export type FreelancerProfileUpdateWithoutUserInput = {
   applications?: Prisma.ApplicationUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutFreelancerNestedInput
   experiences?: Prisma.ExperienceUpdateManyWithoutFreelancerNestedInput
+  selectedJobs?: Prisma.JobUpdateManyWithoutSelectedFreelancerNestedInput
 }
 
 export type FreelancerProfileUncheckedUpdateWithoutUserInput = {
@@ -1020,6 +1046,7 @@ export type FreelancerProfileUncheckedUpdateWithoutUserInput = {
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutFreelancerNestedInput
   experiences?: Prisma.ExperienceUncheckedUpdateManyWithoutFreelancerNestedInput
+  selectedJobs?: Prisma.JobUncheckedUpdateManyWithoutSelectedFreelancerNestedInput
 }
 
 export type FreelancerProfileCreateWithoutSkillsInput = {
@@ -1048,6 +1075,7 @@ export type FreelancerProfileCreateWithoutSkillsInput = {
   applications?: Prisma.ApplicationCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutFreelancerInput
   experiences?: Prisma.ExperienceCreateNestedManyWithoutFreelancerInput
+  selectedJobs?: Prisma.JobCreateNestedManyWithoutSelectedFreelancerInput
 }
 
 export type FreelancerProfileUncheckedCreateWithoutSkillsInput = {
@@ -1076,6 +1104,7 @@ export type FreelancerProfileUncheckedCreateWithoutSkillsInput = {
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutFreelancerInput
   experiences?: Prisma.ExperienceUncheckedCreateNestedManyWithoutFreelancerInput
+  selectedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutSelectedFreelancerInput
 }
 
 export type FreelancerProfileCreateOrConnectWithoutSkillsInput = {
@@ -1120,6 +1149,7 @@ export type FreelancerProfileUpdateWithoutSkillsInput = {
   applications?: Prisma.ApplicationUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutFreelancerNestedInput
   experiences?: Prisma.ExperienceUpdateManyWithoutFreelancerNestedInput
+  selectedJobs?: Prisma.JobUpdateManyWithoutSelectedFreelancerNestedInput
 }
 
 export type FreelancerProfileUncheckedUpdateWithoutSkillsInput = {
@@ -1144,6 +1174,139 @@ export type FreelancerProfileUncheckedUpdateWithoutSkillsInput = {
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  portfolios?: Prisma.PortfolioUncheckedUpdateManyWithoutFreelancerNestedInput
+  applications?: Prisma.ApplicationUncheckedUpdateManyWithoutFreelancerNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutFreelancerNestedInput
+  experiences?: Prisma.ExperienceUncheckedUpdateManyWithoutFreelancerNestedInput
+  selectedJobs?: Prisma.JobUncheckedUpdateManyWithoutSelectedFreelancerNestedInput
+}
+
+export type FreelancerProfileCreateWithoutSelectedJobsInput = {
+  id?: string
+  title: string
+  bio: string
+  fullName?: string | null
+  country?: string | null
+  walletBalance?: number
+  isProfileCompleted?: boolean
+  experienceLevel: $Enums.ExperienceLevel
+  hourlyRate: number
+  location?: string | null
+  github?: string | null
+  linkedin?: string | null
+  portfolio?: string | null
+  yearsOfExperience?: number
+  totalProjects?: number
+  averageRating?: number
+  aiEmbedding?: string | null
+  isAvailable?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutFreelancerProfileInput
+  skills?: Prisma.FreelancerSkillCreateNestedManyWithoutFreelancerInput
+  portfolios?: Prisma.PortfolioCreateNestedManyWithoutFreelancerInput
+  applications?: Prisma.ApplicationCreateNestedManyWithoutFreelancerInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutFreelancerInput
+  experiences?: Prisma.ExperienceCreateNestedManyWithoutFreelancerInput
+}
+
+export type FreelancerProfileUncheckedCreateWithoutSelectedJobsInput = {
+  id?: string
+  userId: string
+  title: string
+  bio: string
+  fullName?: string | null
+  country?: string | null
+  walletBalance?: number
+  isProfileCompleted?: boolean
+  experienceLevel: $Enums.ExperienceLevel
+  hourlyRate: number
+  location?: string | null
+  github?: string | null
+  linkedin?: string | null
+  portfolio?: string | null
+  yearsOfExperience?: number
+  totalProjects?: number
+  averageRating?: number
+  aiEmbedding?: string | null
+  isAvailable?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  skills?: Prisma.FreelancerSkillUncheckedCreateNestedManyWithoutFreelancerInput
+  portfolios?: Prisma.PortfolioUncheckedCreateNestedManyWithoutFreelancerInput
+  applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutFreelancerInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutFreelancerInput
+  experiences?: Prisma.ExperienceUncheckedCreateNestedManyWithoutFreelancerInput
+}
+
+export type FreelancerProfileCreateOrConnectWithoutSelectedJobsInput = {
+  where: Prisma.FreelancerProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.FreelancerProfileCreateWithoutSelectedJobsInput, Prisma.FreelancerProfileUncheckedCreateWithoutSelectedJobsInput>
+}
+
+export type FreelancerProfileUpsertWithoutSelectedJobsInput = {
+  update: Prisma.XOR<Prisma.FreelancerProfileUpdateWithoutSelectedJobsInput, Prisma.FreelancerProfileUncheckedUpdateWithoutSelectedJobsInput>
+  create: Prisma.XOR<Prisma.FreelancerProfileCreateWithoutSelectedJobsInput, Prisma.FreelancerProfileUncheckedCreateWithoutSelectedJobsInput>
+  where?: Prisma.FreelancerProfileWhereInput
+}
+
+export type FreelancerProfileUpdateToOneWithWhereWithoutSelectedJobsInput = {
+  where?: Prisma.FreelancerProfileWhereInput
+  data: Prisma.XOR<Prisma.FreelancerProfileUpdateWithoutSelectedJobsInput, Prisma.FreelancerProfileUncheckedUpdateWithoutSelectedJobsInput>
+}
+
+export type FreelancerProfileUpdateWithoutSelectedJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  bio?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  walletBalance?: Prisma.FloatFieldUpdateOperationsInput | number
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
+  hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  github?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsOfExperience?: Prisma.IntFieldUpdateOperationsInput | number
+  totalProjects?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  aiEmbedding?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutFreelancerProfileNestedInput
+  skills?: Prisma.FreelancerSkillUpdateManyWithoutFreelancerNestedInput
+  portfolios?: Prisma.PortfolioUpdateManyWithoutFreelancerNestedInput
+  applications?: Prisma.ApplicationUpdateManyWithoutFreelancerNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutFreelancerNestedInput
+  experiences?: Prisma.ExperienceUpdateManyWithoutFreelancerNestedInput
+}
+
+export type FreelancerProfileUncheckedUpdateWithoutSelectedJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  bio?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  walletBalance?: Prisma.FloatFieldUpdateOperationsInput | number
+  isProfileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  experienceLevel?: Prisma.EnumExperienceLevelFieldUpdateOperationsInput | $Enums.ExperienceLevel
+  hourlyRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  github?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portfolio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsOfExperience?: Prisma.IntFieldUpdateOperationsInput | number
+  totalProjects?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  aiEmbedding?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.FreelancerSkillUncheckedUpdateManyWithoutFreelancerNestedInput
   portfolios?: Prisma.PortfolioUncheckedUpdateManyWithoutFreelancerNestedInput
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutFreelancerNestedInput
@@ -1176,6 +1339,7 @@ export type FreelancerProfileCreateWithoutPortfoliosInput = {
   applications?: Prisma.ApplicationCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutFreelancerInput
   experiences?: Prisma.ExperienceCreateNestedManyWithoutFreelancerInput
+  selectedJobs?: Prisma.JobCreateNestedManyWithoutSelectedFreelancerInput
 }
 
 export type FreelancerProfileUncheckedCreateWithoutPortfoliosInput = {
@@ -1204,6 +1368,7 @@ export type FreelancerProfileUncheckedCreateWithoutPortfoliosInput = {
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutFreelancerInput
   experiences?: Prisma.ExperienceUncheckedCreateNestedManyWithoutFreelancerInput
+  selectedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutSelectedFreelancerInput
 }
 
 export type FreelancerProfileCreateOrConnectWithoutPortfoliosInput = {
@@ -1248,6 +1413,7 @@ export type FreelancerProfileUpdateWithoutPortfoliosInput = {
   applications?: Prisma.ApplicationUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutFreelancerNestedInput
   experiences?: Prisma.ExperienceUpdateManyWithoutFreelancerNestedInput
+  selectedJobs?: Prisma.JobUpdateManyWithoutSelectedFreelancerNestedInput
 }
 
 export type FreelancerProfileUncheckedUpdateWithoutPortfoliosInput = {
@@ -1276,6 +1442,7 @@ export type FreelancerProfileUncheckedUpdateWithoutPortfoliosInput = {
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutFreelancerNestedInput
   experiences?: Prisma.ExperienceUncheckedUpdateManyWithoutFreelancerNestedInput
+  selectedJobs?: Prisma.JobUncheckedUpdateManyWithoutSelectedFreelancerNestedInput
 }
 
 export type FreelancerProfileCreateWithoutApplicationsInput = {
@@ -1304,6 +1471,7 @@ export type FreelancerProfileCreateWithoutApplicationsInput = {
   portfolios?: Prisma.PortfolioCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutFreelancerInput
   experiences?: Prisma.ExperienceCreateNestedManyWithoutFreelancerInput
+  selectedJobs?: Prisma.JobCreateNestedManyWithoutSelectedFreelancerInput
 }
 
 export type FreelancerProfileUncheckedCreateWithoutApplicationsInput = {
@@ -1332,6 +1500,7 @@ export type FreelancerProfileUncheckedCreateWithoutApplicationsInput = {
   portfolios?: Prisma.PortfolioUncheckedCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutFreelancerInput
   experiences?: Prisma.ExperienceUncheckedCreateNestedManyWithoutFreelancerInput
+  selectedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutSelectedFreelancerInput
 }
 
 export type FreelancerProfileCreateOrConnectWithoutApplicationsInput = {
@@ -1376,6 +1545,7 @@ export type FreelancerProfileUpdateWithoutApplicationsInput = {
   portfolios?: Prisma.PortfolioUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutFreelancerNestedInput
   experiences?: Prisma.ExperienceUpdateManyWithoutFreelancerNestedInput
+  selectedJobs?: Prisma.JobUpdateManyWithoutSelectedFreelancerNestedInput
 }
 
 export type FreelancerProfileUncheckedUpdateWithoutApplicationsInput = {
@@ -1404,6 +1574,7 @@ export type FreelancerProfileUncheckedUpdateWithoutApplicationsInput = {
   portfolios?: Prisma.PortfolioUncheckedUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutFreelancerNestedInput
   experiences?: Prisma.ExperienceUncheckedUpdateManyWithoutFreelancerNestedInput
+  selectedJobs?: Prisma.JobUncheckedUpdateManyWithoutSelectedFreelancerNestedInput
 }
 
 export type FreelancerProfileCreateWithoutReviewsInput = {
@@ -1432,6 +1603,7 @@ export type FreelancerProfileCreateWithoutReviewsInput = {
   portfolios?: Prisma.PortfolioCreateNestedManyWithoutFreelancerInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutFreelancerInput
   experiences?: Prisma.ExperienceCreateNestedManyWithoutFreelancerInput
+  selectedJobs?: Prisma.JobCreateNestedManyWithoutSelectedFreelancerInput
 }
 
 export type FreelancerProfileUncheckedCreateWithoutReviewsInput = {
@@ -1460,6 +1632,7 @@ export type FreelancerProfileUncheckedCreateWithoutReviewsInput = {
   portfolios?: Prisma.PortfolioUncheckedCreateNestedManyWithoutFreelancerInput
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutFreelancerInput
   experiences?: Prisma.ExperienceUncheckedCreateNestedManyWithoutFreelancerInput
+  selectedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutSelectedFreelancerInput
 }
 
 export type FreelancerProfileCreateOrConnectWithoutReviewsInput = {
@@ -1504,6 +1677,7 @@ export type FreelancerProfileUpdateWithoutReviewsInput = {
   portfolios?: Prisma.PortfolioUpdateManyWithoutFreelancerNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutFreelancerNestedInput
   experiences?: Prisma.ExperienceUpdateManyWithoutFreelancerNestedInput
+  selectedJobs?: Prisma.JobUpdateManyWithoutSelectedFreelancerNestedInput
 }
 
 export type FreelancerProfileUncheckedUpdateWithoutReviewsInput = {
@@ -1532,6 +1706,7 @@ export type FreelancerProfileUncheckedUpdateWithoutReviewsInput = {
   portfolios?: Prisma.PortfolioUncheckedUpdateManyWithoutFreelancerNestedInput
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutFreelancerNestedInput
   experiences?: Prisma.ExperienceUncheckedUpdateManyWithoutFreelancerNestedInput
+  selectedJobs?: Prisma.JobUncheckedUpdateManyWithoutSelectedFreelancerNestedInput
 }
 
 export type FreelancerProfileCreateWithoutExperiencesInput = {
@@ -1560,6 +1735,7 @@ export type FreelancerProfileCreateWithoutExperiencesInput = {
   portfolios?: Prisma.PortfolioCreateNestedManyWithoutFreelancerInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutFreelancerInput
+  selectedJobs?: Prisma.JobCreateNestedManyWithoutSelectedFreelancerInput
 }
 
 export type FreelancerProfileUncheckedCreateWithoutExperiencesInput = {
@@ -1588,6 +1764,7 @@ export type FreelancerProfileUncheckedCreateWithoutExperiencesInput = {
   portfolios?: Prisma.PortfolioUncheckedCreateNestedManyWithoutFreelancerInput
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutFreelancerInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutFreelancerInput
+  selectedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutSelectedFreelancerInput
 }
 
 export type FreelancerProfileCreateOrConnectWithoutExperiencesInput = {
@@ -1632,6 +1809,7 @@ export type FreelancerProfileUpdateWithoutExperiencesInput = {
   portfolios?: Prisma.PortfolioUpdateManyWithoutFreelancerNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutFreelancerNestedInput
+  selectedJobs?: Prisma.JobUpdateManyWithoutSelectedFreelancerNestedInput
 }
 
 export type FreelancerProfileUncheckedUpdateWithoutExperiencesInput = {
@@ -1660,6 +1838,7 @@ export type FreelancerProfileUncheckedUpdateWithoutExperiencesInput = {
   portfolios?: Prisma.PortfolioUncheckedUpdateManyWithoutFreelancerNestedInput
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutFreelancerNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutFreelancerNestedInput
+  selectedJobs?: Prisma.JobUncheckedUpdateManyWithoutSelectedFreelancerNestedInput
 }
 
 
@@ -1673,6 +1852,7 @@ export type FreelancerProfileCountOutputType = {
   applications: number
   reviews: number
   experiences: number
+  selectedJobs: number
 }
 
 export type FreelancerProfileCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1681,6 +1861,7 @@ export type FreelancerProfileCountOutputTypeSelect<ExtArgs extends runtime.Types
   applications?: boolean | FreelancerProfileCountOutputTypeCountApplicationsArgs
   reviews?: boolean | FreelancerProfileCountOutputTypeCountReviewsArgs
   experiences?: boolean | FreelancerProfileCountOutputTypeCountExperiencesArgs
+  selectedJobs?: boolean | FreelancerProfileCountOutputTypeCountSelectedJobsArgs
 }
 
 /**
@@ -1728,6 +1909,13 @@ export type FreelancerProfileCountOutputTypeCountExperiencesArgs<ExtArgs extends
   where?: Prisma.ExperienceWhereInput
 }
 
+/**
+ * FreelancerProfileCountOutputType without action
+ */
+export type FreelancerProfileCountOutputTypeCountSelectedJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobWhereInput
+}
+
 
 export type FreelancerProfileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1757,6 +1945,7 @@ export type FreelancerProfileSelect<ExtArgs extends runtime.Types.Extensions.Int
   applications?: boolean | Prisma.FreelancerProfile$applicationsArgs<ExtArgs>
   reviews?: boolean | Prisma.FreelancerProfile$reviewsArgs<ExtArgs>
   experiences?: boolean | Prisma.FreelancerProfile$experiencesArgs<ExtArgs>
+  selectedJobs?: boolean | Prisma.FreelancerProfile$selectedJobsArgs<ExtArgs>
   _count?: boolean | Prisma.FreelancerProfileCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["freelancerProfile"]>
 
@@ -1842,6 +2031,7 @@ export type FreelancerProfileInclude<ExtArgs extends runtime.Types.Extensions.In
   applications?: boolean | Prisma.FreelancerProfile$applicationsArgs<ExtArgs>
   reviews?: boolean | Prisma.FreelancerProfile$reviewsArgs<ExtArgs>
   experiences?: boolean | Prisma.FreelancerProfile$experiencesArgs<ExtArgs>
+  selectedJobs?: boolean | Prisma.FreelancerProfile$selectedJobsArgs<ExtArgs>
   _count?: boolean | Prisma.FreelancerProfileCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FreelancerProfileIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1860,6 +2050,7 @@ export type $FreelancerProfilePayload<ExtArgs extends runtime.Types.Extensions.I
     applications: Prisma.$ApplicationPayload<ExtArgs>[]
     reviews: Prisma.$ReviewPayload<ExtArgs>[]
     experiences: Prisma.$ExperiencePayload<ExtArgs>[]
+    selectedJobs: Prisma.$JobPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2283,6 +2474,7 @@ export interface Prisma__FreelancerProfileClient<T, Null = never, ExtArgs extend
   applications<T extends Prisma.FreelancerProfile$applicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FreelancerProfile$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reviews<T extends Prisma.FreelancerProfile$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FreelancerProfile$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   experiences<T extends Prisma.FreelancerProfile$experiencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FreelancerProfile$experiencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExperiencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  selectedJobs<T extends Prisma.FreelancerProfile$selectedJobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FreelancerProfile$selectedJobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2851,6 +3043,30 @@ export type FreelancerProfile$experiencesArgs<ExtArgs extends runtime.Types.Exte
   take?: number
   skip?: number
   distinct?: Prisma.ExperienceScalarFieldEnum | Prisma.ExperienceScalarFieldEnum[]
+}
+
+/**
+ * FreelancerProfile.selectedJobs
+ */
+export type FreelancerProfile$selectedJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Job
+   */
+  select?: Prisma.JobSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Job
+   */
+  omit?: Prisma.JobOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobInclude<ExtArgs> | null
+  where?: Prisma.JobWhereInput
+  orderBy?: Prisma.JobOrderByWithRelationInput | Prisma.JobOrderByWithRelationInput[]
+  cursor?: Prisma.JobWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobScalarFieldEnum | Prisma.JobScalarFieldEnum[]
 }
 
 /**

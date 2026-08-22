@@ -17,6 +17,26 @@ export default function CreateMilestoneForm({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const numericAmount = Number(amount);
+
+if (
+  !Number.isFinite(numericAmount) ||
+  numericAmount <= 0
+) {
+  setError("Enter a valid amount");
+  return;
+}
+
+const numericOrder = Number(order);
+
+if (
+  !Number.isInteger(numericOrder) ||
+  numericOrder <= 0
+) {
+  setError("Enter a valid milestone order");
+  return;
+}
+
   const handleSubmit = async (
     e: React.FormEvent
   ) => {
@@ -45,9 +65,9 @@ export default function CreateMilestoneForm({
       await createMilestone(jobId, {
         title: title.trim(),
         description: description.trim() || undefined,
-        amount: Number(amount),
+        amount: numericAmount,
         dueDate: dueDate || undefined,
-        order: Number(order),
+        order: numericAmount,
       });
 
       alert("Milestone created successfully");

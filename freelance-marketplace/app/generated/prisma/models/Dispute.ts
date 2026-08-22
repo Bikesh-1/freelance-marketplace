@@ -300,7 +300,7 @@ export type DisputeCreateInput = {
   resolvedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  milestone: Prisma.MilestoneCreateNestedOneWithoutDisputeInput
+  milestone: Prisma.MilestoneCreateNestedOneWithoutDisputesInput
   openedBy: Prisma.UserCreateNestedOneWithoutOpenedDisputesInput
 }
 
@@ -326,7 +326,7 @@ export type DisputeUpdateInput = {
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  milestone?: Prisma.MilestoneUpdateOneRequiredWithoutDisputeNestedInput
+  milestone?: Prisma.MilestoneUpdateOneRequiredWithoutDisputesNestedInput
   openedBy?: Prisma.UserUpdateOneRequiredWithoutOpenedDisputesNestedInput
 }
 
@@ -526,7 +526,7 @@ export type DisputeCreateWithoutOpenedByInput = {
   resolvedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  milestone: Prisma.MilestoneCreateNestedOneWithoutDisputeInput
+  milestone: Prisma.MilestoneCreateNestedOneWithoutDisputesInput
 }
 
 export type DisputeUncheckedCreateWithoutOpenedByInput = {
@@ -654,7 +654,7 @@ export type DisputeUpdateWithoutOpenedByInput = {
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  milestone?: Prisma.MilestoneUpdateOneRequiredWithoutDisputeNestedInput
+  milestone?: Prisma.MilestoneUpdateOneRequiredWithoutDisputesNestedInput
 }
 
 export type DisputeUncheckedUpdateWithoutOpenedByInput = {

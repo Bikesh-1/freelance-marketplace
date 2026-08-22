@@ -3,24 +3,46 @@ import { getServerSession } from "next-auth";
 
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import {verifyTransaction,} from "@/lib/blockchain/verifyTransaction";
-export async function POST(req: NextRequest,{params,}: {params: Promise<{ milestoneId: string }>;}) {
+
+export async function POST(
+  req: NextRequest,
+  {
+    params,
+  }: {
+    params: Promise<{ milestoneId: string }>;
+  }
+) {
   try {
     const { milestoneId } = await params;
-    const session = await getServerSession(authOptions);
-  
+
+    // 1. Authentication
+    const session = await getServerSession(
+      authOptions
+    );
+
     if (!session?.user?.id) {
       return NextResponse.json(
-        { message: "Unauthorized" },
+        {
+          message: "Unauthorized",
+        },
         { status: 401 }
       );
     }
 
+    // 2. Only client can fund milestone
     if (session.user.role !== "CLIENT") {
-      return NextResponse.json({message:"Only clients can fund milestones"},{ status: 403 });
+      return NextResponse.json(
+        {
+          message:
+            "Only clients can fund milestones",
+        },
+        { status: 403 }
+      );
     }
 
-    const clientProfile = await prisma.clientProfile.findUnique({
+    // 3. Get client profile
+    const clientProfile =
+      await prisma.clientProfile.findUnique({
         where: {
           userId: session.user.id,
         },
@@ -30,9 +52,15 @@ export async function POST(req: NextRequest,{params,}: {params: Promise<{ milest
       });
 
     if (!clientProfile) {
-      return NextResponse.json({message: "Client profile not found"},{ status: 404 }
+      return NextResponse.json(
+        {
+          message: "Client profile not found",
+        },
+        { status: 404 }
       );
     }
+
+    // 4. Find milestone + job
     const milestone =
       await prisma.milestone.findUnique({
         where: {
@@ -59,7 +87,7 @@ export async function POST(req: NextRequest,{params,}: {params: Promise<{ milest
       );
     }
 
-    // 5. Verify client owns job
+    // 5. Verify job ownership
     if (
       milestone.job.clientId !==
       clientProfile.id
@@ -80,13 +108,13 @@ export async function POST(req: NextRequest,{params,}: {params: Promise<{ milest
       return NextResponse.json(
         {
           message:
-            "Freelancer is not selected for this job",
+            "A freelancer must be selected before funding",
         },
         { status: 400 }
       );
     }
 
-    // 7. Only PENDING can be funded
+    // 7. Only PENDING milestones can be funded
     if (milestone.status !== "PENDING") {
       return NextResponse.json(
         {
@@ -102,21 +130,20 @@ export async function POST(req: NextRequest,{params,}: {params: Promise<{ milest
       return NextResponse.json(
         {
           message:
-            "Escrow already exists for this milestone",
+            "This milestone already has an escrow",
         },
         { status: 400 }
       );
     }
 
-    // 9. Request body
+    // 9. Read blockchain transaction data
     const body = await req.json();
 
     const {
       contractAddress,
       transactionHash,
-      network,
-      blockchainEscrowId,
       amount,
+      network,
     } = body;
 
     // 10. Validate contract address
@@ -146,41 +173,8 @@ export async function POST(req: NextRequest,{params,}: {params: Promise<{ milest
         { status: 400 }
       );
     }
-    const {
-  receipt,
-  transaction,
-} = await verifyTransaction(
-  transactionHash
-);
 
-if (receipt.status !== 1) {
-  return NextResponse.json(
-    {
-      message:
-        "Funding transaction failed",
-    },
-    { status: 400 }
-  );
-}
-
-    // 12. Validate blockchain escrow ID
-    const escrowIndex =
-      Number(blockchainEscrowId);
-
-    if (
-      !Number.isInteger(escrowIndex) ||
-      escrowIndex < 0
-    ) {
-      return NextResponse.json(
-        {
-          message:
-            "Invalid blockchain escrow ID",
-        },
-        { status: 400 }
-      );
-    }
-
-    // 13. Validate amount
+    // 12. Amount must match milestone
     const fundedAmount = Number(amount);
 
     if (
@@ -189,18 +183,15 @@ if (receipt.status !== 1) {
     ) {
       return NextResponse.json(
         {
-          message:
-            "Invalid funding amount",
+          message: "Invalid funding amount",
         },
         { status: 400 }
       );
     }
 
-    // 14. Amount must match milestone
     if (
       Math.abs(
-        fundedAmount -
-          milestone.amount
+        fundedAmount - milestone.amount
       ) > 0.000001
     ) {
       return NextResponse.json(
@@ -212,70 +203,54 @@ if (receipt.status !== 1) {
       );
     }
 
-    // 15. Create escrow + update milestone
+    // 13. Create escrow + update milestone
     const result =
-      await prisma.$transaction(
-        async (tx) => {
-          const escrow =
-            await tx.escrow.create({
-              data: {
-                jobId: milestone.job.id,
+      await prisma.$transaction(async (tx) => {
+        const escrow =
+          await tx.escrow.create({
+            data: {
+              jobId: milestone.job.id,
+              contractAddress:
+                contractAddress.trim(),
+              transactionHash:
+                transactionHash.trim(),
+              network:
+                typeof network === "string" &&
+                network.trim()
+                  ? network.trim()
+                  : "sepolia",
+              amount: milestone.amount,
+              status: "FUNDED",
+            },
+          });
 
-                contractAddress:
-                  contractAddress.trim(),
+        const updatedMilestone =
+          await tx.milestone.update({
+            where: {
+              id: milestone.id,
+            },
+            data: {
+              status: "FUNDED",
+              escrowId: escrow.id,
+            },
+            include: {
+              escrow: true,
+            },
+          });
 
-                transactionHash:
-                  transactionHash.trim(),
-
-                amount:
-                  milestone.amount,
-
-                blockchainEscrowId:
-                  escrowIndex,
-
-                network:
-                  typeof network ===
-                    "string" &&
-                  network.trim()
-                    ? network.trim()
-                    : "hardhat-local",
-
-                status: "FUNDED",
-              },
-            });
-
-          const updatedMilestone =
-            await tx.milestone.update({
-              where: {
-                id: milestoneId,
-              },
-
-              data: {
-                status: "FUNDED",
-                escrowId: escrow.id,
-              },
-
-              include: {
-                escrow: true,
-              },
-            });
-
-          return {
-            escrow,
-            milestone:
-              updatedMilestone,
-          };
-        }
-      );
+        return {
+          escrow,
+          milestone: updatedMilestone,
+        };
+      });
 
     return NextResponse.json(
       {
         success: true,
         message:
           "Milestone funded successfully",
+        milestone: result.milestone,
         escrow: result.escrow,
-        milestone:
-          result.milestone,
       },
       { status: 200 }
     );

@@ -2118,6 +2118,7 @@ export const EscrowScalarFieldEnum = {
   network: 'network',
   amount: 'amount',
   status: 'status',
+  blockchainEscrowId: 'blockchainEscrowId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

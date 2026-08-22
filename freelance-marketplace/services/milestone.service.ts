@@ -25,3 +25,18 @@ export async function createMilestone(
 
   return data.milestone;
 }
+
+export async function submitMilestone(
+  milestoneId: string,
+  payload: {
+    submissionUrl: string;
+    submissionNote?: string;
+  }
+) {
+  const { data } = await axios.post(
+    `/api/milestone/${milestoneId}/submit`,
+    payload
+  );
+
+  return data.milestone;
+}

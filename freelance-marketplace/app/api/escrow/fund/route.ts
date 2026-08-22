@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-
+import {verifyTransaction,} from "@/lib/blockchain/verifyTransaction";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -13,6 +13,22 @@ export async function POST(req: NextRequest) {
       toAddress,
     } = body;
 
+    const {
+  receipt,
+  transaction,
+} = await verifyTransaction(
+  txHash
+);
+
+if (receipt.status !== 1) {
+  return NextResponse.json(
+    {
+      message:
+        "Funding transaction failed",
+    },
+    { status: 400 }
+  );
+}
     const escrow =
       await prisma.escrow.update({
         where: {

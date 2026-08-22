@@ -28,10 +28,12 @@ export type AggregateEscrow = {
 
 export type EscrowAvgAggregateOutputType = {
   amount: number | null
+  blockchainEscrowId: number | null
 }
 
 export type EscrowSumAggregateOutputType = {
   amount: number | null
+  blockchainEscrowId: number | null
 }
 
 export type EscrowMinAggregateOutputType = {
@@ -42,6 +44,7 @@ export type EscrowMinAggregateOutputType = {
   network: string | null
   amount: number | null
   status: $Enums.EscrowStatus | null
+  blockchainEscrowId: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -54,6 +57,7 @@ export type EscrowMaxAggregateOutputType = {
   network: string | null
   amount: number | null
   status: $Enums.EscrowStatus | null
+  blockchainEscrowId: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -66,6 +70,7 @@ export type EscrowCountAggregateOutputType = {
   network: number
   amount: number
   status: number
+  blockchainEscrowId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -74,10 +79,12 @@ export type EscrowCountAggregateOutputType = {
 
 export type EscrowAvgAggregateInputType = {
   amount?: true
+  blockchainEscrowId?: true
 }
 
 export type EscrowSumAggregateInputType = {
   amount?: true
+  blockchainEscrowId?: true
 }
 
 export type EscrowMinAggregateInputType = {
@@ -88,6 +95,7 @@ export type EscrowMinAggregateInputType = {
   network?: true
   amount?: true
   status?: true
+  blockchainEscrowId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -100,6 +108,7 @@ export type EscrowMaxAggregateInputType = {
   network?: true
   amount?: true
   status?: true
+  blockchainEscrowId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -112,6 +121,7 @@ export type EscrowCountAggregateInputType = {
   network?: true
   amount?: true
   status?: true
+  blockchainEscrowId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -211,6 +221,7 @@ export type EscrowGroupByOutputType = {
   network: string
   amount: number
   status: $Enums.EscrowStatus
+  blockchainEscrowId: number | null
   createdAt: Date
   updatedAt: Date
   _count: EscrowCountAggregateOutputType | null
@@ -246,6 +257,7 @@ export type EscrowWhereInput = {
   network?: Prisma.StringFilter<"Escrow"> | string
   amount?: Prisma.FloatFilter<"Escrow"> | number
   status?: Prisma.EnumEscrowStatusFilter<"Escrow"> | $Enums.EscrowStatus
+  blockchainEscrowId?: Prisma.IntNullableFilter<"Escrow"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Escrow"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Escrow"> | Date | string
   milestone?: Prisma.XOR<Prisma.MilestoneNullableScalarRelationFilter, Prisma.MilestoneWhereInput> | null
@@ -261,6 +273,7 @@ export type EscrowOrderByWithRelationInput = {
   network?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  blockchainEscrowId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   milestone?: Prisma.MilestoneOrderByWithRelationInput
@@ -279,6 +292,7 @@ export type EscrowWhereUniqueInput = Prisma.AtLeast<{
   network?: Prisma.StringFilter<"Escrow"> | string
   amount?: Prisma.FloatFilter<"Escrow"> | number
   status?: Prisma.EnumEscrowStatusFilter<"Escrow"> | $Enums.EscrowStatus
+  blockchainEscrowId?: Prisma.IntNullableFilter<"Escrow"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Escrow"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Escrow"> | Date | string
   milestone?: Prisma.XOR<Prisma.MilestoneNullableScalarRelationFilter, Prisma.MilestoneWhereInput> | null
@@ -294,6 +308,7 @@ export type EscrowOrderByWithAggregationInput = {
   network?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  blockchainEscrowId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.EscrowCountOrderByAggregateInput
@@ -314,6 +329,7 @@ export type EscrowScalarWhereWithAggregatesInput = {
   network?: Prisma.StringWithAggregatesFilter<"Escrow"> | string
   amount?: Prisma.FloatWithAggregatesFilter<"Escrow"> | number
   status?: Prisma.EnumEscrowStatusWithAggregatesFilter<"Escrow"> | $Enums.EscrowStatus
+  blockchainEscrowId?: Prisma.IntNullableWithAggregatesFilter<"Escrow"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Escrow"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Escrow"> | Date | string
 }
@@ -325,6 +341,7 @@ export type EscrowCreateInput = {
   network?: string
   amount: number
   status?: $Enums.EscrowStatus
+  blockchainEscrowId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   milestone?: Prisma.MilestoneCreateNestedOneWithoutEscrowInput
@@ -340,6 +357,7 @@ export type EscrowUncheckedCreateInput = {
   network?: string
   amount: number
   status?: $Enums.EscrowStatus
+  blockchainEscrowId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   milestone?: Prisma.MilestoneUncheckedCreateNestedOneWithoutEscrowInput
@@ -353,6 +371,7 @@ export type EscrowUpdateInput = {
   network?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus
+  blockchainEscrowId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   milestone?: Prisma.MilestoneUpdateOneWithoutEscrowNestedInput
@@ -368,6 +387,7 @@ export type EscrowUncheckedUpdateInput = {
   network?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus
+  blockchainEscrowId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   milestone?: Prisma.MilestoneUncheckedUpdateOneWithoutEscrowNestedInput
@@ -382,6 +402,7 @@ export type EscrowCreateManyInput = {
   network?: string
   amount: number
   status?: $Enums.EscrowStatus
+  blockchainEscrowId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -393,6 +414,7 @@ export type EscrowUpdateManyMutationInput = {
   network?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus
+  blockchainEscrowId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -405,6 +427,7 @@ export type EscrowUncheckedUpdateManyInput = {
   network?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus
+  blockchainEscrowId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -427,12 +450,14 @@ export type EscrowCountOrderByAggregateInput = {
   network?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  blockchainEscrowId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type EscrowAvgOrderByAggregateInput = {
   amount?: Prisma.SortOrder
+  blockchainEscrowId?: Prisma.SortOrder
 }
 
 export type EscrowMaxOrderByAggregateInput = {
@@ -443,6 +468,7 @@ export type EscrowMaxOrderByAggregateInput = {
   network?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  blockchainEscrowId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -455,12 +481,14 @@ export type EscrowMinOrderByAggregateInput = {
   network?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  blockchainEscrowId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type EscrowSumOrderByAggregateInput = {
   amount?: Prisma.SortOrder
+  blockchainEscrowId?: Prisma.SortOrder
 }
 
 export type EscrowNullableScalarRelationFilter = {
@@ -514,6 +542,14 @@ export type EnumEscrowStatusFieldUpdateOperationsInput = {
   set?: $Enums.EscrowStatus
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type EscrowCreateNestedOneWithoutTransactionsInput = {
   create?: Prisma.XOR<Prisma.EscrowCreateWithoutTransactionsInput, Prisma.EscrowUncheckedCreateWithoutTransactionsInput>
   connectOrCreate?: Prisma.EscrowCreateOrConnectWithoutTransactionsInput
@@ -553,6 +589,7 @@ export type EscrowCreateWithoutJobInput = {
   network?: string
   amount: number
   status?: $Enums.EscrowStatus
+  blockchainEscrowId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   milestone?: Prisma.MilestoneCreateNestedOneWithoutEscrowInput
@@ -566,6 +603,7 @@ export type EscrowUncheckedCreateWithoutJobInput = {
   network?: string
   amount: number
   status?: $Enums.EscrowStatus
+  blockchainEscrowId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   milestone?: Prisma.MilestoneUncheckedCreateNestedOneWithoutEscrowInput
@@ -609,6 +647,7 @@ export type EscrowScalarWhereInput = {
   network?: Prisma.StringFilter<"Escrow"> | string
   amount?: Prisma.FloatFilter<"Escrow"> | number
   status?: Prisma.EnumEscrowStatusFilter<"Escrow"> | $Enums.EscrowStatus
+  blockchainEscrowId?: Prisma.IntNullableFilter<"Escrow"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Escrow"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Escrow"> | Date | string
 }
@@ -620,6 +659,7 @@ export type EscrowCreateWithoutTransactionsInput = {
   network?: string
   amount: number
   status?: $Enums.EscrowStatus
+  blockchainEscrowId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   milestone?: Prisma.MilestoneCreateNestedOneWithoutEscrowInput
@@ -634,6 +674,7 @@ export type EscrowUncheckedCreateWithoutTransactionsInput = {
   network?: string
   amount: number
   status?: $Enums.EscrowStatus
+  blockchainEscrowId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   milestone?: Prisma.MilestoneUncheckedCreateNestedOneWithoutEscrowInput
@@ -662,6 +703,7 @@ export type EscrowUpdateWithoutTransactionsInput = {
   network?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus
+  blockchainEscrowId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   milestone?: Prisma.MilestoneUpdateOneWithoutEscrowNestedInput
@@ -676,6 +718,7 @@ export type EscrowUncheckedUpdateWithoutTransactionsInput = {
   network?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus
+  blockchainEscrowId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   milestone?: Prisma.MilestoneUncheckedUpdateOneWithoutEscrowNestedInput
@@ -688,6 +731,7 @@ export type EscrowCreateWithoutMilestoneInput = {
   network?: string
   amount: number
   status?: $Enums.EscrowStatus
+  blockchainEscrowId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   job: Prisma.JobCreateNestedOneWithoutEscrowInput
@@ -702,6 +746,7 @@ export type EscrowUncheckedCreateWithoutMilestoneInput = {
   network?: string
   amount: number
   status?: $Enums.EscrowStatus
+  blockchainEscrowId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutEscrowInput
@@ -730,6 +775,7 @@ export type EscrowUpdateWithoutMilestoneInput = {
   network?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus
+  blockchainEscrowId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   job?: Prisma.JobUpdateOneRequiredWithoutEscrowNestedInput
@@ -744,6 +790,7 @@ export type EscrowUncheckedUpdateWithoutMilestoneInput = {
   network?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus
+  blockchainEscrowId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutEscrowNestedInput
@@ -756,6 +803,7 @@ export type EscrowCreateManyJobInput = {
   network?: string
   amount: number
   status?: $Enums.EscrowStatus
+  blockchainEscrowId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -767,6 +815,7 @@ export type EscrowUpdateWithoutJobInput = {
   network?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus
+  blockchainEscrowId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   milestone?: Prisma.MilestoneUpdateOneWithoutEscrowNestedInput
@@ -780,6 +829,7 @@ export type EscrowUncheckedUpdateWithoutJobInput = {
   network?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus
+  blockchainEscrowId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   milestone?: Prisma.MilestoneUncheckedUpdateOneWithoutEscrowNestedInput
@@ -793,6 +843,7 @@ export type EscrowUncheckedUpdateManyWithoutJobInput = {
   network?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus
+  blockchainEscrowId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -836,6 +887,7 @@ export type EscrowSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   network?: boolean
   amount?: boolean
   status?: boolean
+  blockchainEscrowId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   milestone?: boolean | Prisma.Escrow$milestoneArgs<ExtArgs>
@@ -852,6 +904,7 @@ export type EscrowSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   network?: boolean
   amount?: boolean
   status?: boolean
+  blockchainEscrowId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   job?: boolean | Prisma.JobDefaultArgs<ExtArgs>
@@ -865,6 +918,7 @@ export type EscrowSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   network?: boolean
   amount?: boolean
   status?: boolean
+  blockchainEscrowId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   job?: boolean | Prisma.JobDefaultArgs<ExtArgs>
@@ -878,11 +932,12 @@ export type EscrowSelectScalar = {
   network?: boolean
   amount?: boolean
   status?: boolean
+  blockchainEscrowId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type EscrowOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "jobId" | "contractAddress" | "transactionHash" | "network" | "amount" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["escrow"]>
+export type EscrowOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "jobId" | "contractAddress" | "transactionHash" | "network" | "amount" | "status" | "blockchainEscrowId" | "createdAt" | "updatedAt", ExtArgs["result"]["escrow"]>
 export type EscrowInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   milestone?: boolean | Prisma.Escrow$milestoneArgs<ExtArgs>
   job?: boolean | Prisma.JobDefaultArgs<ExtArgs>
@@ -911,6 +966,7 @@ export type $EscrowPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     network: string
     amount: number
     status: $Enums.EscrowStatus
+    blockchainEscrowId: number | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["escrow"]>
@@ -1346,6 +1402,7 @@ export interface EscrowFieldRefs {
   readonly network: Prisma.FieldRef<"Escrow", 'String'>
   readonly amount: Prisma.FieldRef<"Escrow", 'Float'>
   readonly status: Prisma.FieldRef<"Escrow", 'EscrowStatus'>
+  readonly blockchainEscrowId: Prisma.FieldRef<"Escrow", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Escrow", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Escrow", 'DateTime'>
 }

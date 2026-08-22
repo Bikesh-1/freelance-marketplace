@@ -38,22 +38,34 @@ export default async function ClientMilestonesPage({
     redirect("/client/profile");
   }
 
-  const job = await prisma.job.findFirst({
-    where: {
-      id: jobId,
-      clientId: profile.id,
-    },
-    include: {
-      milestones: {
-        include: {
-          escrow: true,
-        },
-        orderBy: {
-          order: "asc",
+const job = await prisma.job.findFirst({
+  where: {
+    id: jobId,
+    clientId: profile.id,
+  },
+
+  include: {
+    selectedFreelancer: {
+      select: {
+        user: {
+          select: {
+            walletAddress: true,
+          },
         },
       },
     },
-  });
+
+    milestones: {
+      include: {
+        escrow: true,
+      },
+
+      orderBy: {
+        order: "asc",
+      },
+    },
+  },
+});
 
   if (!job) {
     redirect("/client/dashboard");
@@ -105,6 +117,7 @@ export default async function ClientMilestonesPage({
                     <MilestoneCard
                       key={milestone.id}
                       milestone={milestone}
+                      freelancerAddress={job.selectedFreelancer?.user.walletAddress}
                     />
                   )
                 )}

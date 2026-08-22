@@ -1,65 +1,105 @@
 "use client";
 
 import { useState } from "react";
+
 import { submitMilestone } from "@/services/milestone.action";
+import RaiseDisputeForm from "@/components/dispute/RaiseDisputeForm";
+
+type Milestone = {
+  id: string;
+  title: string;
+  description?: string | null;
+  amount: number;
+
+  status:
+    | "PENDING"
+    | "FUNDED"
+    | "DISPUTED"
+    | "SUBMITTED"
+    | "APPROVED"
+    | "RELEASED"
+    | "REFUNDED";
+
+  submissionUrl?: string | null;
+  submissionNote?: string | null;
+
+  escrow?: {
+    id: string;
+    blockchainEscrowId: number | null;
+  } | null;
+};
 
 export default function FreelancerMilestoneCard({
   milestone,
 }: {
-  milestone: any;
+  milestone: Milestone;
 }) {
-  const [open, setOpen] = useState(false);
   const [submissionNote, setSubmissionNote] =
     useState(
       milestone.submissionNote || ""
     );
+
   const [submissionUrl, setSubmissionUrl] =
     useState(
       milestone.submissionUrl || ""
     );
-  const [loading, setLoading] =
+
+  const [submitting, setSubmitting] =
     useState(false);
+
+  // -----------------------------------------
+  // SUBMIT MILESTONE
+  // -----------------------------------------
 
   const handleSubmit = async () => {
     try {
-      if (
-        !submissionNote.trim() &&
-        !submissionUrl.trim()
-      ) {
+      if (!submissionUrl.trim()) {
         alert(
-          "Please add work details or a work URL"
+          "Submission URL is required"
         );
         return;
       }
 
-      setLoading(true);
+      setSubmitting(true);
 
       await submitMilestone(
         milestone.id,
         {
-          submissionNote,
-          submissionUrl,
+          submissionUrl:
+            submissionUrl.trim(),
+
+          submissionNote:
+            submissionNote.trim() ||
+            undefined,
         }
       );
 
       alert(
-        "Work submitted successfully"
+        "Milestone submitted successfully"
       );
 
       window.location.reload();
     } catch (error) {
-      console.error(error);
+      console.error(
+        "Submit milestone error:",
+        error
+      );
 
       alert(
-        "Failed to submit work"
+        "Failed to submit milestone"
       );
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
   return (
     <div className="space-y-4 rounded-2xl border border-slate-800 bg-slate-900 p-5">
+
+      {/* -------------------------------- */}
+      {/* TITLE */}
+      {/* -------------------------------- */}
+
       <div>
         <h3 className="text-xl font-semibold text-white">
           {milestone.title}
@@ -72,6 +112,10 @@ export default function FreelancerMilestoneCard({
         )}
       </div>
 
+      {/* -------------------------------- */}
+      {/* AMOUNT */}
+      {/* -------------------------------- */}
+
       <div className="flex items-center justify-between">
         <span className="text-slate-300">
           Amount
@@ -81,6 +125,10 @@ export default function FreelancerMilestoneCard({
           {milestone.amount} ETH
         </span>
       </div>
+
+      {/* -------------------------------- */}
+      {/* STATUS */}
+      {/* -------------------------------- */}
 
       <div className="flex items-center justify-between">
         <span className="text-slate-300">
@@ -92,105 +140,138 @@ export default function FreelancerMilestoneCard({
         </span>
       </div>
 
+      {/* -------------------------------- */}
+      {/* FUNDED → SUBMIT WORK */}
+      {/* -------------------------------- */}
+
       {milestone.status === "FUNDED" && (
-        <>
-          {!open ? (
-            <button
-              onClick={() => setOpen(true)}
-              className="w-full rounded-lg bg-indigo-600 py-3 font-medium text-white hover:bg-indigo-500"
-            >
-              Submit Work
-            </button>
-          ) : (
-            <div className="space-y-4 rounded-xl border border-slate-700 p-4">
-              <div>
-                <label className="mb-2 block text-sm font-medium text-slate-300">
-                  Work Description
-                </label>
+        <div className="space-y-3">
 
-                <textarea
-                  value={submissionNote}
-                  onChange={(e) =>
-                    setSubmissionNote(
-                      e.target.value
-                    )
-                  }
-                  placeholder="Describe the completed work..."
-                  rows={5}
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 p-3 text-white outline-none focus:border-indigo-500"
-                />
-              </div>
+          <input
+            type="url"
+            value={submissionUrl}
+            onChange={(e) =>
+              setSubmissionUrl(
+                e.target.value
+              )
+            }
+            placeholder="Submission URL"
+            className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none"
+          />
 
-              <div>
-                <label className="mb-2 block text-sm font-medium text-slate-300">
-                  Work URL
-                </label>
+          <textarea
+            value={submissionNote}
+            onChange={(e) =>
+              setSubmissionNote(
+                e.target.value
+              )
+            }
+            placeholder="Submission note (optional)"
+            rows={4}
+            className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none"
+          />
 
-                <input
-                  type="url"
-                  value={submissionUrl}
-                  onChange={(e) =>
-                    setSubmissionUrl(
-                      e.target.value
-                    )
-                  }
-                  placeholder="https://github.com/..."
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 p-3 text-white outline-none focus:border-indigo-500"
-                />
-              </div>
-
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setOpen(false)}
-                  disabled={loading}
-                  className="w-1/2 rounded-lg border border-slate-700 py-3 font-medium text-slate-300 hover:bg-slate-800"
-                >
-                  Cancel
-                </button>
-
-                <button
-                  onClick={handleSubmit}
-                  disabled={loading}
-                  className="w-1/2 rounded-lg bg-blue-600 py-3 font-medium text-white hover:bg-blue-500 disabled:opacity-50"
-                >
-                  {loading
-                    ? "Submitting..."
-                    : "Submit Work"}
-                </button>
-              </div>
-            </div>
-          )}
-        </>
+          <button
+            onClick={handleSubmit}
+            disabled={submitting}
+            className="w-full rounded-lg bg-indigo-600 py-3 font-medium text-white hover:bg-indigo-500 disabled:opacity-50"
+          >
+            {submitting
+              ? "Submitting..."
+              : "Submit Work"}
+          </button>
+        </div>
       )}
 
+      {/* -------------------------------- */}
+      {/* FUNDED / SUBMITTED → DISPUTE */}
+      {/* -------------------------------- */}
+
+      {(milestone.status === "FUNDED" ||
+        milestone.status === "SUBMITTED") && (
+        <RaiseDisputeForm
+          milestoneId={milestone.id}
+        />
+      )}
+
+      {/* -------------------------------- */}
+      {/* SUBMITTED → SHOW WORK */}
+      {/* -------------------------------- */}
+
       {milestone.status === "SUBMITTED" && (
-        <div className="space-y-3 rounded-lg border border-yellow-700 bg-yellow-900/20 p-4">
-          <p className="font-medium text-yellow-300">
-            Work submitted — waiting for client approval
+        <div className="space-y-3 rounded-lg border border-slate-700 p-4">
+
+          <p className="text-sm font-medium text-slate-400">
+            Work Submitted
           </p>
+
+          {milestone.submissionUrl && (
+            <a
+              href={
+                milestone.submissionUrl
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block break-all text-indigo-400 hover:underline"
+            >
+              {milestone.submissionUrl}
+            </a>
+          )}
 
           {milestone.submissionNote && (
             <p className="text-sm text-slate-300">
               {milestone.submissionNote}
             </p>
           )}
-
-          {milestone.submissionUrl && (
-            <a
-              href={milestone.submissionUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block text-sm text-indigo-400 hover:text-indigo-300"
-            >
-              View Submitted Work →
-            </a>
-          )}
         </div>
       )}
+
+      {/* -------------------------------- */}
+      {/* DISPUTED */}
+      {/* -------------------------------- */}
+
+      {milestone.status === "DISPUTED" && (
+        <div className="rounded-lg border border-red-700 bg-red-900/30 p-4 text-center">
+          <p className="font-medium text-red-300">
+            Dispute Raised
+          </p>
+
+          <p className="mt-1 text-sm text-red-400">
+            This milestone is currently under dispute review.
+          </p>
+        </div>
+      )}
+
+      {/* -------------------------------- */}
+      {/* APPROVED */}
+      {/* -------------------------------- */}
+
+      {milestone.status === "APPROVED" && (
+        <div className="rounded-lg border border-indigo-700 bg-indigo-900/30 p-4 text-center">
+          <p className="font-medium text-indigo-300">
+            Milestone Approved
+          </p>
+
+          <p className="mt-1 text-sm text-indigo-400">
+            Waiting for client to release payment.
+          </p>
+        </div>
+      )}
+
+      {/* -------------------------------- */}
+      {/* RELEASED */}
+      {/* -------------------------------- */}
 
       {milestone.status === "RELEASED" && (
         <div className="rounded-lg border border-green-700 bg-green-900/30 p-3 text-center font-medium text-green-300">
           Payment Released
+        </div>
+      )}
+
+
+      {milestone.status === "REFUNDED" && (
+        <div className="rounded-lg border border-yellow-700 bg-yellow-900/30 p-3 text-center font-medium text-yellow-300">
+          Milestone Refunded
         </div>
       )}
     </div>

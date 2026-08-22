@@ -7,20 +7,16 @@ export async function submitMilestone(
     submissionUrl?: string;
   }
 ) {
-  const { data } = await axios.post(
-    `/api/milestone/${milestoneId}/submit`,
+  const { data } = await axios.post(`/api/milestone/${milestoneId}/submit`,
     payload
   );
-
   return data.milestone;
 }
 
-export async function approveMilestone(
-  milestoneId: string
-) {
-  const { data } = await axios.post(
-    `/api/milestone/${milestoneId}/approve`
-  );
+
+
+export async function approveMilestone(milestoneId: string) {
+  const { data } = await axios.post(`/api/milestone/${milestoneId}/approve`);
 
   return data.milestone;
 }

@@ -1,28 +1,62 @@
 "use client";
 
 import { useState } from "react";
+
 import { createDispute } from "@/services/dispute.service";
 
 export default function RaiseDisputeForm({
   milestoneId,
-  userId,
 }: {
   milestoneId: string;
-  userId: string;
 }) {
   const [reason, setReason] =
     useState("");
 
-  const handleSubmit = async () => {
-    await createDispute({
-      milestoneId,
-      userId,
-      reason,
-    });
+  const [evidence, setEvidence] =
+    useState("");
 
-    alert(
-      "Dispute raised successfully"
-    );
+  const [loading, setLoading] =
+    useState(false);
+
+  const handleSubmit = async () => {
+    try {
+      if (!reason.trim()) {
+        alert(
+          "Dispute reason is required"
+        );
+        return;
+      }
+
+      setLoading(true);
+
+      await createDispute({
+        milestoneId,
+
+        reason:
+          reason.trim(),
+
+        evidence:
+          evidence.trim() ||
+          undefined,
+      });
+
+      alert(
+        "Dispute raised successfully"
+      );
+
+      window.location.reload();
+    } catch (error) {
+      console.error(
+        "Raise dispute error:",
+        error
+      );
+
+      alert(
+        "Failed to raise dispute"
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -42,11 +76,26 @@ export default function RaiseDisputeForm({
         className="w-full rounded-lg border border-slate-700 bg-slate-950 p-3 text-white"
       />
 
+      <input
+        type="url"
+        value={evidence}
+        onChange={(e) =>
+          setEvidence(
+            e.target.value
+          )
+        }
+        placeholder="Evidence URL (optional)"
+        className="w-full rounded-lg border border-slate-700 bg-slate-950 p-3 text-white"
+      />
+
       <button
         onClick={handleSubmit}
-        className="w-full rounded-lg bg-red-600 py-3 font-medium text-white hover:bg-red-500"
+        disabled={loading}
+        className="w-full rounded-lg bg-red-600 py-3 font-medium text-white hover:bg-red-500 disabled:opacity-50"
       >
-        Submit Dispute
+        {loading
+          ? "Submitting..."
+          : "Submit Dispute"}
       </button>
     </div>
   );

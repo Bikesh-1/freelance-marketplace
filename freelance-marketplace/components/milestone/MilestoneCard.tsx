@@ -1,76 +1,183 @@
 "use client";
 
 import { useState } from "react";
+import axios from "axios";
+
 import { useEscrow } from "@/hooks/useEscrow";
 import { approveMilestone } from "@/services/milestone.action";
-
+import RaiseDisputeForm from "@/components/dispute/RaiseDisputeForm";
 type Milestone = {
   id: string;
   title: string;
   description?: string | null;
   amount: number;
+
   status:
     | "PENDING"
     | "FUNDED"
     | "SUBMITTED"
+    | "DISPUTED"
     | "APPROVED"
     | "RELEASED"
     | "REFUNDED";
+
   escrowId?: string | null;
+
+  escrow?: {
+    id: string;
+    blockchainEscrowId: number | null;
+  } | null;
 };
 
 export default function MilestoneCard({
   milestone,
+  freelancerAddress,
 }: {
   milestone: Milestone;
+  freelancerAddress?: string | null;
 }) {
   const {
-  createAndFundEscrow,
-  releasePayment,
-  loading,
-  error,
-} = useEscrow();
+    createAndFundEscrow,
+    releasePayment,
+    loading,
+    error,
+  } = useEscrow();
 
-  // Blockchain escrow index
-  // Abhi demo ke liye 0 use kar rahe hain
-  // Baad me actual blockchain escrow id store karenge
-  const [escrowIndex] = useState(0);
+  const [approving, setApproving] =
+    useState(false);
 
-  // TODO: Real freelancer wallet database se aayega
-  const freelancerAddress =
-    "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
+  const [releasing, setReleasing] =
+    useState(false);
 
-  // Fund milestone
- const handleFund = async () => {
-  try {
-    await createAndFundEscrow(
-      freelancerAddress,
-      milestone.amount.toString(),
-      milestone.escrowId || ""
-    );
+  // -----------------------------------------
+  // FUND MILESTONE
+  // -----------------------------------------
 
-    alert(
-      "Milestone funded successfully"
-    );
+  const handleFund = async () => {
+    try {
+      if (!freelancerAddress) {
+        throw new Error(
+          "Freelancer wallet address not found"
+        );
+      }
 
-    window.location.reload();
-  } catch (err) {
-    console.error(err);
-  }
-};
+      const result =
+        await createAndFundEscrow(
+          freelancerAddress,
+          milestone.amount.toString()
+        );
 
-  // Approve milestone + release payment
+      await axios.post(
+        `/api/milestone/${milestone.id}/fund`,
+        {
+          contractAddress:
+            process.env
+              .NEXT_PUBLIC_ESCROW_CONTRACT_ADDRESS,
+
+          transactionHash:
+            result.receipt.hash,
+
+          amount: milestone.amount,
+
+          network: "hardhat-local",
+
+          blockchainEscrowId:
+            result.escrowIndex,
+        }
+      );
+
+      alert(
+        "Milestone funded successfully"
+      );
+
+      window.location.reload();
+    } catch (err) {
+      console.error(
+        "Fund milestone error:",
+        err
+      );
+    }
+  };
+
+  // -----------------------------------------
+  // APPROVE MILESTONE
+  // -----------------------------------------
+
   const handleApprove = async () => {
     try {
-      // Update milestone status to APPROVED
+      if (
+        milestone.status !== "SUBMITTED"
+      ) {
+        return;
+      }
+
+      setApproving(true);
+
       await approveMilestone(
         milestone.id
       );
 
-      // Release payment from blockchain escrow
+      alert(
+        "Milestone approved successfully"
+      );
+
+      window.location.reload();
+    } catch (err) {
+      console.error(
+        "Approve milestone error:",
+        err
+      );
+
+      alert(
+        "Failed to approve milestone"
+      );
+    } finally {
+      setApproving(false);
+    }
+  };
+
+  // -----------------------------------------
+  // RELEASE PAYMENT
+  // -----------------------------------------
+
+  const handleRelease = async () => {
+    try {
+      if (
+        milestone.status !== "APPROVED"
+      ) {
+        return;
+      }
+
+      if (!milestone.escrow) {
+        throw new Error(
+          "Escrow not found"
+        );
+      }
+
+      if (!freelancerAddress) {
+        throw new Error(
+          "Freelancer wallet address not found"
+        );
+      }
+
+      const escrowIndex =
+        milestone.escrow
+          .blockchainEscrowId;
+
+      if (
+        escrowIndex === null ||
+        escrowIndex === undefined
+      ) {
+        throw new Error(
+          "Blockchain escrow ID not found"
+        );
+      }
+
+      setReleasing(true);
+
       await releasePayment(
         escrowIndex,
-        milestone.escrowId || "",
+        milestone.escrow.id,
         freelancerAddress,
         milestone.amount
       );
@@ -78,13 +185,25 @@ export default function MilestoneCard({
       alert(
         "Payment released successfully"
       );
+
+      window.location.reload();
     } catch (err) {
-      console.error(err);
+      console.error(
+        "Release payment error:",
+        err
+      );
+
+      alert(
+        "Failed to release payment"
+      );
+    } finally {
+      setReleasing(false);
     }
   };
 
   return (
     <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5 space-y-4">
+      {/* Header */}
       <div>
         <h3 className="text-xl font-semibold text-white">
           {milestone.title}
@@ -97,6 +216,7 @@ export default function MilestoneCard({
         )}
       </div>
 
+      {/* Amount */}
       <div className="flex items-center justify-between">
         <span className="text-slate-300">
           Amount
@@ -107,6 +227,7 @@ export default function MilestoneCard({
         </span>
       </div>
 
+      {/* Status */}
       <div className="flex items-center justify-between">
         <span className="text-slate-300">
           Status
@@ -117,7 +238,10 @@ export default function MilestoneCard({
         </span>
       </div>
 
-      {/* Fund Milestone */}
+      {/* -------------------------------- */}
+      {/* FUND */}
+      {/* -------------------------------- */}
+
       {milestone.status ===
         "PENDING" && (
         <button
@@ -131,28 +255,62 @@ export default function MilestoneCard({
         </button>
       )}
 
-      {/* Approve + Release Payment */}
+      {/* -------------------------------- */}
+      {/* APPROVE */}
+      {/* -------------------------------- */}
+
       {milestone.status ===
         "SUBMITTED" && (
         <button
           onClick={handleApprove}
-          disabled={loading}
+          disabled={
+            loading || approving
+          }
           className="w-full rounded-lg bg-indigo-600 py-3 font-medium text-white hover:bg-indigo-500 disabled:opacity-50"
         >
-          {loading
-            ? "Releasing..."
-            : "Approve & Release Payment"}
+          {approving
+            ? "Approving..."
+            : "Approve Milestone"}
         </button>
       )}
 
-      {/* Released */}
+      {/* -------------------------------- */}
+      {/* RELEASE */}
+      {/* -------------------------------- */}
+
+      {milestone.status ===
+        "APPROVED" && (
+        <button
+          onClick={handleRelease}
+          disabled={
+            loading || releasing
+          }
+          className="w-full rounded-lg bg-green-600 py-3 font-medium text-white hover:bg-green-500 disabled:opacity-50"
+        >
+          {releasing
+            ? "Releasing..."
+            : "Release Payment"}
+        </button>
+      )}
+
+      {/* -------------------------------- */}
+      {/* RELEASED */}
+      {/* -------------------------------- */}
+      {(milestone.status === "FUNDED" ||
+      milestone.status === "SUBMITTED"
+    ) && (
+  <RaiseDisputeForm
+    milestoneId={milestone.id}
+  />
+)}
       {milestone.status ===
         "RELEASED" && (
-        <div className="rounded-lg bg-green-900/30 border border-green-700 p-3 text-green-300 text-center font-medium">
+        <div className="rounded-lg border border-green-700 bg-green-900/30 p-3 text-center font-medium text-green-300">
           Payment Released
         </div>
       )}
 
+      {/* Error */}
       {error && (
         <p className="text-sm text-red-400">
           {error}

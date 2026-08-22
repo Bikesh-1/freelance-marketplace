@@ -205,6 +205,83 @@ contract FreelanceEscrow is ReentrancyGuard, Ownable {
             amount
         );
     }
+    function adminReleasePayment(
+    uint256 escrowId
+)
+    external
+    onlyOwner
+    nonReentrant
+    escrowExists(escrowId)
+{
+    Escrow storage escrow =
+        escrows[escrowId];
+
+    require(
+        escrow.status == Status.FUNDED,
+        "Escrow is not funded"
+    );
+
+    uint256 amount =
+        escrow.amount;
+
+    escrow.amount = 0;
+    escrow.status =
+        Status.RELEASED;
+
+    (bool success, ) =
+        payable(escrow.freelancer)
+            .call{value: amount}("");
+
+    require(
+        success,
+        "Payment transfer failed"
+    );
+
+    emit PaymentReleased(
+        escrowId,
+        escrow.freelancer,
+        amount
+    );
+}
+
+function adminRefundClient(
+    uint256 escrowId
+)
+    external
+    onlyOwner
+    nonReentrant
+    escrowExists(escrowId)
+{
+    Escrow storage escrow =
+        escrows[escrowId];
+
+    require(
+        escrow.status == Status.FUNDED,
+        "Escrow is not funded"
+    );
+
+    uint256 amount =
+        escrow.amount;
+
+    escrow.amount = 0;
+    escrow.status =
+        Status.REFUNDED;
+
+    (bool success, ) =
+        payable(escrow.client)
+            .call{value: amount}("");
+
+    require(
+        success,
+        "Refund failed"
+    );
+
+    emit PaymentRefunded(
+        escrowId,
+        escrow.client,
+        amount
+    );
+}
 
     function getEscrow(
         uint256 escrowId
