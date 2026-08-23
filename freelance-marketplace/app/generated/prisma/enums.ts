@@ -9,6 +9,16 @@
 * 🟢 You can import this file directly.
 */
 
+export const EscrowTransactionType = {
+  CREATED: 'CREATED',
+  FUNDED: 'FUNDED',
+  RELEASED: 'RELEASED',
+  REFUNDED: 'REFUNDED'
+} as const
+
+export type EscrowTransactionType = (typeof EscrowTransactionType)[keyof typeof EscrowTransactionType]
+
+
 export const DisputeStatus = {
   OPEN: 'OPEN',
   UNDER_REVIEW: 'UNDER_REVIEW',

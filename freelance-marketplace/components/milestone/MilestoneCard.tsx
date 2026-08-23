@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import axios from "axios";
-
+import TransactionHistory from "@/components/escrow/TransactionHistory";
 import { useEscrow } from "@/hooks/useEscrow";
 import { approveMilestone } from "@/services/milestone.action";
 import RaiseDisputeForm from "@/components/dispute/RaiseDisputeForm";
@@ -215,7 +215,13 @@ export default function MilestoneCard({
           </p>
         )}
       </div>
-
+{milestone.escrow && (
+  <TransactionHistory
+    escrowId={
+      milestone.escrow.id
+    }
+  />
+)}
       {/* Amount */}
       <div className="flex items-center justify-between">
         <span className="text-slate-300">

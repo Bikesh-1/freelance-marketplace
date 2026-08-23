@@ -31,7 +31,7 @@ export async function POST(
       where: { id: disputeId },
 
       data: {
-        status: "CLIENT_WON",
+        status: "RESOLVED",
         resolvedAt: new Date(),
       },
     });
@@ -57,6 +57,7 @@ export async function POST(
         },
       });
     }
+    
 
     return NextResponse.json({
       success: true,

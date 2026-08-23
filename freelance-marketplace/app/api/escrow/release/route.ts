@@ -175,7 +175,29 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+    await prisma.escrowTransaction.create({
+      data: {
+        escrowId:
+          escrow.id,
 
+        type: "RELEASED",
+
+        transactionHash:
+          txHash,
+
+        amount:
+          Number(amount),
+
+        fromAddress:
+          fromAddress ?? null,
+
+        toAddress:
+          toAddress ?? null,
+
+        network:
+          escrow.network,
+      },
+    });
     // 10. Amount validation
     const releaseAmount = Number(amount);
 

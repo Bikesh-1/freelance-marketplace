@@ -62,6 +62,7 @@ export const ModelName = {
   Review: 'Review',
   Message: 'Message',
   Escrow: 'Escrow',
+  EscrowTransaction: 'EscrowTransaction',
   Transaction: 'Transaction',
   Notification: 'Notification',
   Milestone: 'Milestone',
@@ -258,6 +259,21 @@ export const EscrowScalarFieldEnum = {
 } as const
 
 export type EscrowScalarFieldEnum = (typeof EscrowScalarFieldEnum)[keyof typeof EscrowScalarFieldEnum]
+
+
+export const EscrowTransactionScalarFieldEnum = {
+  id: 'id',
+  escrowId: 'escrowId',
+  type: 'type',
+  transactionHash: 'transactionHash',
+  amount: 'amount',
+  fromAddress: 'fromAddress',
+  toAddress: 'toAddress',
+  network: 'network',
+  createdAt: 'createdAt'
+} as const
+
+export type EscrowTransactionScalarFieldEnum = (typeof EscrowTransactionScalarFieldEnum)[keyof typeof EscrowTransactionScalarFieldEnum]
 
 
 export const TransactionScalarFieldEnum = {

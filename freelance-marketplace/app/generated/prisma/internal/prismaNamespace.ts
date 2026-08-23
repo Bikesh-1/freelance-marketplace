@@ -408,6 +408,7 @@ export const ModelName = {
   Review: 'Review',
   Message: 'Message',
   Escrow: 'Escrow',
+  EscrowTransaction: 'EscrowTransaction',
   Transaction: 'Transaction',
   Notification: 'Notification',
   Milestone: 'Milestone',
@@ -432,7 +433,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "freelancerProfile" | "clientProfile" | "skill" | "freelancerSkill" | "job" | "portfolio" | "application" | "review" | "message" | "escrow" | "transaction" | "notification" | "milestone" | "aIRecommendation" | "walletTransaction" | "blockchainEvent" | "experience" | "jobSkill" | "dispute"
+    modelProps: "user" | "freelancerProfile" | "clientProfile" | "skill" | "freelancerSkill" | "job" | "portfolio" | "application" | "review" | "message" | "escrow" | "escrowTransaction" | "transaction" | "notification" | "milestone" | "aIRecommendation" | "walletTransaction" | "blockchainEvent" | "experience" | "jobSkill" | "dispute"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1247,6 +1248,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.EscrowCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.EscrowCountAggregateOutputType> | number
+        }
+      }
+    }
+    EscrowTransaction: {
+      payload: Prisma.$EscrowTransactionPayload<ExtArgs>
+      fields: Prisma.EscrowTransactionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EscrowTransactionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EscrowTransactionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EscrowTransactionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EscrowTransactionPayload>
+        }
+        findFirst: {
+          args: Prisma.EscrowTransactionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EscrowTransactionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EscrowTransactionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EscrowTransactionPayload>
+        }
+        findMany: {
+          args: Prisma.EscrowTransactionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EscrowTransactionPayload>[]
+        }
+        create: {
+          args: Prisma.EscrowTransactionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EscrowTransactionPayload>
+        }
+        createMany: {
+          args: Prisma.EscrowTransactionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EscrowTransactionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EscrowTransactionPayload>[]
+        }
+        delete: {
+          args: Prisma.EscrowTransactionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EscrowTransactionPayload>
+        }
+        update: {
+          args: Prisma.EscrowTransactionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EscrowTransactionPayload>
+        }
+        deleteMany: {
+          args: Prisma.EscrowTransactionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EscrowTransactionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EscrowTransactionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EscrowTransactionPayload>[]
+        }
+        upsert: {
+          args: Prisma.EscrowTransactionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EscrowTransactionPayload>
+        }
+        aggregate: {
+          args: Prisma.EscrowTransactionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEscrowTransaction>
+        }
+        groupBy: {
+          args: Prisma.EscrowTransactionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EscrowTransactionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EscrowTransactionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EscrowTransactionCountAggregateOutputType> | number
         }
       }
     }
@@ -2126,6 +2201,21 @@ export const EscrowScalarFieldEnum = {
 export type EscrowScalarFieldEnum = (typeof EscrowScalarFieldEnum)[keyof typeof EscrowScalarFieldEnum]
 
 
+export const EscrowTransactionScalarFieldEnum = {
+  id: 'id',
+  escrowId: 'escrowId',
+  type: 'type',
+  transactionHash: 'transactionHash',
+  amount: 'amount',
+  fromAddress: 'fromAddress',
+  toAddress: 'toAddress',
+  network: 'network',
+  createdAt: 'createdAt'
+} as const
+
+export type EscrowTransactionScalarFieldEnum = (typeof EscrowTransactionScalarFieldEnum)[keyof typeof EscrowTransactionScalarFieldEnum]
+
+
 export const TransactionScalarFieldEnum = {
   id: 'id',
   escrowId: 'escrowId',
@@ -2434,6 +2524,20 @@ export type ListEnumEscrowStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
 
 
 /**
+ * Reference to a field of type 'EscrowTransactionType'
+ */
+export type EnumEscrowTransactionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EscrowTransactionType'>
+    
+
+
+/**
+ * Reference to a field of type 'EscrowTransactionType[]'
+ */
+export type ListEnumEscrowTransactionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EscrowTransactionType[]'>
+    
+
+
+/**
  * Reference to a field of type 'TransactionStatus'
  */
 export type EnumTransactionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionStatus'>
@@ -2650,6 +2754,7 @@ export type GlobalOmitConfig = {
   review?: Prisma.ReviewOmit
   message?: Prisma.MessageOmit
   escrow?: Prisma.EscrowOmit
+  escrowTransaction?: Prisma.EscrowTransactionOmit
   transaction?: Prisma.TransactionOmit
   notification?: Prisma.NotificationOmit
   milestone?: Prisma.MilestoneOmit

@@ -27,3 +27,19 @@ export async function resolveDispute(
 
   return data;
 }
+
+export async function createDispute(
+  payload: {
+    milestoneId: string;
+    reason: string;
+    evidence?: string;
+  }
+) {
+  const { data } =
+    await axios.post(
+      "/api/dispute/create",
+      payload
+    );
+
+  return data.dispute;
+}

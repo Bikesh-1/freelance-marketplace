@@ -263,6 +263,7 @@ export type EscrowWhereInput = {
   milestone?: Prisma.XOR<Prisma.MilestoneNullableScalarRelationFilter, Prisma.MilestoneWhereInput> | null
   job?: Prisma.XOR<Prisma.JobScalarRelationFilter, Prisma.JobWhereInput>
   transactions?: Prisma.TransactionListRelationFilter
+  escrowTransactions?: Prisma.EscrowTransactionListRelationFilter
 }
 
 export type EscrowOrderByWithRelationInput = {
@@ -279,6 +280,7 @@ export type EscrowOrderByWithRelationInput = {
   milestone?: Prisma.MilestoneOrderByWithRelationInput
   job?: Prisma.JobOrderByWithRelationInput
   transactions?: Prisma.TransactionOrderByRelationAggregateInput
+  escrowTransactions?: Prisma.EscrowTransactionOrderByRelationAggregateInput
 }
 
 export type EscrowWhereUniqueInput = Prisma.AtLeast<{
@@ -298,6 +300,7 @@ export type EscrowWhereUniqueInput = Prisma.AtLeast<{
   milestone?: Prisma.XOR<Prisma.MilestoneNullableScalarRelationFilter, Prisma.MilestoneWhereInput> | null
   job?: Prisma.XOR<Prisma.JobScalarRelationFilter, Prisma.JobWhereInput>
   transactions?: Prisma.TransactionListRelationFilter
+  escrowTransactions?: Prisma.EscrowTransactionListRelationFilter
 }, "id">
 
 export type EscrowOrderByWithAggregationInput = {
@@ -347,6 +350,7 @@ export type EscrowCreateInput = {
   milestone?: Prisma.MilestoneCreateNestedOneWithoutEscrowInput
   job: Prisma.JobCreateNestedOneWithoutEscrowInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutEscrowInput
+  escrowTransactions?: Prisma.EscrowTransactionCreateNestedManyWithoutEscrowInput
 }
 
 export type EscrowUncheckedCreateInput = {
@@ -362,6 +366,7 @@ export type EscrowUncheckedCreateInput = {
   updatedAt?: Date | string
   milestone?: Prisma.MilestoneUncheckedCreateNestedOneWithoutEscrowInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutEscrowInput
+  escrowTransactions?: Prisma.EscrowTransactionUncheckedCreateNestedManyWithoutEscrowInput
 }
 
 export type EscrowUpdateInput = {
@@ -377,6 +382,7 @@ export type EscrowUpdateInput = {
   milestone?: Prisma.MilestoneUpdateOneWithoutEscrowNestedInput
   job?: Prisma.JobUpdateOneRequiredWithoutEscrowNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutEscrowNestedInput
+  escrowTransactions?: Prisma.EscrowTransactionUpdateManyWithoutEscrowNestedInput
 }
 
 export type EscrowUncheckedUpdateInput = {
@@ -392,6 +398,7 @@ export type EscrowUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   milestone?: Prisma.MilestoneUncheckedUpdateOneWithoutEscrowNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutEscrowNestedInput
+  escrowTransactions?: Prisma.EscrowTransactionUncheckedUpdateManyWithoutEscrowNestedInput
 }
 
 export type EscrowCreateManyInput = {
@@ -491,6 +498,11 @@ export type EscrowSumOrderByAggregateInput = {
   blockchainEscrowId?: Prisma.SortOrder
 }
 
+export type EscrowScalarRelationFilter = {
+  is?: Prisma.EscrowWhereInput
+  isNot?: Prisma.EscrowWhereInput
+}
+
 export type EscrowNullableScalarRelationFilter = {
   is?: Prisma.EscrowWhereInput | null
   isNot?: Prisma.EscrowWhereInput | null
@@ -550,6 +562,20 @@ export type NullableIntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type EscrowCreateNestedOneWithoutEscrowTransactionsInput = {
+  create?: Prisma.XOR<Prisma.EscrowCreateWithoutEscrowTransactionsInput, Prisma.EscrowUncheckedCreateWithoutEscrowTransactionsInput>
+  connectOrCreate?: Prisma.EscrowCreateOrConnectWithoutEscrowTransactionsInput
+  connect?: Prisma.EscrowWhereUniqueInput
+}
+
+export type EscrowUpdateOneRequiredWithoutEscrowTransactionsNestedInput = {
+  create?: Prisma.XOR<Prisma.EscrowCreateWithoutEscrowTransactionsInput, Prisma.EscrowUncheckedCreateWithoutEscrowTransactionsInput>
+  connectOrCreate?: Prisma.EscrowCreateOrConnectWithoutEscrowTransactionsInput
+  upsert?: Prisma.EscrowUpsertWithoutEscrowTransactionsInput
+  connect?: Prisma.EscrowWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EscrowUpdateToOneWithWhereWithoutEscrowTransactionsInput, Prisma.EscrowUpdateWithoutEscrowTransactionsInput>, Prisma.EscrowUncheckedUpdateWithoutEscrowTransactionsInput>
+}
+
 export type EscrowCreateNestedOneWithoutTransactionsInput = {
   create?: Prisma.XOR<Prisma.EscrowCreateWithoutTransactionsInput, Prisma.EscrowUncheckedCreateWithoutTransactionsInput>
   connectOrCreate?: Prisma.EscrowCreateOrConnectWithoutTransactionsInput
@@ -594,6 +620,7 @@ export type EscrowCreateWithoutJobInput = {
   updatedAt?: Date | string
   milestone?: Prisma.MilestoneCreateNestedOneWithoutEscrowInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutEscrowInput
+  escrowTransactions?: Prisma.EscrowTransactionCreateNestedManyWithoutEscrowInput
 }
 
 export type EscrowUncheckedCreateWithoutJobInput = {
@@ -608,6 +635,7 @@ export type EscrowUncheckedCreateWithoutJobInput = {
   updatedAt?: Date | string
   milestone?: Prisma.MilestoneUncheckedCreateNestedOneWithoutEscrowInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutEscrowInput
+  escrowTransactions?: Prisma.EscrowTransactionUncheckedCreateNestedManyWithoutEscrowInput
 }
 
 export type EscrowCreateOrConnectWithoutJobInput = {
@@ -652,6 +680,82 @@ export type EscrowScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Escrow"> | Date | string
 }
 
+export type EscrowCreateWithoutEscrowTransactionsInput = {
+  id?: string
+  contractAddress: string
+  transactionHash?: string | null
+  network?: string
+  amount: number
+  status?: $Enums.EscrowStatus
+  blockchainEscrowId?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  milestone?: Prisma.MilestoneCreateNestedOneWithoutEscrowInput
+  job: Prisma.JobCreateNestedOneWithoutEscrowInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutEscrowInput
+}
+
+export type EscrowUncheckedCreateWithoutEscrowTransactionsInput = {
+  id?: string
+  jobId: string
+  contractAddress: string
+  transactionHash?: string | null
+  network?: string
+  amount: number
+  status?: $Enums.EscrowStatus
+  blockchainEscrowId?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  milestone?: Prisma.MilestoneUncheckedCreateNestedOneWithoutEscrowInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutEscrowInput
+}
+
+export type EscrowCreateOrConnectWithoutEscrowTransactionsInput = {
+  where: Prisma.EscrowWhereUniqueInput
+  create: Prisma.XOR<Prisma.EscrowCreateWithoutEscrowTransactionsInput, Prisma.EscrowUncheckedCreateWithoutEscrowTransactionsInput>
+}
+
+export type EscrowUpsertWithoutEscrowTransactionsInput = {
+  update: Prisma.XOR<Prisma.EscrowUpdateWithoutEscrowTransactionsInput, Prisma.EscrowUncheckedUpdateWithoutEscrowTransactionsInput>
+  create: Prisma.XOR<Prisma.EscrowCreateWithoutEscrowTransactionsInput, Prisma.EscrowUncheckedCreateWithoutEscrowTransactionsInput>
+  where?: Prisma.EscrowWhereInput
+}
+
+export type EscrowUpdateToOneWithWhereWithoutEscrowTransactionsInput = {
+  where?: Prisma.EscrowWhereInput
+  data: Prisma.XOR<Prisma.EscrowUpdateWithoutEscrowTransactionsInput, Prisma.EscrowUncheckedUpdateWithoutEscrowTransactionsInput>
+}
+
+export type EscrowUpdateWithoutEscrowTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  contractAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  transactionHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  network?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus
+  blockchainEscrowId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  milestone?: Prisma.MilestoneUpdateOneWithoutEscrowNestedInput
+  job?: Prisma.JobUpdateOneRequiredWithoutEscrowNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutEscrowNestedInput
+}
+
+export type EscrowUncheckedUpdateWithoutEscrowTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  jobId?: Prisma.StringFieldUpdateOperationsInput | string
+  contractAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  transactionHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  network?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.EnumEscrowStatusFieldUpdateOperationsInput | $Enums.EscrowStatus
+  blockchainEscrowId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  milestone?: Prisma.MilestoneUncheckedUpdateOneWithoutEscrowNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutEscrowNestedInput
+}
+
 export type EscrowCreateWithoutTransactionsInput = {
   id?: string
   contractAddress: string
@@ -664,6 +768,7 @@ export type EscrowCreateWithoutTransactionsInput = {
   updatedAt?: Date | string
   milestone?: Prisma.MilestoneCreateNestedOneWithoutEscrowInput
   job: Prisma.JobCreateNestedOneWithoutEscrowInput
+  escrowTransactions?: Prisma.EscrowTransactionCreateNestedManyWithoutEscrowInput
 }
 
 export type EscrowUncheckedCreateWithoutTransactionsInput = {
@@ -678,6 +783,7 @@ export type EscrowUncheckedCreateWithoutTransactionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   milestone?: Prisma.MilestoneUncheckedCreateNestedOneWithoutEscrowInput
+  escrowTransactions?: Prisma.EscrowTransactionUncheckedCreateNestedManyWithoutEscrowInput
 }
 
 export type EscrowCreateOrConnectWithoutTransactionsInput = {
@@ -708,6 +814,7 @@ export type EscrowUpdateWithoutTransactionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   milestone?: Prisma.MilestoneUpdateOneWithoutEscrowNestedInput
   job?: Prisma.JobUpdateOneRequiredWithoutEscrowNestedInput
+  escrowTransactions?: Prisma.EscrowTransactionUpdateManyWithoutEscrowNestedInput
 }
 
 export type EscrowUncheckedUpdateWithoutTransactionsInput = {
@@ -722,6 +829,7 @@ export type EscrowUncheckedUpdateWithoutTransactionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   milestone?: Prisma.MilestoneUncheckedUpdateOneWithoutEscrowNestedInput
+  escrowTransactions?: Prisma.EscrowTransactionUncheckedUpdateManyWithoutEscrowNestedInput
 }
 
 export type EscrowCreateWithoutMilestoneInput = {
@@ -736,6 +844,7 @@ export type EscrowCreateWithoutMilestoneInput = {
   updatedAt?: Date | string
   job: Prisma.JobCreateNestedOneWithoutEscrowInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutEscrowInput
+  escrowTransactions?: Prisma.EscrowTransactionCreateNestedManyWithoutEscrowInput
 }
 
 export type EscrowUncheckedCreateWithoutMilestoneInput = {
@@ -750,6 +859,7 @@ export type EscrowUncheckedCreateWithoutMilestoneInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutEscrowInput
+  escrowTransactions?: Prisma.EscrowTransactionUncheckedCreateNestedManyWithoutEscrowInput
 }
 
 export type EscrowCreateOrConnectWithoutMilestoneInput = {
@@ -780,6 +890,7 @@ export type EscrowUpdateWithoutMilestoneInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   job?: Prisma.JobUpdateOneRequiredWithoutEscrowNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutEscrowNestedInput
+  escrowTransactions?: Prisma.EscrowTransactionUpdateManyWithoutEscrowNestedInput
 }
 
 export type EscrowUncheckedUpdateWithoutMilestoneInput = {
@@ -794,6 +905,7 @@ export type EscrowUncheckedUpdateWithoutMilestoneInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutEscrowNestedInput
+  escrowTransactions?: Prisma.EscrowTransactionUncheckedUpdateManyWithoutEscrowNestedInput
 }
 
 export type EscrowCreateManyJobInput = {
@@ -820,6 +932,7 @@ export type EscrowUpdateWithoutJobInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   milestone?: Prisma.MilestoneUpdateOneWithoutEscrowNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutEscrowNestedInput
+  escrowTransactions?: Prisma.EscrowTransactionUpdateManyWithoutEscrowNestedInput
 }
 
 export type EscrowUncheckedUpdateWithoutJobInput = {
@@ -834,6 +947,7 @@ export type EscrowUncheckedUpdateWithoutJobInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   milestone?: Prisma.MilestoneUncheckedUpdateOneWithoutEscrowNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutEscrowNestedInput
+  escrowTransactions?: Prisma.EscrowTransactionUncheckedUpdateManyWithoutEscrowNestedInput
 }
 
 export type EscrowUncheckedUpdateManyWithoutJobInput = {
@@ -855,10 +969,12 @@ export type EscrowUncheckedUpdateManyWithoutJobInput = {
 
 export type EscrowCountOutputType = {
   transactions: number
+  escrowTransactions: number
 }
 
 export type EscrowCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   transactions?: boolean | EscrowCountOutputTypeCountTransactionsArgs
+  escrowTransactions?: boolean | EscrowCountOutputTypeCountEscrowTransactionsArgs
 }
 
 /**
@@ -878,6 +994,13 @@ export type EscrowCountOutputTypeCountTransactionsArgs<ExtArgs extends runtime.T
   where?: Prisma.TransactionWhereInput
 }
 
+/**
+ * EscrowCountOutputType without action
+ */
+export type EscrowCountOutputTypeCountEscrowTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EscrowTransactionWhereInput
+}
+
 
 export type EscrowSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -893,6 +1016,7 @@ export type EscrowSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   milestone?: boolean | Prisma.Escrow$milestoneArgs<ExtArgs>
   job?: boolean | Prisma.JobDefaultArgs<ExtArgs>
   transactions?: boolean | Prisma.Escrow$transactionsArgs<ExtArgs>
+  escrowTransactions?: boolean | Prisma.Escrow$escrowTransactionsArgs<ExtArgs>
   _count?: boolean | Prisma.EscrowCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["escrow"]>
 
@@ -942,6 +1066,7 @@ export type EscrowInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   milestone?: boolean | Prisma.Escrow$milestoneArgs<ExtArgs>
   job?: boolean | Prisma.JobDefaultArgs<ExtArgs>
   transactions?: boolean | Prisma.Escrow$transactionsArgs<ExtArgs>
+  escrowTransactions?: boolean | Prisma.Escrow$escrowTransactionsArgs<ExtArgs>
   _count?: boolean | Prisma.EscrowCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type EscrowIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -957,6 +1082,7 @@ export type $EscrowPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     milestone: Prisma.$MilestonePayload<ExtArgs> | null
     job: Prisma.$JobPayload<ExtArgs>
     transactions: Prisma.$TransactionPayload<ExtArgs>[]
+    escrowTransactions: Prisma.$EscrowTransactionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1366,6 +1492,7 @@ export interface Prisma__EscrowClient<T, Null = never, ExtArgs extends runtime.T
   milestone<T extends Prisma.Escrow$milestoneArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Escrow$milestoneArgs<ExtArgs>>): Prisma.Prisma__MilestoneClient<runtime.Types.Result.GetResult<Prisma.$MilestonePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   job<T extends Prisma.JobDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobDefaultArgs<ExtArgs>>): Prisma.Prisma__JobClient<runtime.Types.Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   transactions<T extends Prisma.Escrow$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Escrow$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  escrowTransactions<T extends Prisma.Escrow$escrowTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Escrow$escrowTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EscrowTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1846,6 +1973,30 @@ export type Escrow$transactionsArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.TransactionScalarFieldEnum | Prisma.TransactionScalarFieldEnum[]
+}
+
+/**
+ * Escrow.escrowTransactions
+ */
+export type Escrow$escrowTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EscrowTransaction
+   */
+  select?: Prisma.EscrowTransactionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EscrowTransaction
+   */
+  omit?: Prisma.EscrowTransactionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EscrowTransactionInclude<ExtArgs> | null
+  where?: Prisma.EscrowTransactionWhereInput
+  orderBy?: Prisma.EscrowTransactionOrderByWithRelationInput | Prisma.EscrowTransactionOrderByWithRelationInput[]
+  cursor?: Prisma.EscrowTransactionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EscrowTransactionScalarFieldEnum | Prisma.EscrowTransactionScalarFieldEnum[]
 }
 
 /**

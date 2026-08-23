@@ -73,6 +73,11 @@ export type Message = Prisma.MessageModel
  */
 export type Escrow = Prisma.EscrowModel
 /**
+ * Model EscrowTransaction
+ * 
+ */
+export type EscrowTransaction = Prisma.EscrowTransactionModel
+/**
  * Model Transaction
  * 
  */

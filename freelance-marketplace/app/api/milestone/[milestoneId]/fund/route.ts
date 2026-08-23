@@ -267,7 +267,27 @@ if (receipt.status !== 1) {
           };
         }
       );
+await prisma.escrowTransaction.create({
+  data: {
+    escrowId: result.escrow.id,
 
+    type: "FUNDED",
+
+    transactionHash:
+      transactionHash,
+
+    amount: Number(amount),
+
+    fromAddress:
+      body.fromAddress ?? null,
+
+    toAddress:
+      contractAddress,
+
+    network:
+      network ?? "sepolia",
+  },
+});
     return NextResponse.json(
       {
         success: true,

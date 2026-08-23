@@ -226,13 +226,34 @@ model Escrow {
   job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
 
   transactions Transaction[]
+  escrowTransactions EscrowTransaction[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 
   @@index([status])
   @@index([network])
 }
+model EscrowTransaction {
+  id String @id @default(cuid())
 
+  escrowId String
+  escrow   Escrow @relation(fields: [escrowId],references: [id],onDelete: Cascade)
+  type EscrowTransactionType
+
+  transactionHash String @unique
+
+  amount Float?
+
+  fromAddress String?
+  toAddress   String?
+
+  network String
+
+  createdAt DateTime @default(now())
+
+  @@index([escrowId])
+  @@index([type])
+}
 model Transaction {
   id String @id @default(cuid())
 
@@ -402,6 +423,13 @@ model Dispute {
 
   @@index([milestoneId])
   @@index([status])
+}
+
+enum EscrowTransactionType {
+  CREATED
+  FUNDED
+  RELEASED
+  REFUNDED
 }
 
 enum DisputeStatus {

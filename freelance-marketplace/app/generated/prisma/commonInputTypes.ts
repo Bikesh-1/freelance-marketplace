@@ -358,6 +358,23 @@ export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
 }
 
+export type EnumEscrowTransactionTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.EscrowTransactionType | Prisma.EnumEscrowTransactionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.EscrowTransactionType[] | Prisma.ListEnumEscrowTransactionTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EscrowTransactionType[] | Prisma.ListEnumEscrowTransactionTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEscrowTransactionTypeFilter<$PrismaModel> | $Enums.EscrowTransactionType
+}
+
+export type EnumEscrowTransactionTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EscrowTransactionType | Prisma.EnumEscrowTransactionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.EscrowTransactionType[] | Prisma.ListEnumEscrowTransactionTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EscrowTransactionType[] | Prisma.ListEnumEscrowTransactionTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEscrowTransactionTypeWithAggregatesFilter<$PrismaModel> | $Enums.EscrowTransactionType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEscrowTransactionTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEscrowTransactionTypeFilter<$PrismaModel>
+}
+
 export type EnumTransactionStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.TransactionStatus | Prisma.EnumTransactionStatusFieldRefInput<$PrismaModel>
   in?: $Enums.TransactionStatus[] | Prisma.ListEnumTransactionStatusFieldRefInput<$PrismaModel>
@@ -759,6 +776,23 @@ export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumEscrowTransactionTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.EscrowTransactionType | Prisma.EnumEscrowTransactionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.EscrowTransactionType[] | Prisma.ListEnumEscrowTransactionTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EscrowTransactionType[] | Prisma.ListEnumEscrowTransactionTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEscrowTransactionTypeFilter<$PrismaModel> | $Enums.EscrowTransactionType
+}
+
+export type NestedEnumEscrowTransactionTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EscrowTransactionType | Prisma.EnumEscrowTransactionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.EscrowTransactionType[] | Prisma.ListEnumEscrowTransactionTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EscrowTransactionType[] | Prisma.ListEnumEscrowTransactionTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEscrowTransactionTypeWithAggregatesFilter<$PrismaModel> | $Enums.EscrowTransactionType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEscrowTransactionTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEscrowTransactionTypeFilter<$PrismaModel>
 }
 
 export type NestedEnumTransactionStatusFilter<$PrismaModel = never> = {
