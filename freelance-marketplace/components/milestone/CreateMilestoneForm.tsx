@@ -17,44 +17,33 @@ export default function CreateMilestoneForm({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const numericAmount = Number(amount);
-
-if (
-  !Number.isFinite(numericAmount) ||
-  numericAmount <= 0
-) {
-  setError("Enter a valid amount");
-  return;
-}
-
-const numericOrder = Number(order);
-
-if (
-  !Number.isInteger(numericOrder) ||
-  numericOrder <= 0
-) {
-  setError("Enter a valid milestone order");
-  return;
-}
-
-  const handleSubmit = async (
-    e: React.FormEvent
-  ) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     setError("");
 
+    // Title validation
     if (!title.trim()) {
       setError("Milestone title is required");
       return;
     }
 
-    if (!amount || Number(amount) <= 0) {
+    // Amount validation
+    const numericAmount = Number(amount);
+
+    if (!amount || !Number.isFinite(numericAmount) || numericAmount <= 0) {
       setError("Enter a valid amount");
       return;
     }
 
-    if (!order || Number(order) <= 0) {
+    // Order validation
+    const numericOrder = Number(order);
+
+    if (
+      !order ||
+      !Number.isInteger(numericOrder) ||
+      numericOrder <= 0
+    ) {
       setError("Enter a valid milestone order");
       return;
     }
@@ -67,7 +56,7 @@ if (
         description: description.trim() || undefined,
         amount: numericAmount,
         dueDate: dueDate || undefined,
-        order: numericAmount,
+        order: numericOrder,
       });
 
       alert("Milestone created successfully");
@@ -77,9 +66,7 @@ if (
       setAmount("");
       setDueDate("");
 
-      setOrder(
-        String(Number(order) + 1)
-      );
+      setOrder(String(numericOrder + 1));
 
       window.location.reload();
     } catch (error: any) {
@@ -124,9 +111,7 @@ if (
         <input
           type="text"
           value={title}
-          onChange={(e) =>
-            setTitle(e.target.value)
-          }
+          onChange={(e) => setTitle(e.target.value)}
           placeholder="e.g. Frontend Development"
           className="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none focus:border-indigo-500"
         />
@@ -140,9 +125,7 @@ if (
 
         <textarea
           value={description}
-          onChange={(e) =>
-            setDescription(e.target.value)
-          }
+          onChange={(e) => setDescription(e.target.value)}
           placeholder="Describe what should be completed..."
           rows={4}
           className="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none focus:border-indigo-500"
@@ -160,9 +143,7 @@ if (
           min="0"
           step="0.001"
           value={amount}
-          onChange={(e) =>
-            setAmount(e.target.value)
-          }
+          onChange={(e) => setAmount(e.target.value)}
           placeholder="0.5"
           className="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none focus:border-indigo-500"
         />
@@ -177,9 +158,7 @@ if (
         <input
           type="date"
           value={dueDate}
-          onChange={(e) =>
-            setDueDate(e.target.value)
-          }
+          onChange={(e) => setDueDate(e.target.value)}
           className="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none focus:border-indigo-500"
         />
       </div>
@@ -194,9 +173,7 @@ if (
           type="number"
           min="1"
           value={order}
-          onChange={(e) =>
-            setOrder(e.target.value)
-          }
+          onChange={(e) => setOrder(e.target.value)}
           className="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none focus:border-indigo-500"
         />
       </div>
@@ -206,9 +183,7 @@ if (
         disabled={loading}
         className="w-full rounded-lg bg-indigo-600 py-3 font-medium text-white hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {loading
-          ? "Creating..."
-          : "Create Milestone"}
+        {loading ? "Creating..." : "Create Milestone"}
       </button>
     </form>
   );
