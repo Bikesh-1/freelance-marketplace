@@ -5,6 +5,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Card from "@/components/ui/card";
 import Button from "@/components/ui/button";
+import { getDashboardRoute } from "@/lib/routes";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -13,28 +14,38 @@ export default function LoginPage() {
     const [loading, setLoading] = useState(false);
 
     async function handleLogin(e: React.FormEvent) {
-        e.preventDefault();
-        setLoading(true);
+    e.preventDefault();
+    setLoading(true);
 
-        const res = await signIn("credentials", {
-            email,
-            password,
-            redirect: false,
-        });
+    const res = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+    });
 
-        setLoading(false);
+    setLoading(false);
 
-        if (!res?.error) {
-            const session = await fetch("/api/auth/session").then((r) => r.json());
-            if (session?.user?.role === "CLIENT") {
-                router.push("/client/dashboard");
-            } else {
-                router.push("/freelancer/dashboard");
-            }
-        } else {
-            alert("Invalid credentials");
-        }
+    if (res?.error) {
+        alert("Invalid credentials");
+        return;
     }
+
+    const session = await fetch("/api/auth/session").then((r) => r.json());
+
+    router.push(getDashboardRoute(session?.user?.role));
+    
+    const role = session?.user?.role;
+
+    if (role === "CLIENT") {
+        router.push("/client/dashboard");
+    } else if (role === "FREELANCER") {
+        router.push("/freelancer/dashboard");
+    } else if (role === "ADMIN") {
+        router.push("/admin");
+    } else {
+        router.push("/login");
+    }
+}
 
     return (
         <main className="min-h-screen flex items-center justify-center px-6 bg-[#0B0B0F]">
@@ -85,7 +96,7 @@ export default function LoginPage() {
 
                 <p className="text-center text-sm text-gray-400">
                     Don't have an account?{" "}
-                    <a href="/signup" className="text-white hover:underline">
+                    <a href="/register" className="text-white hover:underline">
                         Create one
                     </a>
                 </p>

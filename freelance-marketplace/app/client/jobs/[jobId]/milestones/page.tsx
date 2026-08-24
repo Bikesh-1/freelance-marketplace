@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 import Navbar from "@/components/layout/navbar";
 import CreateMilestoneForm from "@/components/milestone/CreateMilestoneForm";
 import MilestoneCard from "@/components/milestone/MilestoneCard";
+import MilestoneList from "@/components/milestone/MilestoneList";
 
 export default async function ClientMilestonesPage({
   params,
@@ -38,34 +39,34 @@ export default async function ClientMilestonesPage({
     redirect("/client/profile");
   }
 
-const job = await prisma.job.findFirst({
-  where: {
-    id: jobId,
-    clientId: profile.id,
-  },
+  const job = await prisma.job.findFirst({
+    where: {
+      id: jobId,
+      clientId: profile.id,
+    },
 
-  include: {
-    selectedFreelancer: {
-      select: {
-        user: {
-          select: {
-            walletAddress: true,
+    include: {
+      selectedFreelancer: {
+        select: {
+          user: {
+            select: {
+              walletAddress: true,
+            },
           },
         },
       },
-    },
 
-    milestones: {
-      include: {
-        escrow: true,
-      },
+      milestones: {
+        include: {
+          escrow: true,
+        },
 
-      orderBy: {
-        order: "asc",
+        orderBy: {
+          order: "asc",
+        },
       },
     },
-  },
-});
+  });
 
   if (!job) {
     redirect("/client/dashboard");
@@ -81,8 +82,8 @@ const job = await prisma.job.findFirst({
           {/* Header */}
           <div>
             <p className="mb-3 text-sm text-indigo-400">
-  Client Project
-</p>
+              Client Project
+            </p>
 
             <h1 className="text-4xl font-bold text-white">
               {job.title}
@@ -103,6 +104,19 @@ const job = await prisma.job.findFirst({
             <h2 className="mb-5 text-2xl font-semibold text-white">
               Project Milestones
             </h2>
+            <div className="mx-auto max-w-5xl space-y-8">
+              <div>
+                <h1 className="text-4xl font-bold text-white">
+                  Project Milestones
+                </h1>
+
+                <p className="mt-2 text-slate-400">
+                  Create, fund and manage milestones for this job.
+                </p>
+              </div>
+
+              <MilestoneList jobId={jobId} />
+            </div>
 
             {job.milestones.length === 0 ? (
               <div className="rounded-2xl border border-slate-800 bg-slate-900 p-8 text-center">

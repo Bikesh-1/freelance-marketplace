@@ -136,17 +136,15 @@ export default async function ClientJobsPage() {
                     </Link>
 
                     <Link
-                      href={`/client/milestones?jobId=${job.id}`}
-                      className="rounded-lg border border-slate-700 px-4 py-2 text-center text-sm font-medium text-white hover:border-slate-600"
-                    >
-                      Milestones
+                      href={`/client/jobs/${job.id}/milestones`}
+                      className="rounded-lg border border-slate-700 px-4 py-2 text-center text-sm font-medium text-white hover:border-slate-600">
+                        Milestones
                     </Link>
 
                     <Link
-                      href={`/client/escrow?jobId=${job.id}`}
-                      className="col-span-2 rounded-lg bg-indigo-600 px-4 py-2 text-center text-sm font-medium text-white hover:bg-indigo-500"
-                    >
-                      Escrow
+                      href={`/client/jobs/${job.id}/escrow`}
+                      className="col-span-2 rounded-lg bg-indigo-600 px-4 py-2 text-center text-sm font-medium text-white hover:bg-indigo-500">
+                        Escrow
                     </Link>
                   </div>
                 </div>
