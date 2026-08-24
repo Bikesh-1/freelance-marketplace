@@ -12,9 +12,9 @@ export default function Button({
 }: ButtonProps) {
      return ( 
      <button className={cn( 
-        "px-2 py-2 rounded-xl font-light font-mono transition-all duration-200 text-md cursor-pointer", 
+        "rounded-full px-5 py-2 text-sm tracking-wide font-medium", 
         variant === "default" && "bg-red-500 hover:bg-red-700 text-white", 
-        variant === "outline" && "border border-slate-700 hover:border-red-500 text-white", 
+        variant === "outline" && "border border-slate-700 hover:border-red-500 text-black", 
         className )} 
         {...props} 
         /> 

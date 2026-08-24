@@ -31,9 +31,7 @@ export default async function ClientDashboard() {
     redirect("/client/profile");
   }
 
-  const getProgress = (
-    status: string
-  ) => {
+  const getProgress = (status: string) => {
     switch (status) {
       case "PENDING":
         return 0;
@@ -256,10 +254,8 @@ export default async function ClientDashboard() {
                 Wallet
               </Link>
 
-              <Link
-                href={recentJobs.length ? `/jobs/${recentJobs[0].id}/chat` : "/client/jobs"}
-                className="rounded-xl border border-slate-700 px-4 py-3 text-center font-medium text-white hover:border-slate-600"
-              >
+              <Link href="/message"
+                className="rounded-xl border border-slate-700 px-4 py-3 text-center font-medium text-white hover:border-slate-600">
                 Messages
               </Link>
             </div>
@@ -323,8 +319,9 @@ export default async function ClientDashboard() {
                       <span className="rounded-full bg-slate-800 px-3 py-1 text-sm text-slate-200">
                         {job.status}
                       </span>
-                      <Link href={`/jobs/${job.id}`}>
-                        {job.title}
+                      <Link href={`/client/jobs/${job.id}`}
+                        className="text-indigo-400 hover:text-indigo-300">
+                        View Job
                       </Link>
                     </div>
                   </div>
@@ -339,7 +336,7 @@ export default async function ClientDashboard() {
                 </h2>
 
                 <Link
-                  href="/client/applications"
+                  href="/client/jobs"
                   className="text-sm text-indigo-400 hover:text-indigo-300"
                 >
                   View all
@@ -380,7 +377,7 @@ export default async function ClientDashboard() {
               </h2>
 
               <Link
-                href="/client/milestones"
+                href="/client/jobs"
                 className="text-sm text-indigo-400 hover:text-indigo-300"
               >
                 View all
@@ -421,7 +418,7 @@ export default async function ClientDashboard() {
               </h2>
 
               <Link
-                href="/client/applications"
+                href="/message"
                 className="text-sm text-indigo-400 hover:text-indigo-300"
               >
                 Open inbox

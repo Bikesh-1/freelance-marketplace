@@ -3,7 +3,13 @@ import "./globals.css";
 import Providers from "@/lib/providers";
 import AuthProvider from "@/components/providers/session-provider";
 import { Toaster } from "sonner";
+import { Oswald } from "next/font/google";
+import "./globals.css";
 
+const oswald = Oswald({
+  subsets: ["latin"],
+  variable: "--font-oswald",
+});
 
 export const metadata: Metadata = {
   title: "Blockchain Freelance Marketplace",
@@ -16,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode 
 }) { 
   return ( 
-  <html lang="en"> 
+  <html lang="en" className={oswald.variable}> 
   <body className="bg-slate-950 text-white"> 
     <Providers>
       <AuthProvider>{children}</AuthProvider>

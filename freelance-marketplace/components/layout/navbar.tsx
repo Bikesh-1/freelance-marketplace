@@ -3,20 +3,44 @@
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import Button from "@/components/ui/button";
+import Image from "next/image";
 
 export default function Navbar() {
     const { data: session } = useSession();
     return (
-        <header className="w-full  bg-[#0B0B0F] backdrop-blur font-mono">
+        <header className="w-full absolute top-0 left-0">
             <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-                <Link href="/" className="text-xl flex items-center justify-center gap-2 text-white font-mono"><h1 className="font-bold text-red-500">&lt;/&gt;</h1> <span>freelanzo</span>
-                </Link>
+                <Image
+                src="/logo.png"
+                alt="logo"
+                width={50}
+                height={50}
+                />
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                    <div className="flex items-center gap-2 rounded-full bg-[#EEECE7] p-1.25 font-bold">
+                        <Link
+                            href="/"
+                            className="rounded-full bg-[#0D0D0D] px-5 py-2 text-xs tracking-wide text-white transition-colors hover:bg-red-500"
+                        >
+                            HOME
+                        </Link>
+
+                        <Link
+                            href="/about"
+                            className="rounded-full px-5 py-2 text-xs tracking-wide text-[#111] transition-colors hover:bg-red-500 hover:text-white"
+                        >
+                            ABOUT
+                        </Link>
+                        <Link
+                            href="/about"
+                            className="rounded-full px-5 py-2 text-xs tracking-wide text-[#111] transition-colors hover:bg-red-500 hover:text-white"
+                        >
+                            CONTACT
+                        </Link>
+                    </div>
+                </div>
                 <nav className="flex items-center gap-4">
-                    <Link href="/jobs" className="text-slate-300 hover:text-white">
-                        Find Jobs
-                    </Link>
-                    <Link href="/freelancers" className="text-slate-300 hover:text-white" > Freelancers
-                    </Link>
+                    
                     {session ? (<> <Link href="/dashboard">
                         <Button variant="outline">
                             Dashboard
