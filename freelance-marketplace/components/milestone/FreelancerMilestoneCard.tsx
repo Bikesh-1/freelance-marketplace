@@ -29,27 +29,13 @@ type Milestone = {
   } | null;
 };
 
-export default function FreelancerMilestoneCard({
-  milestone,
-}: {
-  milestone: Milestone;
-}) {
-  const [submissionNote, setSubmissionNote] =
-    useState(
-      milestone.submissionNote || ""
-    );
+export default function FreelancerMilestoneCard({milestone,}: {milestone: Milestone;}) {
+  
+  const [submissionNote, setSubmissionNote] = useState(milestone.submissionNote || "");
 
-  const [submissionUrl, setSubmissionUrl] =
-    useState(
-      milestone.submissionUrl || ""
-    );
+  const [submissionUrl, setSubmissionUrl] =useState(milestone.submissionUrl || "");
 
-  const [submitting, setSubmitting] =
-    useState(false);
-
-  // -----------------------------------------
-  // SUBMIT MILESTONE
-  // -----------------------------------------
+  const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async () => {
     try {
@@ -62,32 +48,18 @@ export default function FreelancerMilestoneCard({
 
       setSubmitting(true);
 
-      await submitMilestone(
-        milestone.id,
-        {
-          submissionUrl:
-            submissionUrl.trim(),
-
-          submissionNote:
-            submissionNote.trim() ||
-            undefined,
+      await submitMilestone(milestone.id,{
+          submissionUrl:submissionUrl.trim(),
+          submissionNote:submissionNote.trim() || undefined,
         }
       );
 
-      alert(
-        "Milestone submitted successfully"
-      );
-
+      alert("Milestone submitted successfully");
       window.location.reload();
     } catch (error) {
-      console.error(
-        "Submit milestone error:",
-        error
-      );
+      console.error("Submit milestone error:",error);
 
-      alert(
-        "Failed to submit milestone"
-      );
+      alert("Failed to submit milestone");
     } finally {
       setSubmitting(false);
     }
@@ -95,10 +67,6 @@ export default function FreelancerMilestoneCard({
 
   return (
     <div className="space-y-4 rounded-2xl border border-slate-800 bg-slate-900 p-5">
-
-      {/* -------------------------------- */}
-      {/* TITLE */}
-      {/* -------------------------------- */}
 
       <div>
         <h3 className="text-xl font-semibold text-white">
@@ -112,9 +80,6 @@ export default function FreelancerMilestoneCard({
         )}
       </div>
 
-      {/* -------------------------------- */}
-      {/* AMOUNT */}
-      {/* -------------------------------- */}
 
       <div className="flex items-center justify-between">
         <span className="text-slate-300">
@@ -126,10 +91,6 @@ export default function FreelancerMilestoneCard({
         </span>
       </div>
 
-      {/* -------------------------------- */}
-      {/* STATUS */}
-      {/* -------------------------------- */}
-
       <div className="flex items-center justify-between">
         <span className="text-slate-300">
           Status
@@ -139,10 +100,6 @@ export default function FreelancerMilestoneCard({
           {milestone.status}
         </span>
       </div>
-
-      {/* -------------------------------- */}
-      {/* FUNDED → SUBMIT WORK */}
-      {/* -------------------------------- */}
 
       {milestone.status === "FUNDED" && (
         <div className="space-y-3">
@@ -183,20 +140,12 @@ export default function FreelancerMilestoneCard({
         </div>
       )}
 
-      {/* -------------------------------- */}
-      {/* FUNDED / SUBMITTED → DISPUTE */}
-      {/* -------------------------------- */}
-
       {(milestone.status === "FUNDED" ||
         milestone.status === "SUBMITTED") && (
         <RaiseDisputeForm
           milestoneId={milestone.id}
         />
       )}
-
-      {/* -------------------------------- */}
-      {/* SUBMITTED → SHOW WORK */}
-      {/* -------------------------------- */}
 
       {milestone.status === "SUBMITTED" && (
         <div className="space-y-3 rounded-lg border border-slate-700 p-4">
@@ -206,10 +155,7 @@ export default function FreelancerMilestoneCard({
           </p>
 
           {milestone.submissionUrl && (
-            <a
-              href={
-                milestone.submissionUrl
-              }
+            <a href={milestone.submissionUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="block break-all text-indigo-400 hover:underline"
@@ -226,10 +172,6 @@ export default function FreelancerMilestoneCard({
         </div>
       )}
 
-      {/* -------------------------------- */}
-      {/* DISPUTED */}
-      {/* -------------------------------- */}
-
       {milestone.status === "DISPUTED" && (
         <div className="rounded-lg border border-red-700 bg-red-900/30 p-4 text-center">
           <p className="font-medium text-red-300">
@@ -242,10 +184,6 @@ export default function FreelancerMilestoneCard({
         </div>
       )}
 
-      {/* -------------------------------- */}
-      {/* APPROVED */}
-      {/* -------------------------------- */}
-
       {milestone.status === "APPROVED" && (
         <div className="rounded-lg border border-indigo-700 bg-indigo-900/30 p-4 text-center">
           <p className="font-medium text-indigo-300">
@@ -257,10 +195,6 @@ export default function FreelancerMilestoneCard({
           </p>
         </div>
       )}
-
-      {/* -------------------------------- */}
-      {/* RELEASED */}
-      {/* -------------------------------- */}
 
       {milestone.status === "RELEASED" && (
         <div className="rounded-lg border border-green-700 bg-green-900/30 p-3 text-center font-medium text-green-300">

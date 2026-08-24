@@ -7,6 +7,13 @@ export default withAuth(
         const pathname = request.nextUrl.pathname;
 
         const role = token?.role as string | undefined;
+        if (pathname.startsWith("/jobs/create")) {
+            if (role !== "CLIENT") {
+                return NextResponse.redirect(
+                    new URL("/login", request.url)
+                );
+            }
+        }
 
         if (pathname.startsWith("/client")) {
             if (role !== "CLIENT") {

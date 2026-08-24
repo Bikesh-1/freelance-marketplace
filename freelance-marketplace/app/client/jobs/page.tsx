@@ -13,7 +13,7 @@ export default async function ClientJobsPage() {
   }
 
   if ((session.user as any).role !== "CLIENT") {
-    redirect("/freelancer/dashboard");
+    redirect("/login");
   }
 
   const profile = await prisma.clientProfile.findUnique({

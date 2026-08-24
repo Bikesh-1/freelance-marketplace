@@ -2,21 +2,33 @@
 
 import { useState } from "react";
 import axios from "axios";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 
-export default function ApplyForm({
-  jobId,
-}: {
-  jobId: string;
-}) {
-  const [coverLetter, setCoverLetter] =
-    useState("");
+export default function ApplyForm({ jobId, }: { jobId: string; }) {
 
-  const [proposedAmount, setProposedAmount] =
-    useState(0);
+  const [coverLetter, setCoverLetter] = useState("");
+  const [proposedAmount, setProposedAmount] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const { data: session, status } = useSession();
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+  if (!session) {
+    return (
+      <Link href="/login">
+        Login to Apply
+      </Link>
+    );
+  }
 
-  const [loading, setLoading] =
-    useState(false);
-
+  if (session.user.role !== "FREELANCER") {
+    return (
+      <div>
+        Only freelancers can apply to jobs.
+      </div>
+    );
+  }
   const applyHandler = async () => {
     try {
       setLoading(true);
@@ -33,7 +45,7 @@ export default function ApplyForm({
     } catch (error: any) {
       alert(
         error?.response?.data?.message ||
-          "Failed to apply"
+        "Failed to apply"
       );
     } finally {
       setLoading(false);
