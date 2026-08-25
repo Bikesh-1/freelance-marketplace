@@ -1,48 +1,71 @@
-import { BrowserProvider, Eip1193Provider } from "ethers"
+import {
+  BrowserProvider,
+  Eip1193Provider,
+} from "ethers";
 
 declare global {
   interface Window {
-    ethereum?: Eip1193Provider
+    ethereum?: Eip1193Provider;
   }
 }
 
 export const connectWallet = async () => {
   if (typeof window === "undefined") {
-    throw new Error("Window not available")
+    throw new Error(
+      "Window not available"
+    );
   }
 
   if (!window.ethereum) {
-    throw new Error("MetaMask not installed")
+    throw new Error(
+      "MetaMask is not installed"
+    );
   }
 
-  const provider = new BrowserProvider(window.ethereum)
+  const provider =
+    new BrowserProvider(
+      window.ethereum
+    );
 
   await provider.send(
     "eth_requestAccounts",
     []
-  )
+  );
 
-  const signer = await provider.getSigner()
-  const address = await signer.getAddress()
+  const signer =
+    await provider.getSigner();
+
+  const address =
+    await signer.getAddress();
 
   return {
     provider,
     signer,
     address,
-  }
-}
+  };
+};
 
-export const getWalletAddress = async () => {
-  if (typeof window === "undefined" || !window.ethereum) {
-    return null
-  }
+export const getWalletAddress =
+  async () => {
+    if (
+      typeof window === "undefined" ||
+      !window.ethereum
+    ) {
+      return null;
+    }
 
-  const provider = new BrowserProvider(window.ethereum)
+    const provider =
+      new BrowserProvider(
+        window.ethereum
+      );
 
-  const accounts = await provider.send(
-    "eth_accounts",
-    []
-  )
+    const accounts =
+      await provider.send(
+        "eth_accounts",
+        []
+      );
 
-  return accounts[0] || null
-}
+    return (
+      accounts?.[0] || null
+    );
+  };
