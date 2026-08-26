@@ -7,6 +7,7 @@ import TransactionHistory from "@/components/escrow/TransactionHistory";
 import { useEscrow } from "@/hooks/useEscrow";
 import { approveMilestone } from "@/services/milestone.action";
 import RaiseDisputeForm from "@/components/dispute/RaiseDisputeForm";
+import { ethers } from "ethers";
 
 type Milestone = {
     id: string;
@@ -15,13 +16,13 @@ type Milestone = {
     amount: number;
 
     status:
-        | "PENDING"
-        | "FUNDED"
-        | "SUBMITTED"
-        | "DISPUTED"
-        | "APPROVED"
-        | "RELEASED"
-        | "REFUNDED";
+    | "PENDING"
+    | "FUNDED"
+    | "SUBMITTED"
+    | "DISPUTED"
+    | "APPROVED"
+    | "RELEASED"
+    | "REFUNDED";
 
     escrowId?: string | null;
 
@@ -61,40 +62,40 @@ export default function MilestoneCard({
                 );
             }
 
-            const result = await createAndFundEscrow(
-                freelancerAddress,
-                milestone.amount.toString()
-            );
+            if (
+                !ethers.isAddress(
+                    freelancerAddress
+                )
+            ) {
+                throw new Error(
+                    "Invalid freelancer wallet address"
+                );
+            }
 
-            await axios.post(
-                `/api/milestone/${milestone.id}/fund`,
+            if (
+                !milestone.amount ||
+                milestone.amount <= 0
+            ) {
+                throw new Error(
+                    "Invalid milestone amount"
+                );
+            }
+
+            const result =await createAndFundEscrow(freelancerAddress,milestone.amount.toString());
+            await axios.post(`/api/milestone/${milestone.id}/fund`,
                 {
-                    contractAddress:
-                        process.env
-                            .NEXT_PUBLIC_ESCROW_CONTRACT_ADDRESS,
-
-                    transactionHash:
-                        result.receipt.hash,
-
-                    amount: milestone.amount,
-
-                    network: "hardhat-local",
-
-                    blockchainEscrowId:
-                        result.escrowIndex,
+                    contractAddress:process.env.NEXT_PUBLIC_ESCROW_CONTRACT_ADDRESS,
+                    transactionHash:result.receipt.hash,
+                    amount:milestone.amount,
+                    network:process.env.NEXT_PUBLIC_BLOCKCHAIN_NETWORK ||"localhost",
+                    blockchainEscrowId:result.escrowIndex,
                 }
             );
 
-            alert(
-                "Milestone funded successfully"
-            );
-
+            alert(`Milestone funded successfully.\nBlockchain Escrow ID: ${result.escrowIndex}`);
             window.location.reload();
         } catch (err) {
-            console.error(
-                "Fund milestone error:",
-                err
-            );
+            console.error("Fund milestone error:",err);
 
             alert(
                 err instanceof Error
@@ -206,8 +207,6 @@ export default function MilestoneCard({
 
     return (
         <div className="space-y-5 rounded-2xl border border-slate-800 bg-slate-900 p-6">
-
-            {/* Header */}
             <div>
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                     <div>
@@ -228,7 +227,6 @@ export default function MilestoneCard({
                 </div>
             </div>
 
-            {/* Amount */}
             <div className="flex items-center justify-between border-t border-slate-800 pt-4">
                 <span className="text-sm text-slate-400">
                     Milestone Amount
@@ -239,7 +237,6 @@ export default function MilestoneCard({
                 </span>
             </div>
 
-            {/* Escrow */}
             {milestone.escrow && (
                 <div className="rounded-xl border border-slate-800 bg-slate-950 p-4">
                     <div className="flex items-center justify-between">
@@ -262,7 +259,6 @@ export default function MilestoneCard({
                 </div>
             )}
 
-            {/* PENDING */}
             {milestone.status === "PENDING" && (
                 <button
                     onClick={handleFund}
@@ -278,7 +274,6 @@ export default function MilestoneCard({
                 </button>
             )}
 
-            {/* SUBMITTED */}
             {milestone.status === "SUBMITTED" && (
                 <button
                     onClick={handleApprove}
@@ -294,7 +289,6 @@ export default function MilestoneCard({
                 </button>
             )}
 
-            {/* APPROVED */}
             {milestone.status === "APPROVED" && (
                 <button
                     onClick={handleRelease}
@@ -310,15 +304,14 @@ export default function MilestoneCard({
                 </button>
             )}
 
-            {/* DISPUTE */}
             {(milestone.status === "FUNDED" ||
                 milestone.status === "SUBMITTED") && (
-                <RaiseDisputeForm
-                    milestoneId={milestone.id}
-                />
-            )}
+                    <RaiseDisputeForm
+                        milestoneId={milestone.id}
+                    />
+                )}
 
-            {/* RELEASED */}
+
             {milestone.status === "RELEASED" && (
                 <div className="rounded-xl border border-green-700 bg-green-900/30 p-4 text-center">
                     <p className="font-semibold text-green-300">
@@ -331,7 +324,7 @@ export default function MilestoneCard({
                 </div>
             )}
 
-            {/* REFUNDED */}
+
             {milestone.status === "REFUNDED" && (
                 <div className="rounded-xl border border-yellow-700 bg-yellow-900/30 p-4 text-center">
                     <p className="font-semibold text-yellow-300">
@@ -340,7 +333,7 @@ export default function MilestoneCard({
                 </div>
             )}
 
-            {/* DISPUTED */}
+
             {milestone.status === "DISPUTED" && (
                 <div className="rounded-xl border border-red-700 bg-red-900/30 p-4 text-center">
                     <p className="font-semibold text-red-300">
@@ -353,7 +346,6 @@ export default function MilestoneCard({
                 </div>
             )}
 
-            {/* Error */}
             {error && (
                 <div className="rounded-lg border border-red-800 bg-red-950/30 p-3">
                     <p className="text-sm text-red-400">
