@@ -5,6 +5,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Navbar from "@/components/layout/navbar";
 import FreelancerMilestoneCard from "@/components/milestone/FreelancerMilestoneCard";
+import Loginnavbar from "@/components/layout/loginNavbar";
 
 export default async function FreelancerMilestonesPage({
   params,
@@ -53,9 +54,10 @@ export default async function FreelancerMilestonesPage({
 
   return (
     <>
-      <Navbar />
+      
 
       <main className="min-h-screen bg-[#f7f7f8] text-neutral-900">
+        <Loginnavbar/>
         <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
 
           {/* =====================================================

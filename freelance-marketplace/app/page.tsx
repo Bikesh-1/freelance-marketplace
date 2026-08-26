@@ -20,9 +20,9 @@ export default function Home() {
             <h1 className="font-bold font-oswald text-xs">
   Work Submitted by Freelancer
 </h1>
-            <p className="m-10">
+
                 <InfinityCard/>
-            </p>
+            
             
           </section>
         </main>

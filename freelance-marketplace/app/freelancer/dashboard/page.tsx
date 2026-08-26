@@ -371,7 +371,7 @@ export default async function FreelancerDashboard() {
                 </Link>
 
                 <Link
-                  href="/messages"
+                  href="/message"
                   className="rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-center text-sm font-medium text-neutral-200 transition hover:border-neutral-700 hover:bg-neutral-800"
                 >
                   Messages

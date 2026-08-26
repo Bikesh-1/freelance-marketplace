@@ -6,282 +6,501 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 type Message = {
+  id: string;
+  content: string;
+  senderId: string;
+  receiverId: string;
+  createdAt: string;
+  sender: {
     id: string;
-    content: string;
-    senderId: string;
-    receiverId: string;
-    createdAt: string;
-    sender: {
-        id: string;
-        name: string;
-    };
+    name: string;
+  };
 };
 
 export default function JobChatPage() {
-    const params = useParams();
-    const router = useRouter();
+  const params = useParams();
+  const router = useRouter();
 
-    const jobId = params.jobId as string;
+  const jobId = params.jobId as string;
 
-    const { data: session, status } = useSession();
+  const { data: session, status } = useSession();
 
-    const [messages, setMessages] = useState<Message[]>([]);
-    const [content, setContent] = useState("");
-    const [receiverId, setReceiverId] = useState("");
-    const [loading, setLoading] = useState(true);
-    const [sending, setSending] = useState(false);
-    const [error, setError] = useState("");
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [content, setContent] = useState("");
+  const [receiverId, setReceiverId] = useState("");
 
-    useEffect(() => {
-        if (status === "unauthenticated") {
-            router.push("/login");
-        }
-    }, [status, router]);
+  const [loading, setLoading] = useState(true);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
 
-    useEffect(() => {
-        if (!session?.user || !jobId) return;
+  /* =====================================================
+     AUTH REDIRECT
+  ===================================================== */
 
-        const loadChat = async () => {
-            try {
-                setLoading(true);
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.replace("/login");
+    }
+  }, [status, router]);
 
-                const response = await fetch(
-                    `/api/messages/${jobId}`
-                );
+  /* =====================================================
+     LOAD CHAT
+  ===================================================== */
 
-                const data = await response.json();
+  useEffect(() => {
+    if (
+      status !== "authenticated" ||
+      !session?.user?.id ||
+      !jobId
+    ) {
+      return;
+    }
 
-                if (!response.ok) {
-                    throw new Error(
-                        data.message || "Failed to load messages"
-                    );
-                }
+    let cancelled = false;
 
-                setMessages(data.messages || []);
+    const loadChat = async () => {
+      try {
+        setError("");
 
-                if (data.receiverId) {
-                    setReceiverId(data.receiverId);
-                }
-            } catch (error) {
-                console.error(error);
-                setError("Failed to load chat");
-            } finally {
-                setLoading(false);
-            }
-        };
+        const response = await fetch(
+          `/api/messages/${jobId}`,
+          {
+            cache: "no-store",
+          }
+        );
 
-        loadChat();
-    }, [session, jobId]);
+        const data = await response.json();
 
-    const sendMessage = async () => {
-        if (!content.trim()) return;
-
-        if (!receiverId) {
-            setError("Receiver not found");
-            return;
+        if (!response.ok) {
+          throw new Error(
+            data.message ||
+              "Failed to load messages"
+          );
         }
 
-        try {
-            setSending(true);
-            setError("");
+        if (cancelled) return;
 
-            const response = await fetch(
-                "/api/messages",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        jobId,
-                        receiverId,
-                        content: content.trim(),
-                    }),
-                }
-            );
+        setMessages(
+          Array.isArray(data.messages)
+            ? data.messages
+            : []
+        );
 
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(
-                    data.message || "Failed to send message"
-                );
-            }
-
-            setMessages((previous) => [
-                ...previous,
-                data.message,
-            ]);
-
-            setContent("");
-        } catch (error) {
-            console.error(error);
-            setError(
-                error instanceof Error
-                    ? error.message
-                    : "Failed to send message"
-            );
-        } finally {
-            setSending(false);
+        if (data.receiverId) {
+          setReceiverId(data.receiverId);
         }
+      } catch (error) {
+        if (cancelled) return;
+
+        console.error(
+          "Load chat error:",
+          error
+        );
+
+        setError(
+          error instanceof Error
+            ? error.message
+            : "Failed to load chat"
+        );
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
     };
 
-    if (
-        status === "loading" ||
-        loading
-    ) {
-        return (
-            <main className="flex min-h-screen items-center justify-center bg-slate-950">
-                <p className="text-slate-400">
-                    Loading chat...
-                </p>
-            </main>
+    loadChat();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    status,
+    session?.user?.id,
+    jobId,
+  ]);
+
+  /* =====================================================
+     SEND MESSAGE
+  ===================================================== */
+
+  const sendMessage = async () => {
+    const trimmedContent =
+      content.trim();
+
+    if (!trimmedContent) return;
+
+    if (!receiverId) {
+      setError("Receiver not found");
+      return;
+    }
+
+    try {
+      setSending(true);
+      setError("");
+
+      const response = await fetch(
+        "/api/messages",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            jobId,
+            receiverId,
+            content: trimmedContent,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message ||
+            "Failed to send message"
         );
-    }
+      }
 
-    if (!session?.user) {
-        return null;
-    }
+      if (data.message) {
+        setMessages((previous) => [
+          ...previous,
+          data.message,
+        ]);
+      }
 
+      setContent("");
+    } catch (error) {
+      console.error(
+        "Send message error:",
+        error
+      );
+
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Failed to send message"
+      );
+    } finally {
+      setSending(false);
+    }
+  };
+
+  /* =====================================================
+     AUTH LOADING
+  ===================================================== */
+
+  if (status === "loading") {
     return (
-        <main className="min-h-screen bg-slate-950 px-4 py-8">
-            <div className="mx-auto flex h-[calc(100vh-4rem)] max-w-5xl flex-col overflow-hidden rounded-2xl border border-slate-800 bg-slate-900">
+      <main className="flex min-h-screen items-center justify-center bg-[#f7f7f8]">
 
-                {/* Header */}
-                <div className="flex items-center justify-between border-b border-slate-800 px-5 py-4">
-                    <div>
-                        <h1 className="text-lg font-semibold text-white">
-                            Project Chat
-                        </h1>
+        <div className="rounded-2xl border border-neutral-200 bg-white px-8 py-7 text-center shadow-sm">
 
-                        <p className="text-xs text-slate-500">
-                            Job ID: {jobId}
-                        </p>
-                    </div>
+          <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-red-50">
 
-                    <Link
-                        href={
-                            session.user.role === "CLIENT"
-                                ? `/client/jobs/${jobId}`
-                                : `/freelancer/jobs/${jobId}`
-                        }
-                        className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-white hover:bg-slate-800"
-                    >
-                        Back
-                    </Link>
-                </div>
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-red-100 border-t-red-500" />
 
-                {/* Messages */}
-                <div className="flex-1 space-y-4 overflow-y-auto p-5">
-                    {messages.length === 0 ? (
-                        <div className="flex h-full items-center justify-center">
-                            <p className="text-sm text-slate-500">
-                                No messages yet. Start the conversation.
-                            </p>
-                        </div>
-                    ) : (
-                        messages.map((message) => {
-                            const isMine =
-                                message.senderId ===
-                                session.user.id;
+          </div>
 
-                            return (
-                                <div
-                                    key={message.id}
-                                    className={`flex ${
-                                        isMine
-                                            ? "justify-end"
-                                            : "justify-start"
-                                    }`}
-                                >
-                                    <div
-                                        className={`max-w-[75%] rounded-2xl px-4 py-3 ${
-                                            isMine
-                                                ? "bg-indigo-600 text-white"
-                                                : "bg-slate-800 text-slate-200"
-                                        }`}
-                                    >
-                                        {!isMine && (
-                                            <p className="mb-1 text-xs font-semibold text-indigo-300">
-                                                {message.sender.name}
-                                            </p>
-                                        )}
+          <p className="mt-4 text-sm font-semibold text-neutral-800">
+            Checking your session
+          </p>
 
-                                        <p className="whitespace-pre-wrap text-sm">
-                                            {message.content}
-                                        </p>
+          <p className="mt-1 text-xs text-neutral-400">
+            Please wait a moment...
+          </p>
 
-                                        <p
-                                            className={`mt-2 text-[10px] ${
-                                                isMine
-                                                    ? "text-indigo-200"
-                                                    : "text-slate-500"
-                                            }`}
-                                        >
-                                            {new Date(
-                                                message.createdAt
-                                            ).toLocaleTimeString([], {
-                                                hour: "2-digit",
-                                                minute: "2-digit",
-                                            })}
-                                        </p>
-                                    </div>
-                                </div>
-                            );
-                        })
-                    )}
-                </div>
+        </div>
 
-                {/* Error */}
-                {error && (
-                    <div className="border-t border-slate-800 bg-red-950/20 px-5 py-3">
-                        <p className="text-sm text-red-400">
-                            {error}
-                        </p>
-                    </div>
-                )}
-
-                {/* Input */}
-                <div className="border-t border-slate-800 p-4">
-                    <div className="flex gap-3">
-                        <textarea
-                            value={content}
-                            onChange={(e) =>
-                                setContent(e.target.value)
-                            }
-                            onKeyDown={(e) => {
-                                if (
-                                    e.key === "Enter" &&
-                                    !e.shiftKey
-                                ) {
-                                    e.preventDefault();
-                                    sendMessage();
-                                }
-                            }}
-                            placeholder="Write a message..."
-                            rows={2}
-                            className="flex-1 resize-none rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-indigo-500"
-                        />
-
-                        <button
-                            onClick={sendMessage}
-                            disabled={
-                                sending ||
-                                !content.trim()
-                            }
-                            className="self-end rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
-                        >
-                            {sending
-                                ? "Sending..."
-                                : "Send"}
-                        </button>
-                    </div>
-
-                    <p className="mt-2 text-xs text-slate-600">
-                        Press Enter to send • Shift + Enter for new line
-                    </p>
-                </div>
-            </div>
-        </main>
+      </main>
     );
+  }
+
+  if (!session?.user) {
+    return null;
+  }
+
+  /* =====================================================
+     CHAT UI
+  ===================================================== */
+
+  return (
+    <main className="min-h-screen bg-[#f7f7f8] px-3 py-4 sm:px-6 sm:py-6">
+
+      <div className="mx-auto flex h-[calc(100vh-2rem)] max-w-5xl flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm sm:h-[calc(100vh-3rem)]">
+
+        {/* =================================================
+            HEADER
+        ================================================= */}
+
+        <header className="flex items-center justify-between border-b border-neutral-100 px-4 py-4 sm:px-6">
+
+          <div className="flex min-w-0 items-center gap-3">
+
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-500">
+              <span className="text-sm font-bold">
+                #
+              </span>
+            </div>
+
+            <div className="min-w-0">
+
+              <div className="flex items-center gap-2">
+
+                <span className="h-2 w-2 rounded-full bg-green-500" />
+
+                <h1 className="truncate text-sm font-bold text-neutral-950 sm:text-base">
+                  Project Chat
+                </h1>
+
+              </div>
+
+              <p className="mt-1 truncate text-[10px] text-neutral-400">
+                Job ID: {jobId}
+              </p>
+
+            </div>
+
+          </div>
+
+          <Link
+            href={
+              session.user.role === "CLIENT"
+                ? `/client/jobs/${jobId}`
+                : `/freelancer/jobs/${jobId}`
+            }
+            className="rounded-xl border border-neutral-200 bg-white px-3 py-2 text-xs font-semibold text-neutral-600 transition hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-950 sm:px-4"
+          >
+            <span className="hidden sm:inline">
+              ← Back
+            </span>
+
+            <span className="sm:hidden">
+              ←
+            </span>
+          </Link>
+
+        </header>
+
+        {/* =================================================
+            MESSAGES
+        ================================================= */}
+
+        <div className="relative flex-1 overflow-y-auto bg-[#fafafa]">
+
+          {loading ? (
+            <div className="flex h-full items-center justify-center">
+
+              <div className="text-center">
+
+                <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-neutral-100">
+
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-neutral-200 border-t-red-500" />
+
+                </div>
+
+                <p className="mt-4 text-sm font-medium text-neutral-700">
+                  Loading messages...
+                </p>
+
+                <p className="mt-1 text-xs text-neutral-400">
+                  Opening your conversation
+                </p>
+
+              </div>
+
+            </div>
+          ) : messages.length === 0 ? (
+            <div className="flex h-full items-center justify-center px-6">
+
+              <div className="text-center">
+
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-white text-neutral-400 shadow-sm ring-1 ring-neutral-100">
+                  💬
+                </div>
+
+                <h2 className="mt-5 text-sm font-semibold text-neutral-900">
+                  No messages yet
+                </h2>
+
+                <p className="mt-1 max-w-xs text-xs leading-5 text-neutral-400">
+                  Start the conversation with your
+                  {session.user.role === "CLIENT"
+                    ? " freelancer."
+                    : " client."}
+                </p>
+
+              </div>
+
+            </div>
+          ) : (
+            <div className="space-y-4 p-4 sm:p-6">
+
+              {messages.map((message) => {
+
+                const isMine =
+                  message.senderId ===
+                  session.user.id;
+
+                return (
+                  <div
+                    key={message.id}
+                    className={`flex ${
+                      isMine
+                        ? "justify-end"
+                        : "justify-start"
+                    }`}
+                  >
+
+                    <div
+                      className={`max-w-[85%] sm:max-w-[70%] ${
+                        isMine
+                          ? "items-end"
+                          : "items-start"
+                      }`}
+                    >
+
+                      {!isMine && (
+                        <p className="mb-1.5 ml-1 text-[10px] font-semibold text-neutral-500">
+                          {message.sender.name}
+                        </p>
+                      )}
+
+                      <div
+                        className={`rounded-2xl px-4 py-3 shadow-sm ${
+                          isMine
+                            ? "rounded-br-md bg-red-500 text-white"
+                            : "rounded-bl-md border border-neutral-200 bg-white text-neutral-800"
+                        }`}
+                      >
+
+                        <p className="whitespace-pre-wrap text-sm leading-6">
+                          {message.content}
+                        </p>
+
+                        <p
+                          className={`mt-2 text-[9px] ${
+                            isMine
+                              ? "text-red-100"
+                              : "text-neutral-400"
+                          }`}
+                        >
+                          {new Date(
+                            message.createdAt
+                          ).toLocaleTimeString(
+                            [],
+                            {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            }
+                          )}
+                        </p>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+                );
+              })}
+
+            </div>
+          )}
+
+        </div>
+
+        {/* =================================================
+            ERROR
+        ================================================= */}
+
+        {error && (
+          <div className="border-t border-red-100 bg-red-50 px-4 py-3 sm:px-6">
+
+            <div className="flex items-center gap-2">
+
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-100 text-xs font-bold text-red-600">
+                !
+              </span>
+
+              <p className="text-xs font-medium text-red-600">
+                {error}
+              </p>
+
+            </div>
+
+          </div>
+        )}
+
+        {/* =================================================
+            INPUT
+        ================================================= */}
+
+        <div className="border-t border-neutral-100 bg-white p-3 sm:p-4">
+
+          <div className="flex items-end gap-2 sm:gap-3">
+
+            <textarea
+              value={content}
+              onChange={(e) =>
+                setContent(e.target.value)
+              }
+              onKeyDown={(e) => {
+
+                if (
+                  e.key === "Enter" &&
+                  !e.shiftKey
+                ) {
+                  e.preventDefault();
+                  sendMessage();
+                }
+
+              }}
+              placeholder="Write a message..."
+              rows={2}
+              disabled={sending}
+              className="min-h-[48px] flex-1 resize-none rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 outline-none transition placeholder:text-neutral-400 focus:border-red-400 focus:bg-white focus:ring-2 focus:ring-red-500/10 disabled:cursor-not-allowed disabled:opacity-60"
+            />
+
+            <button
+              onClick={sendMessage}
+              disabled={
+                sending ||
+                !content.trim() ||
+                !receiverId
+              }
+              className="flex h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-red-500 px-4 text-xs font-semibold text-white shadow-sm transition hover:bg-red-400 disabled:cursor-not-allowed disabled:opacity-50 sm:px-5"
+            >
+              {sending ? (
+                <>
+                  <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+
+                  <span className="hidden sm:inline">
+                    Sending...
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="hidden sm:inline">
+                    Send
+                  </span>
+
+                  <span className="text-base">
+                    →
+                  </span>
+                </>
+              )}
+            </button>
+
+          </div>
+
+          <p className="mt-2 hidden text-[10px] text-neutral-400 sm:block">
+            Press Enter to send · Shift + Enter for a new line
+          </p>
+
+        </div>
+
+      </div>
+    </main>
+  );
 }
