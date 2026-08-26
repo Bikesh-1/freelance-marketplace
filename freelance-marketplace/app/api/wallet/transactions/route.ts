@@ -7,38 +7,28 @@ export async function GET(req: NextRequest) {
 
     const userId = searchParams.get("userId");
 
-    const transactions =
-      await prisma.transaction.findMany({
-        where: {
-          OR: [
-            {
-              fromAddress:
-                userId!,
-            },
+    if (!userId) {
+      return NextResponse.json(
+        { message: "userId is required" },
+        { status: 400 }
+      );
+    }
 
-            {
-              toAddress:
-                userId!,
-            },
-          ],
-        },
-
-        include: {
-          escrow: true,
-        },
-
-        orderBy: {
-          createdAt: "desc",
-        },
-
-        take: 20,
-      });
+    const transactions = await prisma.walletTransaction.findMany({
+      where: {
+        userId,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 20,
+    });
 
     return NextResponse.json({
       transactions,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Wallet transactions error:", error);
 
     return NextResponse.json(
       { message: "Server Error" },

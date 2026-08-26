@@ -816,7 +816,7 @@ export default async function FreelancerDashboard() {
                     {recentMessages.map((msg) => (
                       <Link
                         key={msg.id}
-                        href="/messages"
+                        href="/message"
                         className="group block rounded-xl border border-neutral-100 bg-neutral-50 p-4 transition hover:border-neutral-200 hover:bg-white hover:shadow-sm"
                       >
                         <div className="flex items-center gap-3">

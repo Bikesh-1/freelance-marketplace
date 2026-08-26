@@ -239,38 +239,20 @@ useEffect(() => {
   };
 }
 
-export function useWallet(
-  userId: string
-) {
+export function useWallet(userId: string) {
   return useQuery({
-    queryKey: [
-      "wallet",
-      userId,
-    ],
-
-    queryFn: () =>
-      getWalletSummary(),
-
+    queryKey: ["wallet",userId,],
+    queryFn: () => getWalletSummary(),
     enabled: !!userId,
-
     staleTime: 1000 * 30,
   });
 }
 
-export function useWalletTransactions(
-  userId: string
-) {
+export function useWalletTransactions(userId: string) {
   return useQuery({
-    queryKey: [
-      "wallet-transactions",
-      userId,
-    ],
-
-    queryFn: () =>
-      getWalletTransactions(),
-
+    queryKey: ["wallet-transactions",userId,],
+    queryFn: () =>getWalletTransactions(),
     enabled: !!userId,
-
     staleTime: 1000 * 30,
   });
 }
