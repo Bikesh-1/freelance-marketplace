@@ -233,7 +233,7 @@ export default function ApplicationCard({
             {/* Profile */}
 
             <Link
-              href={`/freelancer/${application.freelancer.id}`}
+              href={'/freelancer/profile'}
               className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-neutral-200 bg-white px-4 text-xs font-semibold text-neutral-700 transition hover:border-neutral-300 hover:bg-neutral-50 hover:text-red-500"
             >
               View Freelancer Profile
