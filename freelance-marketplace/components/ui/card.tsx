@@ -7,7 +7,7 @@ export default function Card({
 }) { 
     return ( 
     <div className={cn( 
-        "rounded-md font-mono border border-white bg-[#0B0B0F] p-6 shadow-lg", 
+        "p-6", 
         className 
     )} 
     > 

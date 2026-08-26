@@ -2,12 +2,12 @@ import { BrowserProvider, Eip1193Provider } from "ethers";
 import { ethers } from "ethers";
 
 declare global {
-  interface Window {
+    interface Window {
     ethereum?: Eip1193Provider;
   }
 }
 
-const HARDHAT_CHAIN_ID = "0x7a69"; // 31337
+const HARDHAT_CHAIN_ID = "0x7a69";
 const HARDHAT_RPC_URL = "http://127.0.0.1:8545";
 
 export function getBrowserProvider() {
@@ -17,15 +17,20 @@ export function getBrowserProvider() {
     );
   }
 
-  if (!window.ethereum) {
+  const ethereum =
+    (
+      window as unknown as {
+        ethereum?: Eip1193Provider;
+      }
+    ).ethereum;
+
+  if (!ethereum) {
     throw new Error(
       "MetaMask is not installed"
     );
   }
 
-  return new BrowserProvider(
-    window.ethereum
-  );
+  return new BrowserProvider(ethereum);
 }
 
 export async function switchToHardhatLocal() {
@@ -100,15 +105,9 @@ export async function switchToHardhatLocal() {
 }
 
 export function getServerProvider() {
-  const rpcUrl = process.env.SEPOLIA_RPC_URL;
+  const rpcUrl =
+    process.env.HARDHAT_RPC_URL ??
+    "http://127.0.0.1:8545";
 
-  if (!rpcUrl) {
-    throw new Error(
-      "SEPOLIA_RPC_URL is not configured"
-    );
-  }
-
-  return new ethers.JsonRpcProvider(
-    rpcUrl
-  );
+  return new ethers.JsonRpcProvider(rpcUrl);
 }

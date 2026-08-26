@@ -85,9 +85,11 @@ export default function MilestoneCard({
             await axios.post(`/api/milestone/${milestone.id}/fund`,
                 {
                     contractAddress:process.env.NEXT_PUBLIC_ESCROW_CONTRACT_ADDRESS,
+
                     transactionHash:result.receipt.hash,
+
                     amount:milestone.amount,
-                    network:process.env.NEXT_PUBLIC_BLOCKCHAIN_NETWORK ||"localhost",
+                    network:"hardhat-local",
                     blockchainEscrowId:result.escrowIndex,
                 }
             );
