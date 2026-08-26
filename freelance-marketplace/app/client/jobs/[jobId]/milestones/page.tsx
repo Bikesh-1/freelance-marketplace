@@ -9,121 +9,237 @@ import CreateMilestoneForm from "@/components/milestone/CreateMilestoneForm";
 import MilestoneCard from "@/components/milestone/MilestoneCard";
 
 export default async function ClientMilestonesPage({
-    params,
+  params,
 }: {
-    params: Promise<{ jobId: string }>;
+  params: Promise<{ jobId: string }>;
 }) {
-    const { jobId } = await params;
+  const { jobId } = await params;
 
-    const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
 
-    if (!session?.user?.id) {
-        redirect("/login");
-    }
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
 
-    if (session.user.role !== "CLIENT") {
-        redirect("/login");
-    }
+  if (session.user.role !== "CLIENT") {
+    redirect("/login");
+  }
 
-    const profile = await prisma.clientProfile.findUnique({
-        where: {
-            userId: session.user.id,
+  const profile = await prisma.clientProfile.findUnique({
+    where: {
+      userId: session.user.id,
+    },
+  });
+
+  if (!profile) {
+    redirect("/client/profile");
+  }
+
+  const job = await prisma.job.findFirst({
+    where: {
+      id: jobId,
+      clientId: profile.id,
+    },
+
+    include: {
+      selectedFreelancer: {
+        select: {
+          user: {
+            select: {
+              walletAddress: true,
+            },
+          },
         },
-    });
+      },
 
-    if (!profile) {
-        redirect("/client/profile");
-    }
-
-    const job = await prisma.job.findFirst({
-        where: {
-            id: jobId,
-            clientId: profile.id,
-        },
-
+      milestones: {
         include: {
-            selectedFreelancer: {
-                select: {
-                    user: {
-                        select: {
-                            walletAddress: true,
-                        },
-                    },
-                },
-            },
-
-            milestones: {
-                include: {
-                    escrow: true,
-                },
-
-                orderBy: {
-                    order: "asc",
-                },
-            },
+          escrow: true,
         },
-    });
 
-    if (!job) {
-        notFound();
-    }
+        orderBy: {
+          order: "asc",
+        },
+      },
+    },
+  });
 
-    return (
-        <>
-            <Navbar />
+  if (!job) {
+    notFound();
+  }
 
-            <main className="min-h-screen bg-slate-950 px-6 py-10">
-                <div className="mx-auto max-w-6xl space-y-8">
+  return (
+    <>
+      <Navbar />
 
-                    {/* Header */}
-                    <div>
-                        <p className="text-sm text-indigo-400">
-                            Client Project
-                        </p>
+      <main className="min-h-screen bg-[#f7f7f8] text-neutral-900">
 
-                        <h1 className="mt-2 text-4xl font-bold text-white">
-                            {job.title}
-                        </h1>
+        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
 
-                        <p className="mt-2 text-slate-400">
-                            Create, fund and manage project milestones.
-                        </p>
-                    </div>
+          {/* =====================================================
+              HEADER
+          ===================================================== */}
 
-                    {/* Create Milestone */}
-                    <CreateMilestoneForm
-                        jobId={job.id}
+          <section className="mb-8">
+
+            <div className="mb-3 flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-red-500" />
+
+              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500">
+                Client Project
+              </span>
+            </div>
+
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+
+              <div>
+
+                <h1 className="text-3xl font-bold tracking-tight text-neutral-950 sm:text-4xl">
+                  {job.title}
+                </h1>
+
+                <p className="mt-2 max-w-xl text-sm leading-6 text-neutral-500">
+                  Create, fund and manage project milestones from
+                  one place.
+                </p>
+
+              </div>
+
+              <span className="w-fit rounded-full border border-neutral-200 bg-white px-4 py-2 text-[10px] font-semibold uppercase tracking-wider text-neutral-600 shadow-sm">
+                Milestones
+              </span>
+
+            </div>
+
+          </section>
+
+          {/* =====================================================
+              CREATE MILESTONE
+          ===================================================== */}
+
+          <section className="mb-8">
+
+            <div className="mb-4 flex items-center gap-2">
+
+              <span className="h-2 w-2 rounded-full bg-red-500" />
+
+              <div>
+
+                <h2 className="text-lg font-bold tracking-tight text-neutral-950">
+                  Create Milestone
+                </h2>
+
+                <p className="mt-1 text-xs text-neutral-500">
+                  Break your project into clear payment stages.
+                </p>
+
+              </div>
+
+            </div>
+
+            <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm sm:p-6">
+
+              <CreateMilestoneForm
+                jobId={job.id}
+              />
+
+            </div>
+
+          </section>
+
+          {/* =====================================================
+              PROJECT MILESTONES
+          ===================================================== */}
+
+          <section>
+
+            <div className="mb-5 flex items-end justify-between">
+
+              <div>
+
+                <div className="flex items-center gap-2">
+
+                  <span className="h-2 w-2 rounded-full bg-red-500" />
+
+                  <h2 className="text-xl font-bold tracking-tight text-neutral-950">
+                    Project Milestones
+                  </h2>
+
+                </div>
+
+                <p className="mt-1 text-xs text-neutral-500">
+                  Track milestone progress, funding and payments.
+                </p>
+
+              </div>
+
+              <span className="rounded-full bg-white px-3 py-1.5 text-[10px] font-semibold text-neutral-500 shadow-sm ring-1 ring-neutral-200">
+                {job.milestones.length}{" "}
+                {job.milestones.length === 1
+                  ? "Milestone"
+                  : "Milestones"}
+              </span>
+
+            </div>
+
+            {/* =================================================
+                EMPTY STATE
+            ================================================= */}
+
+            {job.milestones.length === 0 ? (
+
+              <div className="rounded-2xl border border-dashed border-neutral-200 bg-white px-6 py-14 text-center shadow-sm">
+
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-neutral-100 text-xl text-neutral-400">
+                  —
+                </div>
+
+                <h3 className="mt-5 text-lg font-semibold text-neutral-950">
+                  No milestones yet
+                </h3>
+
+                <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-neutral-500">
+                  Create your first milestone above to start
+                  managing the project.
+                </p>
+
+              </div>
+
+            ) : (
+
+              /* =================================================
+                 MILESTONE LIST
+              ================================================= */
+
+              <div className="space-y-4">
+
+                {job.milestones.map((milestone) => (
+
+                  <div
+                    key={milestone.id}
+                    className="rounded-2xl border border-neutral-200 bg-white p-1 shadow-sm transition hover:border-neutral-300 hover:shadow-md"
+                  >
+
+                    <MilestoneCard
+                      milestone={milestone}
+                      freelancerAddress={
+                        job.selectedFreelancer?.user
+                          .walletAddress
+                      }
                     />
 
-                    {/* Milestones */}
-                    <section>
-                        <h2 className="mb-5 text-2xl font-semibold text-white">
-                            Project Milestones
-                        </h2>
+                  </div>
 
-                        {job.milestones.length === 0 ? (
-                            <div className="rounded-2xl border border-slate-800 bg-slate-900 p-8 text-center">
-                                <p className="text-slate-400">
-                                    No milestones created yet.
-                                </p>
-                            </div>
-                        ) : (
-                            <div className="space-y-5">
-                                {job.milestones.map((milestone) => (
-                                    <MilestoneCard
-                                        key={milestone.id}
-                                        milestone={milestone}
-                                        freelancerAddress={
-                                            job.selectedFreelancer?.user
-                                                .walletAddress
-                                        }
-                                    />
-                                ))}
-                            </div>
-                        )}
-                    </section>
-                </div>
-            </main>
-        </>
-    );
+                ))}
+
+              </div>
+
+            )}
+
+          </section>
+
+        </div>
+      </main>
+    </>
+  );
 }

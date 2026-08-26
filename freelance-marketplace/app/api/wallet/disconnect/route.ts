@@ -7,9 +7,7 @@ import { prisma } from "@/lib/prisma";
 export async function POST() {
   try {
     const session =
-      await getServerSession(
-        authOptions
-      );
+      await getServerSession(authOptions);
 
     if (!session?.user?.id) {
       return NextResponse.json(
@@ -22,25 +20,19 @@ export async function POST() {
       );
     }
 
-    const user =
-      await prisma.user.update({
-        where: {
-          id: session.user.id,
-        },
+    await prisma.user.update({
+      where: {
+        id: session.user.id,
+      },
 
-        data: {
-          walletAddress: null,
-        },
-
-        select: {
-          walletAddress: true,
-        },
-      });
+      data: {
+        walletAddress: null,
+      },
+    });
 
     return NextResponse.json({
       success: true,
-      walletAddress:
-        user.walletAddress,
+      walletAddress: null,
     });
   } catch (error) {
     console.error(

@@ -9,41 +9,58 @@ declare global {
   }
 }
 
-export const connectWallet = async () => {
-  if (typeof window === "undefined") {
-    throw new Error(
-      "Window not available"
+const HARDHAT_CHAIN_ID = 31337n;
+
+export const connectWallet =
+  async () => {
+    if (
+      typeof window === "undefined"
+    ) {
+      throw new Error(
+        "Window not available"
+      );
+    }
+
+    if (!window.ethereum) {
+      throw new Error(
+        "MetaMask is not installed"
+      );
+    }
+
+    const provider =
+      new BrowserProvider(
+        window.ethereum
+      );
+
+    await provider.send(
+      "eth_requestAccounts",
+      []
     );
-  }
 
-  if (!window.ethereum) {
-    throw new Error(
-      "MetaMask is not installed"
-    );
-  }
+    const network =
+      await provider.getNetwork();
 
-  const provider =
-    new BrowserProvider(
-      window.ethereum
-    );
+    if (
+      network.chainId !==
+      HARDHAT_CHAIN_ID
+    ) {
+      throw new Error(
+        "Please connect MetaMask to Hardhat Local network"
+      );
+    }
 
-  await provider.send(
-    "eth_requestAccounts",
-    []
-  );
+    const signer =
+      await provider.getSigner();
 
-  const signer =
-    await provider.getSigner();
+    const address =
+      await signer.getAddress();
 
-  const address =
-    await signer.getAddress();
-
-  return {
-    provider,
-    signer,
-    address,
+    return {
+      provider,
+      signer,
+      address,
+    };
   };
-};
 
 export const getWalletAddress =
   async () => {
@@ -65,7 +82,5 @@ export const getWalletAddress =
         []
       );
 
-    return (
-      accounts?.[0] || null
-    );
+    return accounts?.[0] ?? null;
   };

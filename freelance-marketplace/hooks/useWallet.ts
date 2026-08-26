@@ -253,6 +253,7 @@ export function useWalletTransactions(userId: string) {
     queryKey: ["wallet-transactions",userId,],
     queryFn: () =>getWalletTransactions(),
     enabled: !!userId,
+
     staleTime: 1000 * 30,
   });
 }

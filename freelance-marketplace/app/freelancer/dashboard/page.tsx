@@ -3,9 +3,8 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-
-import Navbar from "@/components/layout/navbar";
 import ConnectWalletButton from "@/components/wallet/ConnectWalletButton";
+import Loginnavbar from "@/components/layout/loginNavbar";
 
 export default async function FreelancerDashboard() {
   const session = await getServerSession(authOptions);
@@ -180,11 +179,12 @@ export default async function FreelancerDashboard() {
 
   return (
     <>
-      <Navbar />
+
 
       <main className="min-h-screen bg-[#f7f7f8] text-neutral-900">
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
-
+        
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-6">
+<Loginnavbar/>
           {/* =====================================================
               HEADER
           ===================================================== */}

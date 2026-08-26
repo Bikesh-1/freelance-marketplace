@@ -192,174 +192,262 @@ export function useEscrow() {
   // CREATE + FUND ESCROW
   // --------------------------------------------------
 
-  const createAndFundEscrow = async (
-    freelancerAddress: string,
-    amount: string
-  ) => {
-    try {
-      setLoading(true);
-      setError(null);
+const createAndFundEscrow = async (
+  freelancerAddress: string,
+  amount: string
+) => {
+  try {
+    setLoading(true);
+    setError(null);
 
-      if (!freelancerAddress) {
-        throw new Error(
-          "Freelancer wallet address is required"
-        );
-      }
+    if (!ethers.isAddress(freelancerAddress)) {
+      throw new Error("Invalid freelancer wallet address");
+    }
 
-      if (!amount || Number(amount) <= 0) {
-        throw new Error(
-          "Invalid escrow amount"
-        );
-      }
+    if (!amount || Number(amount) <= 0) {
+      throw new Error("Invalid escrow amount");
+    }
 
-      const provider =
-  await switchToHardhatLocal();
+    // --------------------------------------------------
+    // STEP 1: FORCE HARDHAT LOCAL NETWORK
+    // --------------------------------------------------
 
-const signer =
-  await provider.getSigner();
+    const provider = await switchToHardhatLocal();
+    const signer = await provider.getSigner();
+    const signerAddress = await signer.getAddress();
 
-      // Make sure MetaMask is on Sepolia
-      const network =
-        await provider.getNetwork();
+    const network = await provider.getNetwork();
 
-      
-
-      const contract =
-        getEscrowContract(signer);
-
-      /*
-       * ----------------------------------------
-       * STEP 1: CREATE ESCROW
-       * ----------------------------------------
-       */
-
-      const createTx =
-        await contract.createEscrow(
-          freelancerAddress
-        );
-
-      console.log(
-        "Create escrow tx:",
-        createTx.hash
+    if (network.chainId !== 31337n) {
+      throw new Error(
+        `Wrong network. Expected 31337, got ${network.chainId.toString()}`
       );
+    }
 
-      const createReceipt =
-        await createTx.wait();
+    // --------------------------------------------------
+    // STEP 2: GET ESCROW CONTRACT
+    // --------------------------------------------------
 
-      if (!createReceipt) {
-        throw new Error(
-          "Escrow creation transaction failed"
-        );
-      }
+    const contract = getEscrowContract(signer);
 
-      /*
-       * ----------------------------------------
-       * GET REAL ESCROW ID FROM EVENT
-       * ----------------------------------------
-       */
+    const contractAddress = await contract.getAddress();
 
-      let escrowIndex: number | null = null;
+    console.log("========== ESCROW DEBUG ==========");
+    console.log("Network:", network.chainId.toString());
+    console.log("Signer:", signerAddress);
+    console.log("Escrow contract:", contractAddress);
 
-      for (
-        const log of createReceipt.logs
-      ) {
-        try {
-          const parsed =
-            contract.interface.parseLog({
-              topics: log.topics as string[],
-              data: log.data,
-            });
+    // --------------------------------------------------
+    // STEP 3: VERIFY CONTRACT EXISTS
+    // --------------------------------------------------
 
+    const contractCode = await provider.getCode(contractAddress);
+
+    console.log("Contract bytecode length:", contractCode.length);
+
+    if (!contractCode || contractCode === "0x") {
+      throw new Error(
+        `Escrow contract is not deployed at ${contractAddress}`
+      );
+    }
+
+    // --------------------------------------------------
+    // STEP 4: CREATE ESCROW
+    // --------------------------------------------------
+
+    const createTx = await contract.createEscrow(
+      freelancerAddress
+    );
+
+    console.log("Create escrow tx:", createTx.hash);
+
+    const createReceipt = await createTx.wait();
+
+    if (!createReceipt) {
+      throw new Error(
+        "Escrow creation transaction failed"
+      );
+    }
+
+    console.log("Create receipt:", createReceipt);
+    console.log(
+      "Create receipt logs:",
+      createReceipt.logs
+    );
+
+    // --------------------------------------------------
+    // STEP 5: FIND EscrowCreated EVENT
+    // --------------------------------------------------
+
+    let escrowIndex: bigint | null = null;
+
+    for (const log of createReceipt.logs) {
+      try {
+        const parsed = contract.interface.parseLog({
+          topics: [...log.topics],
+          data: log.data,
+        });
+
+        if (!parsed) {
+          continue;
+        }
+
+        console.log("Parsed event:", {
+          name: parsed.name,
+          args: parsed.args,
+        });
+
+        if (parsed.name === "EscrowCreated") {
+          // Prefer named argument if available.
           if (
-            parsed &&
-            parsed.name === "EscrowCreated"
+            parsed.args &&
+            parsed.args.escrowId !== undefined
           ) {
-            escrowIndex = Number(
+            escrowIndex = BigInt(
+              parsed.args.escrowId
+            );
+          } else if (
+            parsed.args &&
+            parsed.args.id !== undefined
+          ) {
+            escrowIndex = BigInt(
+              parsed.args.id
+            );
+          } else {
+            // Fallback to first event argument.
+            escrowIndex = BigInt(
               parsed.args[0]
             );
-
-            break;
           }
-        } catch {
-          // Ignore unrelated logs
+
+          break;
         }
-      }
-
-      if (
-        escrowIndex === null
-      ) {
-        throw new Error(
-          "Could not find blockchain escrow ID from EscrowCreated event."
+      } catch (parseError) {
+        console.log(
+          "Skipping unrelated log:",
+          parseError
         );
       }
-
-      console.log(
-        "Blockchain escrow ID:",
-        escrowIndex
-      );
-
-      /*
-       * ----------------------------------------
-       * STEP 2: FUND ESCROW
-       * ----------------------------------------
-       */
-
-      const value =
-        ethers.parseEther(amount);
-
-      const fundTx =
-        await contract.fundEscrow(
-          escrowIndex,
-          {
-            value,
-          }
-        );
-
-      console.log(
-        "Fund escrow tx:",
-        fundTx.hash
-      );
-
-      const fundReceipt =
-        await fundTx.wait();
-
-      if (!fundReceipt) {
-        throw new Error(
-          "Funding transaction failed"
-        );
-      }
-
-      return {
-        receipt: fundReceipt,
-        escrowIndex,
-        createReceipt,
-        createTxHash: createTx.hash,
-        fundTxHash: fundTx.hash,
-      };
-    } catch (err: unknown) {
-      console.error(
-        "createAndFundEscrow error:",
-        err
-      );
-
-      const errorObj =
-        err as {
-          shortMessage?: string;
-          message?: string;
-        };
-
-      const message =
-        errorObj?.shortMessage ||
-        errorObj?.message ||
-        "Funding failed";
-
-      setError(message);
-
-      throw new Error(message);
-    } finally {
-      setLoading(false);
     }
-  };
+
+    // --------------------------------------------------
+    // STEP 6: FALLBACK - READ CONTRACT COUNTER
+    // --------------------------------------------------
+
+    if (escrowIndex === null) {
+      console.error(
+        "EscrowCreated event was not found.",
+        {
+          contractAddress,
+          transactionHash: createTx.hash,
+          logs: createReceipt.logs,
+        }
+      );
+
+      throw new Error(
+        "EscrowCreated event was not found in the transaction receipt. Check the deployed contract, ABI and EscrowCreated event."
+      );
+    }
+
+    console.log(
+      "Blockchain escrow ID:",
+      escrowIndex.toString()
+    );
+
+    // --------------------------------------------------
+    // STEP 7: VERIFY ESCROW EXISTS
+    // --------------------------------------------------
+
+    const escrow = await contract.getEscrow(
+      escrowIndex
+    );
+
+    console.log("Created escrow:", {
+      id: escrowIndex.toString(),
+      client: escrow[0],
+      freelancer: escrow[1],
+      amount: ethers.formatEther(escrow[2]),
+      status: Number(escrow[3]),
+    });
+
+    // --------------------------------------------------
+    // STEP 8: FUND ESCROW
+    // --------------------------------------------------
+
+    const value = ethers.parseEther(amount);
+
+    await contract.fundEscrow.staticCall(
+      escrowIndex,
+      {
+        value,
+      }
+    );
+
+    console.log(
+      "Funding transaction simulation passed"
+    );
+
+    const fundTx = await contract.fundEscrow(
+      escrowIndex,
+      {
+        value,
+      }
+    );
+
+    console.log(
+      "Fund escrow tx:",
+      fundTx.hash
+    );
+
+    const fundReceipt = await fundTx.wait();
+
+    if (!fundReceipt) {
+      throw new Error(
+        "Funding transaction failed"
+      );
+    }
+
+    console.log(
+      "Fund escrow confirmed:",
+      fundReceipt.hash
+    );
+
+    // --------------------------------------------------
+    // STEP 9: RETURN BOTH TRANSACTIONS
+    // --------------------------------------------------
+
+    return {
+      receipt: fundReceipt,
+      escrowIndex: Number(escrowIndex),
+      createReceipt,
+      createTxHash: createTx.hash,
+      fundTxHash: fundTx.hash,
+    };
+  } catch (err: unknown) {
+    console.error(
+      "createAndFundEscrow error:",
+      err
+    );
+
+    const errorObj = err as {
+      shortMessage?: string;
+      reason?: string;
+      message?: string;
+    };
+
+    const message =
+      errorObj?.shortMessage ||
+      errorObj?.reason ||
+      errorObj?.message ||
+      "Funding failed";
+
+    setError(message);
+
+    throw new Error(message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   // --------------------------------------------------
   // RELEASE PAYMENT

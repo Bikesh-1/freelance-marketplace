@@ -13,5 +13,5 @@ export async function getWalletTransactions() {
     "/api/wallet/transactions"
   );
 
-  return data.transactions;
+  return data.transactions ?? [];
 }

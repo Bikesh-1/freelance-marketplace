@@ -14,7 +14,6 @@ export async function POST(
     if (!session?.user?.id) {
       return NextResponse.json(
         {
-          success: false,
           message: "Unauthorized",
         },
         {
@@ -26,14 +25,18 @@ export async function POST(
     const body = await req.json();
 
     const walletAddress =
-      body?.walletAddress?.trim();
+      body.walletAddress;
 
-    if (!walletAddress) {
+    if (
+      !walletAddress ||
+      !/^0x[a-fA-F0-9]{40}$/.test(
+        walletAddress
+      )
+    ) {
       return NextResponse.json(
         {
-          success: false,
           message:
-            "Wallet address is required",
+            "Invalid wallet address",
         },
         {
           status: 400,
@@ -41,22 +44,10 @@ export async function POST(
       );
     }
 
-    // Normalize wallet address
-    const normalizedWalletAddress =
-      walletAddress.toLowerCase();
-
-    // --------------------------------------------------
-    // CHECK IF WALLET IS ALREADY USED
-    // --------------------------------------------------
-
     const existingUser =
-      await prisma.user.findUnique({
+      await prisma.user.findFirst({
         where: {
-          walletAddress:
-            normalizedWalletAddress,
-        },
-        select: {
-          id: true,
+          walletAddress,
         },
       });
 
@@ -66,10 +57,8 @@ export async function POST(
     ) {
       return NextResponse.json(
         {
-          success: false,
-          code: "WALLET_ALREADY_CONNECTED",
           message:
-            "This wallet is already connected to another account.",
+            "Wallet is already connected to another account",
         },
         {
           status: 409,
@@ -77,36 +66,26 @@ export async function POST(
       );
     }
 
-    // --------------------------------------------------
-    // UPDATE CURRENT USER
-    // --------------------------------------------------
-
     const user =
       await prisma.user.update({
         where: {
           id: session.user.id,
         },
+
         data: {
-          walletAddress:
-            normalizedWalletAddress,
+          walletAddress,
         },
+
         select: {
-          id: true,
           walletAddress: true,
         },
       });
 
-    return NextResponse.json(
-      {
-        success: true,
-        message:
-          "Wallet connected successfully",
-        user,
-      },
-      {
-        status: 200,
-      }
-    );
+    return NextResponse.json({
+      success: true,
+      walletAddress:
+        user.walletAddress,
+    });
   } catch (error) {
     console.error(
       "Wallet connect error:",
@@ -115,7 +94,6 @@ export async function POST(
 
     return NextResponse.json(
       {
-        success: false,
         message:
           "Failed to connect wallet",
       },

@@ -1,90 +1,127 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+
+import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(req.url);
+    const session = await getServerSession(authOptions);
 
-    const userId = searchParams.get("userId");
-
-    if (!userId) {
+    if (!session?.user?.id) {
       return NextResponse.json(
-        { message: "User required" },
-        { status: 400 }
+        {
+          message: "Unauthorized",
+        },
+        {
+          status: 401,
+        }
       );
     }
 
-    const freelancer =
-      await prisma.freelancerProfile.findUnique({
-        where: {
-          userId,
-        },
-      });
+    const userId = session.user.id;
 
-    const client =
-      await prisma.clientProfile.findUnique(
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      include: {
+        freelancerProfile: true,
+        clientProfile: true,
+      },
+    });
+
+    if (!user) {
+      return NextResponse.json(
         {
-          where: {
-            userId,
-          },
+          message: "User not found",
+        },
+        {
+          status: 404,
         }
       );
+    }
 
-    const wallet =
-      freelancer?.walletBalance || 0;
+    const walletBalance =
+      user.freelancerProfile?.walletBalance ?? 0;
 
-    const escrowBalance =
-      await prisma.escrow.aggregate({
+    const transactions = await prisma.walletTransaction.findMany({
+      where: {
+        userId,
+      },
+    });
+
+    const totalReceived = transactions
+      .filter(
+        (tx) =>
+          tx.type === "DEPOSIT" ||
+          tx.type === "EARNING"
+      )
+      .reduce(
+        (total, tx) => total + tx.amount,
+        0
+      );
+
+    const totalSpent = transactions
+      .filter(
+        (tx) =>
+          tx.type === "WITHDRAW" ||
+          tx.type === "PAYMENT"
+      )
+      .reduce(
+        (total, tx) => total + tx.amount,
+        0
+      );
+
+    const escrowTransactions =
+      await prisma.transaction.findMany({
         where: {
-          status: "FUNDED",
-        },
-
-        _sum: {
-          amount: true,
+          escrow: {
+            job: {
+              client: {
+                userId,
+              },
+            },
+          },
         },
       });
 
-    const earnings =
-      await prisma.transaction.aggregate({
-        where: {
-          toAddress: userId,
-        },
-
-        _sum: {
-          amount: true,
-        },
-      });
-
-    const spent =
-      await prisma.transaction.aggregate({
-        where: {
-          fromAddress: userId,
-        },
-
-        _sum: {
-          amount: true,
-        },
-      });
+    const escrowBalance = escrowTransactions
+      .filter(
+        (tx) => tx.status === "CONFIRMED"
+      )
+      .reduce(
+        (total, tx) => total + tx.amount,
+        0
+      );
 
     return NextResponse.json({
-      walletBalance: wallet,
-      escrowBalance:
-        escrowBalance._sum.amount ||
-        0,
-      totalEarnings:
-        earnings._sum.amount || 0,
-      totalSpent:
-        spent._sum.amount || 0,
-      clientId: client?.id || null,
-      freelancerId:
-        freelancer?.id || null,
+      walletAddress:
+        user.walletAddress ?? null,
+
+      walletBalance,
+
+      escrowBalance,
+
+      totalEarnings: totalReceived,
+
+      totalSpent,
+
+      network: "hardhat-local",
     });
   } catch (error) {
-    console.error(error);
+    console.error(
+      "Wallet summary error:",
+      error
+    );
 
     return NextResponse.json(
-      { message: "Server Error" },
-      { status: 500 }
+      {
+        message: "Failed to load wallet summary",
+      },
+      {
+        status: 500,
+      }
     );
   }
 }

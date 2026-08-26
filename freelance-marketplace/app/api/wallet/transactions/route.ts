@@ -1,38 +1,55 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+
+import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(req.url);
+    const session =
+      await getServerSession(authOptions);
 
-    const userId = searchParams.get("userId");
-
-    if (!userId) {
+    if (!session?.user?.id) {
       return NextResponse.json(
-        { message: "userId is required" },
-        { status: 400 }
+        {
+          message: "Unauthorized",
+        },
+        {
+          status: 401,
+        }
       );
     }
 
-    const transactions = await prisma.walletTransaction.findMany({
-      where: {
-        userId,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-      take: 20,
-    });
+    const transactions =
+      await prisma.walletTransaction.findMany({
+        where: {
+          userId: session.user.id,
+        },
+
+        orderBy: {
+          createdAt: "desc",
+        },
+
+        take: 50,
+      });
 
     return NextResponse.json({
       transactions,
     });
   } catch (error) {
-    console.error("Wallet transactions error:", error);
+    console.error(
+      "Wallet transactions error:",
+      error
+    );
 
     return NextResponse.json(
-      { message: "Server Error" },
-      { status: 500 }
+      {
+        message:
+          "Failed to load wallet transactions",
+      },
+      {
+        status: 500,
+      }
     );
   }
 }

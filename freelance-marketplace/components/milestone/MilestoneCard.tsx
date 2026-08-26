@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import axios from "axios";
-
 import TransactionHistory from "@/components/escrow/TransactionHistory";
 import { useEscrow } from "@/hooks/useEscrow";
 import { approveMilestone } from "@/services/milestone.action";
@@ -10,12 +9,12 @@ import RaiseDisputeForm from "@/components/dispute/RaiseDisputeForm";
 import { ethers } from "ethers";
 
 type Milestone = {
-    id: string;
-    title: string;
-    description?: string | null;
-    amount: number;
+  id: string;
+  title: string;
+  description?: string | null;
+  amount: number;
 
-    status:
+  status:
     | "PENDING"
     | "FUNDED"
     | "SUBMITTED"
@@ -24,337 +23,592 @@ type Milestone = {
     | "RELEASED"
     | "REFUNDED";
 
-    escrowId?: string | null;
+  escrowId?: string | null;
 
-    escrow?: {
-        id: string;
-        blockchainEscrowId: number | null;
-        status: string;
-    } | null;
+  escrow?: {
+    id: string;
+    blockchainEscrowId: number | null;
+    status: string;
+  } | null;
 };
 
 export default function MilestoneCard({
-    milestone,
-    freelancerAddress,
+  milestone,
+  freelancerAddress,
 }: {
-    milestone: Milestone;
-    freelancerAddress?: string | null;
+  milestone: Milestone;
+  freelancerAddress?: string | null;
 }) {
-    const {
-        createAndFundEscrow,
-        releasePayment,
-        loading,
-        error,
-    } = useEscrow();
+  const {
+    createAndFundEscrow,
+    releasePayment,
+    loading,
+    error,
+  } = useEscrow();
 
-    const [approving, setApproving] = useState(false);
-    const [releasing, setReleasing] = useState(false);
+  const [approving, setApproving] = useState(false);
+  const [releasing, setReleasing] = useState(false);
 
-    // -----------------------------------------
-    // FUND MILESTONE
-    // -----------------------------------------
+  // -----------------------------------------
+  // FUND MILESTONE
+  // -----------------------------------------
 
-    const handleFund = async () => {
-        try {
-            if (!freelancerAddress) {
-                throw new Error(
-                    "Freelancer wallet address not found"
-                );
-            }
+  const handleFund = async () => {
+    try {
+      if (!freelancerAddress) {
+        throw new Error(
+          "Freelancer wallet address not found"
+        );
+      }
 
-            if (
-                !ethers.isAddress(
-                    freelancerAddress
-                )
-            ) {
-                throw new Error(
-                    "Invalid freelancer wallet address"
-                );
-            }
+      if (!ethers.isAddress(freelancerAddress)) {
+        throw new Error(
+          "Invalid freelancer wallet address"
+        );
+      }
 
-            if (
-                !milestone.amount ||
-                milestone.amount <= 0
-            ) {
-                throw new Error(
-                    "Invalid milestone amount"
-                );
-            }
+      if (
+        !milestone.amount ||
+        milestone.amount <= 0
+      ) {
+        throw new Error(
+          "Invalid milestone amount"
+        );
+      }
 
-            const result =await createAndFundEscrow(freelancerAddress,milestone.amount.toString());
-            await axios.post(`/api/milestone/${milestone.id}/fund`,
-                {
-                    contractAddress:process.env.NEXT_PUBLIC_ESCROW_CONTRACT_ADDRESS,
+      const result = await createAndFundEscrow(
+        freelancerAddress,
+        milestone.amount.toString()
+      );
 
-                    transactionHash:result.receipt.hash,
+      await axios.post(
+        `/api/milestone/${milestone.id}/fund`,
+        {
+          contractAddress:
+            process.env
+              .NEXT_PUBLIC_ESCROW_CONTRACT_ADDRESS,
 
-                    amount:milestone.amount,
-                    network:"hardhat-local",
-                    blockchainEscrowId:result.escrowIndex,
-                }
-            );
+          transactionHash:
+            result.receipt.hash,
 
-            alert(`Milestone funded successfully.\nBlockchain Escrow ID: ${result.escrowIndex}`);
-            window.location.reload();
-        } catch (err) {
-            console.error("Fund milestone error:",err);
-
-            alert(
-                err instanceof Error
-                    ? err.message
-                    : "Failed to fund milestone"
-            );
+          amount: milestone.amount,
+          network: "hardhat-local",
+          blockchainEscrowId:
+            result.escrowIndex,
         }
-    };
+      );
 
-    // -----------------------------------------
-    // APPROVE MILESTONE
-    // -----------------------------------------
+      alert(
+        `Milestone funded successfully.\nBlockchain Escrow ID: ${result.escrowIndex}`
+      );
 
-    const handleApprove = async () => {
-        try {
-            if (milestone.status !== "SUBMITTED") {
-                return;
-            }
+      window.location.reload();
+    } catch (err) {
+      console.error(
+        "Fund milestone error:",
+        err
+      );
 
-            setApproving(true);
+      alert(
+        err instanceof Error
+          ? err.message
+          : "Failed to fund milestone"
+      );
+    }
+  };
 
-            await approveMilestone(
-                milestone.id
-            );
+  // -----------------------------------------
+  // APPROVE MILESTONE
+  // -----------------------------------------
 
-            alert(
-                "Milestone approved successfully"
-            );
+  const handleApprove = async () => {
+    try {
+      if (milestone.status !== "SUBMITTED") {
+        return;
+      }
 
-            window.location.reload();
-        } catch (err) {
-            console.error(
-                "Approve milestone error:",
-                err
-            );
+      setApproving(true);
 
-            alert(
-                "Failed to approve milestone"
-            );
-        } finally {
-            setApproving(false);
-        }
-    };
+      await approveMilestone(
+        milestone.id
+      );
 
-    // -----------------------------------------
-    // RELEASE PAYMENT
-    // -----------------------------------------
+      alert(
+        "Milestone approved successfully"
+      );
 
-    const handleRelease = async () => {
-        try {
-            if (milestone.status !== "APPROVED") {
-                return;
-            }
+      window.location.reload();
+    } catch (err) {
+      console.error(
+        "Approve milestone error:",
+        err
+      );
 
-            if (!milestone.escrow) {
-                throw new Error(
-                    "Escrow not found"
-                );
-            }
+      alert(
+        "Failed to approve milestone"
+      );
+    } finally {
+      setApproving(false);
+    }
+  };
 
-            if (!freelancerAddress) {
-                throw new Error(
-                    "Freelancer wallet address not found"
-                );
-            }
+  // -----------------------------------------
+  // RELEASE PAYMENT
+  // -----------------------------------------
 
-            const escrowIndex =
-                milestone.escrow
-                    .blockchainEscrowId;
+  const handleRelease = async () => {
+    try {
+      if (milestone.status !== "APPROVED") {
+        return;
+      }
 
-            if (
-                escrowIndex === null ||
-                escrowIndex === undefined
-            ) {
-                throw new Error(
-                    "Blockchain escrow ID not found"
-                );
-            }
+      if (!milestone.escrow) {
+        throw new Error(
+          "Escrow not found"
+        );
+      }
 
-            setReleasing(true);
+      if (!freelancerAddress) {
+        throw new Error(
+          "Freelancer wallet address not found"
+        );
+      }
 
-            await releasePayment(
-                escrowIndex,
-                milestone.escrow.id,
-                freelancerAddress,
-                milestone.amount
-            );
+      const escrowIndex =
+        milestone.escrow
+          .blockchainEscrowId;
 
-            alert(
-                "Payment released successfully"
-            );
+      if (
+        escrowIndex === null ||
+        escrowIndex === undefined
+      ) {
+        throw new Error(
+          "Blockchain escrow ID not found"
+        );
+      }
 
-            window.location.reload();
-        } catch (err) {
-            console.error(
-                "Release payment error:",
-                err
-            );
+      setReleasing(true);
 
-            alert(
-                err instanceof Error
-                    ? err.message
-                    : "Failed to release payment"
-            );
-        } finally {
-            setReleasing(false);
-        }
-    };
+      await releasePayment(
+        escrowIndex,
+        milestone.escrow.id,
+        freelancerAddress,
+        milestone.amount
+      );
 
-    return (
-        <div className="space-y-5 rounded-2xl border border-slate-800 bg-slate-900 p-6">
-            <div>
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                    <div>
-                        <h3 className="text-xl font-semibold text-white">
-                            {milestone.title}
-                        </h3>
+      alert(
+        "Payment released successfully"
+      );
 
-                        {milestone.description && (
-                            <p className="mt-2 text-sm leading-6 text-slate-400">
-                                {milestone.description}
-                            </p>
-                        )}
-                    </div>
+      window.location.reload();
+    } catch (err) {
+      console.error(
+        "Release payment error:",
+        err
+      );
 
-                    <span className="w-fit rounded-full bg-slate-800 px-4 py-2 text-xs font-medium text-slate-200">
-                        {milestone.status}
-                    </span>
-                </div>
-            </div>
+      alert(
+        err instanceof Error
+          ? err.message
+          : "Failed to release payment"
+      );
+    } finally {
+      setReleasing(false);
+    }
+  };
 
-            <div className="flex items-center justify-between border-t border-slate-800 pt-4">
-                <span className="text-sm text-slate-400">
-                    Milestone Amount
-                </span>
+  // -----------------------------------------
+  // STATUS STYLING
+  // -----------------------------------------
 
-                <span className="font-semibold text-white">
-                    {milestone.amount} ETH
-                </span>
-            </div>
+  const statusStyles = {
+    PENDING:
+      "border border-neutral-200 bg-neutral-50 text-neutral-500",
 
-            {milestone.escrow && (
-                <div className="rounded-xl border border-slate-800 bg-slate-950 p-4">
-                    <div className="flex items-center justify-between">
-                        <span className="text-sm text-slate-400">
-                            Escrow
-                        </span>
+    FUNDED:
+      "border border-red-100 bg-red-50 text-red-500",
 
-                        <span className="text-sm font-medium text-white">
-                            {milestone.escrow.status}
-                        </span>
-                    </div>
+    SUBMITTED:
+      "border border-blue-100 bg-blue-50 text-blue-600",
 
-                    <div className="mt-4">
-                        <TransactionHistory
-                            escrowId={
-                                milestone.escrow.id
-                            }
-                        />
-                    </div>
-                </div>
-            )}
+    DISPUTED:
+      "border border-red-100 bg-red-50 text-red-600",
 
-            {milestone.status === "PENDING" && (
-                <button
-                    onClick={handleFund}
-                    disabled={
-                        loading ||
-                        !freelancerAddress
-                    }
-                    className="w-full rounded-xl bg-green-600 py-3 font-semibold text-white transition hover:bg-green-500 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                    {loading
-                        ? "Funding..."
-                        : "Fund Milestone"}
-                </button>
-            )}
+    APPROVED:
+      "border border-amber-100 bg-amber-50 text-amber-600",
 
-            {milestone.status === "SUBMITTED" && (
-                <button
-                    onClick={handleApprove}
-                    disabled={
-                        loading ||
-                        approving
-                    }
-                    className="w-full rounded-xl bg-indigo-600 py-3 font-semibold text-white transition hover:bg-indigo-500 disabled:opacity-50"
-                >
-                    {approving
-                        ? "Approving..."
-                        : "Approve Milestone"}
-                </button>
-            )}
+    RELEASED:
+      "border border-green-100 bg-green-50 text-green-600",
 
-            {milestone.status === "APPROVED" && (
-                <button
-                    onClick={handleRelease}
-                    disabled={
-                        loading ||
-                        releasing
-                    }
-                    className="w-full rounded-xl bg-green-600 py-3 font-semibold text-white transition hover:bg-green-500 disabled:opacity-50"
-                >
-                    {releasing
-                        ? "Releasing Payment..."
-                        : "Release Payment"}
-                </button>
-            )}
+    REFUNDED:
+      "border border-neutral-200 bg-neutral-100 text-neutral-600",
+  };
 
-            {(milestone.status === "FUNDED" ||
-                milestone.status === "SUBMITTED") && (
-                    <RaiseDisputeForm
-                        milestoneId={milestone.id}
-                    />
-                )}
+  return (
+    <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition hover:border-neutral-300 hover:shadow-md sm:p-6">
 
+      {/* =====================================================
+          HEADER
+      ===================================================== */}
 
-            {milestone.status === "RELEASED" && (
-                <div className="rounded-xl border border-green-700 bg-green-900/30 p-4 text-center">
-                    <p className="font-semibold text-green-300">
-                        Payment Released
-                    </p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
 
-                    <p className="mt-1 text-sm text-green-400">
-                        This milestone has been completed successfully.
-                    </p>
-                </div>
-            )}
+        <div className="min-w-0">
 
+          <div className="mb-2 flex items-center gap-2">
 
-            {milestone.status === "REFUNDED" && (
-                <div className="rounded-xl border border-yellow-700 bg-yellow-900/30 p-4 text-center">
-                    <p className="font-semibold text-yellow-300">
-                        Milestone Refunded
-                    </p>
-                </div>
-            )}
+            <span className="h-2 w-2 rounded-full bg-red-500" />
 
+            <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-neutral-400">
+              Milestone
+            </span>
 
-            {milestone.status === "DISPUTED" && (
-                <div className="rounded-xl border border-red-700 bg-red-900/30 p-4 text-center">
-                    <p className="font-semibold text-red-300">
-                        Dispute Raised
-                    </p>
+          </div>
 
-                    <p className="mt-1 text-sm text-red-400">
-                        This milestone is currently under dispute review.
-                    </p>
-                </div>
-            )}
+          <h3 className="text-xl font-bold tracking-tight text-neutral-950">
+            {milestone.title}
+          </h3>
 
-            {error && (
-                <div className="rounded-lg border border-red-800 bg-red-950/30 p-3">
-                    <p className="text-sm text-red-400">
-                        {error}
-                    </p>
-                </div>
-            )}
+          {milestone.description && (
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-500">
+              {milestone.description}
+            </p>
+          )}
+
         </div>
-    );
+
+        <span
+          className={`w-fit rounded-full px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider ${
+            statusStyles[milestone.status]
+          }`}
+        >
+          {milestone.status}
+        </span>
+
+      </div>
+
+      {/* =====================================================
+          AMOUNT
+      ===================================================== */}
+
+      <div className="mt-5 flex items-center justify-between border-t border-neutral-100 pt-5">
+
+        <div>
+
+          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-neutral-400">
+            Milestone Amount
+          </p>
+
+          <p className="mt-1 text-xl font-bold text-neutral-950">
+            {milestone.amount} ETH
+          </p>
+
+        </div>
+
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-neutral-50 text-xs font-bold text-neutral-500">
+          ETH
+        </div>
+
+      </div>
+
+      {/* =====================================================
+          ESCROW
+      ===================================================== */}
+
+      {milestone.escrow && (
+        <div className="mt-5 rounded-xl border border-neutral-200 bg-neutral-50 p-4">
+
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+
+            <div>
+
+              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-neutral-400">
+                Escrow
+              </p>
+
+              <p className="mt-1 text-sm font-semibold text-neutral-950">
+                {milestone.escrow.status}
+              </p>
+
+            </div>
+
+            <span className="w-fit rounded-full bg-neutral-950 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-white">
+              Blockchain
+            </span>
+
+          </div>
+
+          <div className="mt-4 border-t border-neutral-200 pt-4">
+
+            <TransactionHistory
+              escrowId={
+                milestone.escrow.id
+              }
+            />
+
+          </div>
+
+        </div>
+      )}
+
+      {/* =====================================================
+          FUND
+      ===================================================== */}
+
+      {milestone.status === "PENDING" && (
+        <div className="mt-5">
+
+          {!freelancerAddress && (
+            <div className="mb-3 rounded-xl border border-amber-200 bg-amber-50 p-3">
+
+              <p className="text-xs font-medium text-amber-700">
+                Freelancer wallet is not connected.
+              </p>
+
+            </div>
+          )}
+
+          <button
+            onClick={handleFund}
+            disabled={
+              loading ||
+              !freelancerAddress
+            }
+            className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-red-500 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-red-400 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {loading ? (
+              <>
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                Funding...
+              </>
+            ) : (
+              <>
+                Fund Milestone
+                <span>→</span>
+              </>
+            )}
+          </button>
+
+        </div>
+      )}
+
+      {/* =====================================================
+          APPROVE
+      ===================================================== */}
+
+      {milestone.status === "SUBMITTED" && (
+        <div className="mt-5">
+
+          <div className="mb-3 rounded-xl border border-blue-100 bg-blue-50 p-3">
+
+            <p className="text-xs font-medium text-blue-700">
+              Work has been submitted by the freelancer.
+            </p>
+
+          </div>
+
+          <button
+            onClick={handleApprove}
+            disabled={
+              loading ||
+              approving
+            }
+            className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-red-500 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-red-400 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {approving ? (
+              <>
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                Approving...
+              </>
+            ) : (
+              <>
+                Approve Milestone
+                <span>→</span>
+              </>
+            )}
+          </button>
+
+        </div>
+      )}
+
+      {/* =====================================================
+          RELEASE PAYMENT
+      ===================================================== */}
+
+      {milestone.status === "APPROVED" && (
+        <div className="mt-5">
+
+          <div className="mb-3 rounded-xl border border-green-100 bg-green-50 p-3">
+
+            <p className="text-xs font-medium text-green-700">
+              Milestone approved. Payment is ready to be
+              released.
+            </p>
+
+          </div>
+
+          <button
+            onClick={handleRelease}
+            disabled={
+              loading ||
+              releasing
+            }
+            className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-neutral-950 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {releasing ? (
+              <>
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                Releasing Payment...
+              </>
+            ) : (
+              <>
+                Release Payment
+                <span>→</span>
+              </>
+            )}
+          </button>
+
+        </div>
+      )}
+
+      {/* =====================================================
+          DISPUTE
+      ===================================================== */}
+
+      {(milestone.status === "FUNDED" ||
+        milestone.status === "SUBMITTED") && (
+        <div className="mt-5 border-t border-neutral-100 pt-5">
+
+          <RaiseDisputeForm
+            milestoneId={
+              milestone.id
+            }
+          />
+
+        </div>
+      )}
+
+      {/* =====================================================
+          RELEASED
+      ===================================================== */}
+
+      {milestone.status === "RELEASED" && (
+        <div className="mt-5 rounded-xl border border-green-200 bg-green-50 p-4">
+
+          <div className="flex items-center gap-3">
+
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-green-100 text-sm font-bold text-green-600">
+              ✓
+            </div>
+
+            <div>
+
+              <p className="text-sm font-semibold text-green-700">
+                Payment Released
+              </p>
+
+              <p className="mt-1 text-xs text-green-600">
+                This milestone has been completed successfully.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+      )}
+
+      {/* =====================================================
+          REFUNDED
+      ===================================================== */}
+
+      {milestone.status === "REFUNDED" && (
+        <div className="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-4">
+
+          <div className="flex items-center gap-3">
+
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-100 text-sm font-bold text-amber-600">
+              ↩
+            </div>
+
+            <div>
+
+              <p className="text-sm font-semibold text-amber-700">
+                Milestone Refunded
+              </p>
+
+              <p className="mt-1 text-xs text-amber-600">
+                The milestone payment has been refunded.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+      )}
+
+      {/* =====================================================
+          DISPUTED
+      ===================================================== */}
+
+      {milestone.status === "DISPUTED" && (
+        <div className="mt-5 rounded-xl border border-red-200 bg-red-50 p-4">
+
+          <div className="flex items-center gap-3">
+
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-red-100 text-sm font-bold text-red-600">
+              !
+            </div>
+
+            <div>
+
+              <p className="text-sm font-semibold text-red-700">
+                Dispute Raised
+              </p>
+
+              <p className="mt-1 text-xs leading-5 text-red-600">
+                This milestone is currently under dispute
+                review.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+      )}
+
+      {/* =====================================================
+          ERROR
+      ===================================================== */}
+
+      {error && (
+        <div className="mt-5 rounded-xl border border-red-200 bg-red-50 p-4">
+
+          <div className="flex items-start gap-3">
+
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-red-100 text-xs font-bold text-red-600">
+              !
+            </div>
+
+            <div>
+
+              <p className="text-xs font-semibold text-red-700">
+                Transaction Error
+              </p>
+
+              <p className="mt-1 break-words text-xs leading-5 text-red-600">
+                {error}
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+      )}
+
+    </div>
+  );
 }
