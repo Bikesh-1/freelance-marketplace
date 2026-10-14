@@ -59,7 +59,7 @@ export default function InfinityCard() {
 
             const loop = gsap.to(track, {
                 x: () => -setWidth,
-                duration: 40,
+                duration: 80,
                 ease: "none",
                 repeat: -1,
                 modifiers: {
@@ -122,7 +122,7 @@ export default function InfinityCard() {
                 card.addEventListener("mouseenter", () => {
                     gsap.to(loop, {
                         timeScale: 0.25,
-                        duration: 0.5,
+                        duration: 1,
                         ease: "power2.out",
                     });
 
