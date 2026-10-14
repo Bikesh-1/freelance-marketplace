@@ -31,31 +31,21 @@ const images = [
 ];
 
 export default function InfinityCard() {
-    const containerRef = useRef(null);
-    const trackRef = useRef(null);
+    const containerRef = useRef<HTMLElement | null>(null);
+    const trackRef = useRef<HTMLDivElement | null>(null);
 
     useLayoutEffect(() => {
         const ctx = gsap.context(() => {
             const track = trackRef.current;
             if (!track) return;
-
             const cards = gsap.utils.toArray<HTMLElement>(".infinity-card");
-
             let setWidth = 0;
-
             const calculateWidth = () => {
-                const firstCardSet = track.querySelector(".card-set");
-
+                const firstCardSet = track.querySelector<HTMLDivElement>(".card-set");
                 if (!firstCardSet) return;
-
                 setWidth = firstCardSet.offsetWidth;
             };
-
             calculateWidth();
-
-            // -----------------------------
-            // INFINITE MOVEMENT
-            // -----------------------------
 
             const loop = gsap.to(track, {
                 x: () => -setWidth,
@@ -69,35 +59,18 @@ export default function InfinityCard() {
                 },
             });
 
-            // -----------------------------
-            // CARD DEPTH EFFECT
-            // -----------------------------
-
             const updateCards = () => {
                 const viewportCenter = window.innerWidth / 2;
-
                 cards.forEach((card) => {
                     const rect = card.getBoundingClientRect();
-
                     const cardCenter = rect.left + rect.width / 2;
+                    const distance = (cardCenter - viewportCenter) / (window.innerWidth / 2);
 
-                    const distance =
-                        (cardCenter - viewportCenter) /
-                        (window.innerWidth / 2);
-
-                    const absDistance = Math.min(
-                        Math.abs(distance),
-                        1
-                    );
-
+                    const absDistance = Math.min(Math.abs(distance),1);
                     const scale = 1.08 - absDistance * 0.12;
-
                     const rotateY = distance * -12;
-
                     const y = absDistance * 18;
-
                     const opacity = 1 - absDistance * 0.25;
-
                     gsap.set(card, {
                         scale,
                         rotateY,
@@ -107,32 +80,23 @@ export default function InfinityCard() {
                     });
                 });
             };
-
             gsap.ticker.add(updateCards);
 
-            // -----------------------------
-            // HOVER EFFECT
-            // -----------------------------
-
             const cardsElements = cards;
-
             cardsElements.forEach((card) => {
                 const image = card.querySelector("img");
-
                 card.addEventListener("mouseenter", () => {
                     gsap.to(loop, {
                         timeScale: 0.25,
                         duration: 1,
                         ease: "power2.out",
                     });
-
                     gsap.to(card, {
                         scale: 1.12,
                         y: -5,
                         duration: 0.5,
                         ease: "power3.out",
                     });
-
                     gsap.to(image, {
                         scale: 1.12,
                         duration: 0.7,
@@ -146,7 +110,6 @@ export default function InfinityCard() {
                         duration: 0.8,
                         ease: "power2.out",
                     });
-
                     gsap.to(image, {
                         scale: 1,
                         duration: 0.7,
@@ -155,19 +118,14 @@ export default function InfinityCard() {
                 });
             });
 
-            const handleResize = () => {
-                calculateWidth();
-            };
-
+            const handleResize = () => {calculateWidth();};
             window.addEventListener("resize", handleResize);
-
             return () => {
                 gsap.ticker.remove(updateCards);
                 window.removeEventListener("resize", handleResize);
                 loop.kill();
             };
         }, containerRef);
-
         return () => ctx.revert();
     }, []);
 
