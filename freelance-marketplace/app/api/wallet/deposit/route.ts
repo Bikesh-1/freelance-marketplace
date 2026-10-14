@@ -29,8 +29,7 @@ export async function POST(req: NextRequest) {
 
     const expected = amount.toString();
     const txValue = Number(transaction.value) / 1e18;
-    if (transaction.to?.toLowerCase() !== profile.user.walletAddress.toLowerCase() ||
-        transaction.from.toLowerCase() !== profile.user.walletAddress.toLowerCase() ||
+    if (transaction.from.toLowerCase() !== profile.user.walletAddress.toLowerCase() ||
         Math.abs(txValue - Number(expected)) > 0.000001) {
       return NextResponse.json({ message: "Transaction does not match the connected wallet and amount" }, { status: 400 });
     }
