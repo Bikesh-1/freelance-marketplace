@@ -129,7 +129,7 @@ export async function POST(req: NextRequest) {
 
     const result = await prisma.$transaction(async (tx) => {
       const escrowChanged = await tx.escrow.updateMany({
-        where: { id: escrow.id, status: "FUNDED", transactionHash: null },
+        where: { id: escrow.id, status: "FUNDED" },
         data: { transactionHash: txHash, status: "RELEASED" },
       });
       if (escrowChanged.count !== 1) throw new Error("ESCROW_ALREADY_PROCESSED");
