@@ -17,7 +17,7 @@ const io = new Server(httpServer, {
 
 registerSocketHandlers(io);
 
-const port = Number(process.env.SOCKET_PORT || 3001);
+const port = Number(process.env.PORT || process.env.SOCKET_PORT || 3001);
 httpServer.listen(port, () => {
   console.log(`Socket server running on port ${port}`);
 });
