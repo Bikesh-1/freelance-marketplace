@@ -75,7 +75,10 @@ export default function EscrowTest() {
     }
 
     await releasePayment(
-      Number(escrowId)
+      Number(escrowId),
+      "",
+      freelancerAddress,
+      Number(amount)
     );
 
     alert(

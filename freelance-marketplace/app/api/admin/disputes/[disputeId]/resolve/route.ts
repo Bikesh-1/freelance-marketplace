@@ -117,18 +117,13 @@ export async function POST(
               },
               data: {
                 status: "RESOLVED",
-                resolution:
-                  decision,
-                resolutionNote:
-                  typeof note ===
-                    "string" &&
-                  note.trim()
+                adminNotes: [
+                  `Decision: ${decision}`,
+                  typeof note === "string" && note.trim()
                     ? note.trim()
                     : null,
-                resolvedAt:
-                  new Date(),
-                resolvedById:
-                  session.user.id,
+                ].filter(Boolean).join("\n"),
+                resolvedAt: new Date(),
               },
             });
 

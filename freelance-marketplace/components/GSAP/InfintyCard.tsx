@@ -37,6 +37,8 @@ export default function InfinityCard() {
     useLayoutEffect(() => {
         const ctx = gsap.context(() => {
             const track = trackRef.current;
+            if (!track) return;
+
             const cards = gsap.utils.toArray<HTMLElement>(".infinity-card");
 
             let setWidth = 0;
