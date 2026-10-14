@@ -156,6 +156,7 @@ export function useEscrow() {
         await axios.post("/api/escrow/fund",
           {
             escrowId: prismaEscrowId,
+            blockchainEscrowId: escrowId,
             txHash: receipt.hash,
             amount: Number(amount),
             fromAddress: signerAddress,
