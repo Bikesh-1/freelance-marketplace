@@ -91,7 +91,7 @@ export async function POST(req: NextRequest) {
           amount,
           fromAddress: transaction.from,
           toAddress: transaction.to!,
-          network: process.env.BLOCKCHAIN_NETWORK || escrow.network || "hardhat-local",
+          network: process.env.BLOCKCHAIN_NETWORK || "hardhat-local",
           status: "CONFIRMED",
         },
       });
