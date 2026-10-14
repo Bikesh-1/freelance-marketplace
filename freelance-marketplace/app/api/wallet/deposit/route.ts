@@ -7,12 +7,27 @@ import { verifyTransaction } from "@/lib/blockchain/verifyTransaction";
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user?.id) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const depositAddress = process.env.WALLET_DEPOSIT_ADDRESS?.trim();
+    if (!depositAddress || !/^0x[a-fA-F0-9]{40}$/.test(depositAddress)) {
+      return NextResponse.json(
+        { message: "Wallet deposits are not configured on this server" },
+        { status: 503 }
+      );
+    }
 
     const body = await req.json();
     const amount = Number(body.amount);
     const txHash = typeof body.txHash === "string" ? body.txHash.trim() : "";
-    if (!Number.isFinite(amount) || amount <= 0 || amount > 1_000_000 || !/^0x[a-fA-F0-9]{64}$/.test(txHash)) {
+    if (
+      !Number.isFinite(amount) ||
+      amount <= 0 ||
+      amount > 1_000_000 ||
+      !/^0x[a-fA-F0-9]{64}$/.test(txHash)
+    ) {
       return NextResponse.json({ message: "Invalid amount or transaction hash" }, { status: 400 });
     }
 
@@ -20,18 +35,33 @@ export async function POST(req: NextRequest) {
       where: { userId: session.user.id },
       include: { user: { select: { walletAddress: true } } },
     });
-    if (!profile) return NextResponse.json({ message: "Freelancer profile not found" }, { status: 404 });
-    if (!profile.user.walletAddress) return NextResponse.json({ message: "Connect a wallet first" }, { status: 400 });
+    if (!profile) {
+      return NextResponse.json({ message: "Freelancer profile not found" }, { status: 404 });
+    }
+    if (!profile.user.walletAddress) {
+      return NextResponse.json({ message: "Connect a wallet first" }, { status: 400 });
+    }
 
     const { transaction } = await verifyTransaction(txHash);
-    const existing = await prisma.transaction.findFirst({ where: { txHash } });
-    if (existing) return NextResponse.json({ message: "Transaction already processed" }, { status: 409 });
+    if (
+      transaction.from.toLowerCase() !== profile.user.walletAddress.toLowerCase() ||
+      !transaction.to ||
+      transaction.to.toLowerCase() !== depositAddress.toLowerCase()
+    ) {
+      return NextResponse.json(
+        { message: "Transaction sender or deposit destination does not match" },
+        { status: 400 }
+      );
+    }
 
-    const expected = amount.toString();
     const txValue = Number(transaction.value) / 1e18;
-    if (transaction.from.toLowerCase() !== profile.user.walletAddress.toLowerCase() ||
-        Math.abs(txValue - Number(expected)) > 0.000001) {
-      return NextResponse.json({ message: "Transaction does not match the connected wallet and amount" }, { status: 400 });
+    if (!Number.isFinite(txValue) || Math.abs(txValue - amount) > 0.000001) {
+      return NextResponse.json({ message: "Transaction amount does not match" }, { status: 400 });
+    }
+
+    const existing = await prisma.transaction.findFirst({ where: { txHash } });
+    if (existing) {
+      return NextResponse.json({ message: "Transaction already processed" }, { status: 409 });
     }
 
     await prisma.$transaction(async (tx) => {
@@ -41,11 +71,16 @@ export async function POST(req: NextRequest) {
       });
       await tx.transaction.create({
         data: {
-          amount, txHash, fromAddress: transaction.from,
-          toAddress: transaction.to!, network: "hardhat-local", status: "CONFIRMED",
+          amount,
+          txHash,
+          fromAddress: transaction.from,
+          toAddress: transaction.to!,
+          network: process.env.BLOCKCHAIN_NETWORK || "hardhat-local",
+          status: "CONFIRMED",
         },
       });
     });
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Wallet deposit error:", error);
