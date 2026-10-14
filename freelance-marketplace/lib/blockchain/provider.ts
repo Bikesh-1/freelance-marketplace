@@ -34,11 +34,7 @@ export async function switchToHardhatLocal(): Promise<BrowserProvider> {
   try {
     await window.ethereum.request({
       method: "wallet_switchEthereumChain",
-      params: [
-        {
-          chainId: HARDHAT_CHAIN_ID,
-        },
-      ],
+      params: [{ chainId: HARDHAT_CHAIN_ID }],
     });
   } catch (error: unknown) {
     const err = error as { code?: number };
@@ -46,18 +42,12 @@ export async function switchToHardhatLocal(): Promise<BrowserProvider> {
     if (err.code === 4902) {
       await window.ethereum.request({
         method: "wallet_addEthereumChain",
-        params: [
-          {
-            chainId: HARDHAT_CHAIN_ID,
-            chainName: "Hardhat Local",
-            nativeCurrency: {
-              name: "Ether",
-              symbol: "ETH",
-              decimals: 18,
-            },
-            rpcUrls: [HARDHAT_RPC_URL],
-          },
-        ],
+        params: [{
+          chainId: HARDHAT_CHAIN_ID,
+          chainName: "Hardhat Local",
+          nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+          rpcUrls: [HARDHAT_RPC_URL],
+        }],
       });
     } else {
       throw error;
@@ -65,18 +55,16 @@ export async function switchToHardhatLocal(): Promise<BrowserProvider> {
   }
 
   const provider = new BrowserProvider(window.ethereum);
-
   const network = await provider.getNetwork();
 
   if (network.chainId !== HARDHAT_CHAIN_ID_DECIMAL) {
-    throw new Error(
-      `Wrong network. Connected chain ID: ${network.chainId.toString()}`
-    );
+    throw new Error(`Wrong network. Connected chain ID: ${network.chainId.toString()}`);
   }
 
   return provider;
 }
 
 export function getServerProvider(): ethers.JsonRpcProvider {
-  return new ethers.JsonRpcProvider(HARDHAT_RPC_URL);
+  const rpcUrl = process.env.BLOCKCHAIN_RPC_URL || HARDHAT_RPC_URL;
+  return new ethers.JsonRpcProvider(rpcUrl);
 }
