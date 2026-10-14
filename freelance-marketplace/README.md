@@ -32,6 +32,7 @@ The default blockchain settings target a local Hardhat node. Start Hardhat at `h
 - `BLOCKCHAIN_CHAIN_ID`: expected server-side chain ID (defaults to `31337`).
 - `BLOCKCHAIN_NETWORK`: network label stored with verified transactions (defaults to `hardhat-local`).
 - `WALLET_DEPOSIT_ADDRESS`: required destination address for wallet deposits. Deposits fail closed until this is configured.
+- `WALLET_WITHDRAWAL_ADDRESS`: required platform payout address. A withdrawal is credited only after a successful on-chain transfer from this address to the user's connected wallet.
 
 Keep browser and server chain IDs/RPC endpoints aligned, and configure `NEXT_PUBLIC_ESCROW_CONTRACT_ADDRESS` to the escrow contract deployed on that same chain. Do not use a local Hardhat RPC URL for a hosted app unless the deployed server can reach that node.
 
