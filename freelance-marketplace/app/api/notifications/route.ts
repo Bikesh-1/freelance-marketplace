@@ -1,80 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(req: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url);
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
 
-    const userId = searchParams.get("userId");
-
-    const cursor = searchParams.get("cursor");
-
-    const notifications =
-      await prisma.notification.findMany({
-        where: {
-          userId: userId!,
-        },
-
-        orderBy: {
-          createdAt: "desc",
-        },
-
-        take: 10,
-
-        ...(cursor
-          ? {
-              skip: 1,
-
-              cursor: {
-                id: cursor,
-              },
-            }
-          : {}),
-      });
-
-    const nextCursor =
-      notifications.length === 10
-        ? notifications[9].id
-        : null;
+    const cursor = req.nextUrl.searchParams.get("cursor");
+    const notifications = await prisma.notification.findMany({
+      where: { userId: session.user.id },
+      orderBy: { createdAt: "desc" },
+      take: 10,
+      ...(cursor ? { skip: 1, cursor: { id: cursor } } : {}),
+    });
 
     return NextResponse.json({
       notifications,
-      nextCursor,
+      nextCursor: notifications.length === 10 ? notifications[9].id : null,
     });
   } catch (error) {
-    console.error(error);
-
-    return NextResponse.json(
-      { message: "Server Error" },
-      { status: 500 }
-    );
+    console.error("Get notifications error:", error);
+    return NextResponse.json({ message: "Server Error" }, { status: 500 });
   }
 }
 
-export async function POST(req: NextRequest) {
-  try {
-    const body = await req.json();
-
-    const notification =
-      await prisma.notification.create({
-        data: {
-          userId: body.userId,
-          type: body.type,
-          title: body.title,
-          message: body.message,
-        },
-      });
-
-    return NextResponse.json({
-      success: true,
-      notification,
-    });
-  } catch (error) {
-    console.error(error);
-
-    return NextResponse.json(
-      { message: "Server Error" },
-      { status: 500 }
-    );
-  }
+export async function POST() {
+  return NextResponse.json(
+    { message: "Method not allowed" },
+    { status: 405, headers: { Allow: "GET" } },
+  );
 }
