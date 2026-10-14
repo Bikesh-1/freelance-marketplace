@@ -7,6 +7,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { verifyTransaction } from "@/lib/blockchain/verifyTransaction";
 import { escrowAbi } from "@/lib/blockchain/escrowAbi";
+import { getServerProvider } from "@/lib/blockchain/provider";
 
 export async function POST(
   req: NextRequest,
@@ -64,7 +65,7 @@ export async function POST(
     const milestone = await prisma.milestone.findUnique({
       where: { id: milestoneId },
       include: {
-        job: { select: { id: true, clientId: true, selectedFreelancerId: true } },
+        job: { select: { id: true, clientId: true, selectedFreelancerId: true, selectedFreelancer: { select: { user: { select: { walletAddress: true } } } } } },
         escrow: true,
       },
     });
@@ -120,6 +121,22 @@ export async function POST(
     if (!fundedEvent ||
         Math.abs(Number(ethers.formatEther(fundedEvent.args[1])) - milestone.amount) > 0.000001) {
       return NextResponse.json({ message: "Verified EscrowFunded event was not found for this milestone amount" }, { status: 400 });
+    }
+
+    const expectedFreelancerWallet = milestone.job.selectedFreelancer?.user.walletAddress;
+    if (!expectedFreelancerWallet) {
+      return NextResponse.json({ message: "Selected freelancer has no connected wallet" }, { status: 409 });
+    }
+
+    const chainContract = new ethers.Contract(contractAddress, escrowAbi, getServerProvider());
+    const chainEscrow = await chainContract.getEscrow(blockchainEscrowId);
+    if (
+      chainEscrow[0].toLowerCase() !== clientProfile.user.walletAddress.toLowerCase() ||
+      chainEscrow[1].toLowerCase() !== expectedFreelancerWallet.toLowerCase() ||
+      Math.abs(Number(ethers.formatEther(chainEscrow[2])) - milestone.amount) > 0.000001 ||
+      Number(chainEscrow[3]) !== 1
+    ) {
+      return NextResponse.json({ message: "On-chain escrow parties, amount, or status do not match this milestone" }, { status: 400 });
     }
 
     const network = process.env.BLOCKCHAIN_NETWORK || "hardhat-local";
