@@ -464,12 +464,6 @@ const createAndFundEscrow = async (
       setLoading(true);
       setError(null);
 
-      if (!prismaEscrowId) {
-        throw new Error(
-          "Prisma escrow ID is required"
-        );
-      }
-
       if (!freelancerAddress) {
         throw new Error(
           "Freelancer wallet address is required"
@@ -496,18 +490,20 @@ const createAndFundEscrow = async (
         );
       }
 
-      await axios.post(
-        "/api/escrow/release",
-        {
-          escrowId: prismaEscrowId,
-          txHash: receipt.hash,
-          amount,
-          fromAddress:
-            await signer.getAddress(),
-          toAddress:
-            freelancerAddress,
-        }
-      );
+      if (prismaEscrowId) {
+        await axios.post(
+          "/api/escrow/release",
+          {
+            escrowId: prismaEscrowId,
+            txHash: receipt.hash,
+            amount,
+            fromAddress:
+              await signer.getAddress(),
+            toAddress:
+              freelancerAddress,
+          }
+        );
+      }
 
       return {
         receipt,
