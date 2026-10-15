@@ -127,7 +127,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Transaction already processed" }, { status: 409 });
     }
 
-    const network = process.env.BLOCKCHAIN_NETWORK || "hardhat-local";
+    const network = process.env.NEXT_PUBLIC_BLOCKCHAIN_NETWORK || "hardhat-local";
     const updated = await prisma.$transaction(async (tx) => {
       const changed = await tx.escrow.updateMany({
         where: { id: escrowId, status: "CREATED" },
