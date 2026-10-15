@@ -219,9 +219,9 @@ const createAndFundEscrow = async (
 
     const network = await provider.getNetwork();
 
-    if (network.chainId !== 31337n) {
+    if (network.chainId !== 11155111n) {
       throw new Error(
-        `Wrong network. Expected 31337, got ${network.chainId.toString()}`
+        `Wrong network. Expected 11155111, got ${network.chainId.toString()}`
       );
     }
 
