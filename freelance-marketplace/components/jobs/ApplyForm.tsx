@@ -112,10 +112,12 @@ export default function ApplyForm({
     try {
       setLoading(true);
 
-      await axios.post(`/api/jobs/${jobId}/apply`, {
-        coverLetter,
-        proposedAmount,
-      });
+      
+await axios.post(`/api/jobs/${jobId}/apply`, {
+  coverLetter,
+  proposedBudget: proposedAmount,
+});
+
 
       alert("Application submitted successfully");
 
