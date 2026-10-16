@@ -210,6 +210,27 @@ export default async function FreelancerDashboard() {
                 </p>
               </div>
 
+              <div className="flex flex-wrap items-center gap-2">
+                <Link
+                  href="/freelancer/recommendations"
+                  className="flex h-11 items-center rounded-xl border border-neutral-200 bg-white px-4 text-sm font-semibold text-neutral-700 shadow-sm transition hover:border-red-300 hover:text-red-500"
+                >
+                  Recommended jobs
+                </Link>
+                <Link
+                  href="/freelancer/experience"
+                  className="flex h-11 items-center rounded-xl border border-neutral-200 bg-white px-4 text-sm font-semibold text-neutral-700 shadow-sm transition hover:border-red-300 hover:text-red-500"
+                >
+                  Work experience
+                </Link>
+                <Link
+                  href="/freelancer/settings"
+                  className="flex h-11 items-center rounded-xl border border-neutral-200 bg-white px-4 text-sm font-semibold text-neutral-700 shadow-sm transition hover:border-red-300 hover:text-red-500"
+                >
+                  Skills
+                </Link>
+              </div>
+
               <div className="flex items-center gap-3">
                 {/* Notifications */}
                 <Link
