@@ -139,13 +139,32 @@ export async function POST(req: NextRequest) {
       })
       .filter((item): item is NonNullable<typeof item> => item !== null);
 
-    const matchedRelease = releaseEvents.find(({ event }) =>
-      BigInt(event.args[0].toString()) === BigInt(escrow.blockchainEscrowId!) &&
-      event.args[1].toLowerCase() === freelancerWallet.toLowerCase()
-    );
+    // The database can contain a stale blockchainEscrowId from an earlier
+    // local-network deployment. Identify the escrow ID emitted by the verified
+    // release event, then validate its parties and RELEASED state on-chain before
+    // repairing that database mapping.
+    const expectedAmountWei = ethers.parseEther(String(escrow.amount));
+    const allowedDifferenceWei = ethers.parseEther("0.000001");
+    const matchedRelease = releaseEvents.find(({ event, legacy }) => {
+      if (event.args[1].toLowerCase() !== freelancerWallet.toLowerCase()) return false;
+      const amountSlot = legacy
+        ? (BigInt(event.args[3].toString()) > 0n
+            ? BigInt(event.args[3].toString())
+            : BigInt(event.args[2].toString()))
+        : BigInt(event.args[2].toString());
+      const difference = amountSlot >= expectedAmountWei
+        ? amountSlot - expectedAmountWei
+        : expectedAmountWei - amountSlot;
+      return amountSlot > 0n && difference <= allowedDifferenceWei;
+    });
 
     if (!matchedRelease) {
-      return NextResponse.json({ message: "PaymentReleased event for this freelancer was not found in either supported event format" }, { status: 400 });
+      return NextResponse.json({ message: "No release event for this freelancer with the expected escrow amount was found" }, { status: 400 });
+    }
+
+    const blockchainEscrowId = BigInt(matchedRelease.event.args[0].toString());
+    if (blockchainEscrowId > BigInt(Number.MAX_SAFE_INTEGER)) {
+      return NextResponse.json({ message: "The on-chain escrow ID is outside the supported range" }, { status: 400 });
     }
 
     let releaseAmountWei: bigint;
@@ -159,8 +178,6 @@ export async function POST(req: NextRequest) {
       releaseAmountWei = BigInt(matchedRelease.event.args[2].toString());
     }
 
-    const expectedAmountWei = ethers.parseEther(String(escrow.amount));
-    const allowedDifferenceWei = ethers.parseEther("0.000001");
     const differenceWei = releaseAmountWei >= expectedAmountWei
       ? releaseAmountWei - expectedAmountWei
       : expectedAmountWei - releaseAmountWei;
@@ -172,7 +189,7 @@ export async function POST(req: NextRequest) {
 
     // Check the contract's current state for this escrow and these parties.
     const chainContract = new ethers.Contract(escrow.contractAddress, escrowAbi, getServerProvider());
-    const chainEscrow = await chainContract.getEscrow(escrow.blockchainEscrowId);
+    const chainEscrow = await chainContract.getEscrow(blockchainEscrowId);
     if (
       chainEscrow[0].toLowerCase() !== clientProfile.user.walletAddress.toLowerCase() ||
       chainEscrow[1].toLowerCase() !== freelancerWallet.toLowerCase() ||
@@ -184,7 +201,7 @@ export async function POST(req: NextRequest) {
     const result = await prisma.$transaction(async (tx) => {
       const escrowChanged = await tx.escrow.updateMany({
         where: { id: escrow.id, status: { in: ["FUNDED", "RELEASED"] } },
-        data: { transactionHash: txHash, status: "RELEASED", network },
+        data: { transactionHash: txHash, status: "RELEASED", network, blockchainEscrowId: Number(blockchainEscrowId) },
       });
       if (escrowChanged.count !== 1) throw new Error("ESCROW_STATUS_CHANGED");
 
