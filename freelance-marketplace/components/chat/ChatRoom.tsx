@@ -33,6 +33,7 @@ export default function ChatRoom({ jobId }: { jobId: string }) {
     const onOnlineUsers = (users: string[]) => setOnlineUsers(users);
     const onReceiveMessage = (incoming: MessageRecord) => {
       if (incoming.jobId !== jobId) return;
+      if (incoming.senderId === userId) setSending(false);
       queryClient.setQueryData<JobMessagesResponse>(["messages", jobId], (old) => {
         if (!old) return { messages: [incoming], receiverId: incoming.senderId === userId ? incoming.receiverId : incoming.senderId };
         if (old.messages.some((item) => item.id === incoming.id)) return old;
@@ -119,9 +120,7 @@ export default function ChatRoom({ jobId }: { jobId: string }) {
     setSending(true);
     socket.emit("send-message", { jobId, content: trimmed });
     setMessage("");
-    // The persisted receive-message event is broadcast to both participants.
-    // Clear the pending state after the server has had time to process it.
-    window.setTimeout(() => setSending(false), 1500);
+    // The server broadcasts the persisted message after the database write succeeds.
   };
 
   const handleTyping = (value: string) => {
