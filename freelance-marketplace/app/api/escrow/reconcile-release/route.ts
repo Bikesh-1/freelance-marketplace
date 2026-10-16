@@ -144,21 +144,29 @@ export async function POST(req: NextRequest) {
     // release for a different escrow to this record.
     const expectedAmountWei = ethers.parseEther(String(escrow.amount));
     const allowedDifferenceWei = ethers.parseEther("0.000001");
-    const matchedRelease = releaseEvents.find(({ event, legacy }) => {
-      if (event.args[1].toLowerCase() !== freelancerWallet.toLowerCase()) return false;
-      const amountSlot = legacy
-        ? (BigInt(event.args[3].toString()) > 0n
-            ? BigInt(event.args[3].toString())
-            : BigInt(event.args[2].toString()))
-        : BigInt(event.args[2].toString());
-      const difference = amountSlot >= expectedAmountWei
-        ? amountSlot - expectedAmountWei
-        : expectedAmountWei - amountSlot;
-      return amountSlot > 0n && difference <= allowedDifferenceWei;
+    // First identify the release by its indexed freelancer. Do not use the
+    // non-indexed amount slot as a filter here: older deployed versions emitted
+    // a malformed four-field event where the amount was encoded in the address
+    // slot and the final uint256 was zero. Validate the decoded amount below.
+    const matchedRelease = releaseEvents.find(({ event }) => {
+      const eventFreelancer = String(event.args[1] ?? "").toLowerCase();
+      const indexedFreelancer = receipt.logs.find((log) => {
+        if (log.address.toLowerCase() !== escrow.contractAddress.toLowerCase()) return false;
+        if (log.topics.length < 3 || log.topics[0].toLowerCase() !== event.topicHash.toLowerCase()) return false;
+        return log.topics[2].slice(-40).toLowerCase() === freelancerWallet.slice(2).toLowerCase();
+      });
+      return eventFreelancer === freelancerWallet.toLowerCase() || Boolean(indexedFreelancer);
     });
 
     if (!matchedRelease) {
-      return NextResponse.json({ message: "No release event for this freelancer with the expected escrow amount was found" }, { status: 400 });
+      const found = releaseEvents.map(({ event }) => ({
+        escrowId: String(event.args[0] ?? ""),
+        freelancer: String(event.args[1] ?? ""),
+      }));
+      return NextResponse.json({
+        message: "A PaymentReleased event was found, but its indexed freelancer does not match this milestone.",
+        foundReleaseEvents: found,
+      }, { status: 400 });
     }
 
     const blockchainEscrowId = BigInt(matchedRelease.event.args[0].toString());
