@@ -27,10 +27,7 @@ export function useEscrow() {
 
       const signer = await provider.getSigner();
       const contract = getEscrowContract(signer);
-
-      const tx = await contract.createEscrow(
-        freelancerAddress
-      );
+      const tx = await contract.createEscrow(freelancerAddress);
 
       const receipt = await tx.wait();
 
