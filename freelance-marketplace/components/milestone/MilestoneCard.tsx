@@ -96,9 +96,7 @@ export default function MilestoneCard({
         milestone.id
       );
 
-      alert(
-        "Milestone approved successfully"
-      );
+      alert("Milestone approved successfully");
 
       window.location.reload();
     } catch (err) {

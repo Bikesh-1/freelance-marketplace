@@ -1,4 +1,6 @@
-import { BrowserProvider, Eip1193Provider, ethers } from "ethers";
+
+
+import { BrowserProvider, ethers, type Eip1193Provider } from "ethers";
 
 declare global {
   interface Window {
@@ -6,78 +8,100 @@ declare global {
   }
 }
 
-export const HARDHAT_CHAIN_ID = "0x7a69";
-export const HARDHAT_CHAIN_ID_DECIMAL = 31337n;
-export const HARDHAT_RPC_URL = "http://127.0.0.1:8545";
+const DEFAULT_CHAIN_ID = 11155111n;
+const DEFAULT_RPC_URL = "https://sepolia.infura.io/v3/YOUR_INFURA_KEY";
 
 export function getConfiguredChainId(): bigint {
-  const raw = process.env.NEXT_PUBLIC_BLOCKCHAIN_CHAIN_ID || "31337";
+  const raw = process.env.NEXT_PUBLIC_BLOCKCHAIN_CHAIN_ID || "11155111";
   const chainId = BigInt(raw);
-  if (chainId <= 0n) throw new Error("NEXT_PUBLIC_BLOCKCHAIN_CHAIN_ID must be positive");
+
+  if (chainId <= 0n) {
+    throw new Error("NEXT_PUBLIC_BLOCKCHAIN_CHAIN_ID must be positive");
+  }
+
   return chainId;
 }
 
 export function getConfiguredRpcUrl(): string {
-  return process.env.NEXT_PUBLIC_BLOCKCHAIN_RPC_URL || HARDHAT_RPC_URL;
+  return (
+    process.env.NEXT_PUBLIC_BLOCKCHAIN_RPC_URL ||
+    DEFAULT_RPC_URL
+  );
 }
 
 export function getBrowserProvider(): BrowserProvider {
   if (typeof window === "undefined") {
-    throw new Error("Browser provider can only be used on client");
+    throw new Error("Wallet provider can only be used in the browser");
   }
+
   if (!window.ethereum) {
     throw new Error("MetaMask is not installed");
   }
+
   return new BrowserProvider(window.ethereum);
 }
 
-/**
- * Kept under its existing name for compatibility with current imports.
- * The actual target chain is configurable through NEXT_PUBLIC_BLOCKCHAIN_*.
- */
 export async function switchToHardhatLocal(): Promise<BrowserProvider> {
   if (typeof window === "undefined") {
-    throw new Error("Wallet can only be used in browser");
+    throw new Error("Wallet can only be used in the browser");
   }
+
   if (!window.ethereum) {
     throw new Error("MetaMask is not installed");
   }
 
-  const configuredChainId = getConfiguredChainId();
-  const chainIdHex = `0x${configuredChainId.toString(16)}`;
+  const chainId = getConfiguredChainId();
+  const chainIdHex = `0x${chainId.toString(16)}`;
   const rpcUrl = getConfiguredRpcUrl();
-  const chainName = process.env.NEXT_PUBLIC_BLOCKCHAIN_CHAIN_NAME || "Hardhat Local";
-  const currencySymbol = process.env.NEXT_PUBLIC_BLOCKCHAIN_CURRENCY_SYMBOL || "ETH";
 
   try {
     await window.ethereum.request({
       method: "wallet_switchEthereumChain",
       params: [{ chainId: chainIdHex }],
     });
-  } catch (error: unknown) {
-    const err = error as { code?: number };
-    if (err.code !== 4902) throw error;
+  } catch (error) {
+    const walletError = error as { code?: number };
+
+    if (walletError.code !== 4902) {
+      throw error;
+    }
 
     await window.ethereum.request({
       method: "wallet_addEthereumChain",
-      params: [{
-        chainId: chainIdHex,
-        chainName,
-        nativeCurrency: { name: currencySymbol, symbol: currencySymbol, decimals: 18 },
-        rpcUrls: [rpcUrl],
-      }],
+      params: [
+        {
+          chainId: chainIdHex,
+          chainName:
+            process.env.NEXT_PUBLIC_BLOCKCHAIN_CHAIN_NAME || "Sepolia",
+          nativeCurrency: {
+            name: "Sepolia Ether",
+            symbol:
+              process.env.NEXT_PUBLIC_BLOCKCHAIN_CURRENCY_SYMBOL || "ETH",
+            decimals: 18,
+          },
+          rpcUrls: [rpcUrl],
+          blockExplorerUrls: ["https://sepolia.etherscan.io"],
+        },
+      ],
     });
   }
 
   const provider = new BrowserProvider(window.ethereum);
   const network = await provider.getNetwork();
-  if (network.chainId !== configuredChainId) {
-    throw new Error(`Wrong network. Connected chain ID: ${network.chainId.toString()}`);
+
+  if (network.chainId !== chainId) {
+    throw new Error(
+      `Wrong network. Expected ${chainId.toString()}, connected to ${network.chainId.toString()}`
+    );
   }
+
   return provider;
 }
 
 export function getServerProvider(): ethers.JsonRpcProvider {
-  const rpcUrl = process.env.BLOCKCHAIN_RPC_URL || HARDHAT_RPC_URL;
+  const rpcUrl = process.env.BLOCKCHAIN_RPC_URL ||
+    process.env.NEXT_PUBLIC_BLOCKCHAIN_RPC_URL ||
+    DEFAULT_RPC_URL;
+
   return new ethers.JsonRpcProvider(rpcUrl);
 }
