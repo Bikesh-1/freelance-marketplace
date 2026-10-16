@@ -63,15 +63,60 @@ export function registerSocketHandlers(io: Server) {
       socket.to(jobId).emit("messages-read", { userId: authenticatedUserId });
     });
 
-    socket.on("send-message", (message) => {
-      if (!message || typeof message.jobId !== "string" ||
-          typeof message.content !== "string" || !message.content.trim() ||
-          message.content.length > 5000 || !socket.rooms.has(message.jobId)) return;
-      io.to(message.jobId).emit("receive-message", {
-        jobId: message.jobId,
-        userId: authenticatedUserId,
-        content: message.content.trim(),
-      });
+    socket.on("send-message", async (payload) => {
+      if (!payload || typeof payload.jobId !== "string" ||
+          typeof payload.content !== "string" || !payload.content.trim() ||
+          payload.content.trim().length > 5000 || !socket.rooms.has(payload.jobId)) {
+        return;
+      }
+
+      try {
+        const job = await prisma.job.findUnique({
+          where: { id: payload.jobId },
+          include: {
+            client: { select: { userId: true } },
+            selectedFreelancer: { select: { userId: true } },
+          },
+        });
+
+        if (!job) {
+          socket.emit("message-error", { message: "Job not found." });
+          return;
+        }
+
+        const participantIds = [
+          job.client.userId,
+          job.selectedFreelancer?.userId,
+        ].filter((id): id is string => Boolean(id));
+
+        if (!participantIds.includes(authenticatedUserId)) {
+          socket.emit("message-error", { message: "You are not a participant in this job." });
+          return;
+        }
+
+        const receiverId = participantIds.find((id) => id !== authenticatedUserId);
+        if (!receiverId) {
+          socket.emit("message-error", { message: "No recipient is assigned to this job yet." });
+          return;
+        }
+
+        const message = await prisma.message.create({
+          data: {
+            jobId: payload.jobId,
+            senderId: authenticatedUserId,
+            receiverId,
+            content: payload.content.trim(),
+          },
+          include: {
+            sender: { select: { id: true, name: true } },
+          },
+        });
+
+        io.to(payload.jobId).emit("receive-message", message);
+      } catch (error) {
+        console.error("Persist socket message error:", error);
+        socket.emit("message-error", { message: "Message could not be saved. Please try again." });
+      }
     });
 
     socket.on("join-user", () => {
