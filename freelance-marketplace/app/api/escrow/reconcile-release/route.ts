@@ -110,27 +110,65 @@ export async function POST(req: NextRequest) {
     }
 
     const iface = new ethers.Interface(escrowAbi);
+    // Some already-deployed contract versions emitted a legacy four-field event:
+    // PaymentReleased(uint256 indexed escrowId, address indexed freelancer,
+    //                 address recipient, uint256 amount).
+    // In that deployment the amount was accidentally encoded in the recipient
+    // slot and the final amount slot was zero. Support that shape only when the
+    // encoded value exactly matches this database escrow's expected wei amount.
+    const legacyReleaseIface = new ethers.Interface([
+      "event PaymentReleased(uint256 indexed escrowId, address indexed freelancer, address recipient, uint256 amount)",
+    ]);
 
-    const releasedEvent = receipt.logs
+    const releaseEvents = receipt.logs
       .filter((log) => log.address.toLowerCase() === escrow.contractAddress.toLowerCase())
       .map((log) => {
-        try { return iface.parseLog({ topics: [...log.topics], data: log.data }); }
-        catch { return null; }
+        try {
+          const event = iface.parseLog({ topics: [...log.topics], data: log.data });
+          if (event?.name === "PaymentReleased") return { event, legacy: false };
+        } catch {
+          // Try the legacy deployed event signature below.
+        }
+        try {
+          const event = legacyReleaseIface.parseLog({ topics: [...log.topics], data: log.data });
+          if (event?.name === "PaymentReleased") return { event, legacy: true };
+        } catch {
+          // Ignore unrelated logs from the escrow contract.
+        }
+        return null;
       })
-      .find((event) =>
-        event?.name === "PaymentReleased" &&
-        BigInt(event.args[0].toString()) === BigInt(escrow.blockchainEscrowId!) &&
-        event.args[1].toLowerCase() === freelancerWallet.toLowerCase()
-      );
+      .filter((item): item is NonNullable<typeof item> => item !== null);
 
-    if (!releasedEvent) {
-      return NextResponse.json({ message: "PaymentReleased event for this freelancer was not found" }, { status: 400 });
+    const matchedRelease = releaseEvents.find(({ event }) =>
+      BigInt(event.args[0].toString()) === BigInt(escrow.blockchainEscrowId!) &&
+      event.args[1].toLowerCase() === freelancerWallet.toLowerCase()
+    );
+
+    if (!matchedRelease) {
+      return NextResponse.json({ message: "PaymentReleased event for this freelancer was not found in either supported event format" }, { status: 400 });
     }
 
-    const eventAmount = Number(ethers.formatEther(releasedEvent.args[2]));
-    if (!Number.isFinite(eventAmount) || Math.abs(eventAmount - escrow.amount) > 0.000001) {
-      return NextResponse.json({ message: "Released amount does not match the escrow amount" }, { status: 400 });
+    let releaseAmountWei: bigint;
+    if (matchedRelease.legacy) {
+      const legacyAmount = BigInt(matchedRelease.event.args[3].toString());
+      const legacyRecipientSlot = BigInt(matchedRelease.event.args[2].toString());
+      // Correct legacy logs use args[3]. For the malformed historical event
+      // shown by the explorer, args[3] is zero and args[2] contains the amount.
+      releaseAmountWei = legacyAmount > 0n ? legacyAmount : legacyRecipientSlot;
+    } else {
+      releaseAmountWei = BigInt(matchedRelease.event.args[2].toString());
     }
+
+    const expectedAmountWei = ethers.parseEther(String(escrow.amount));
+    const allowedDifferenceWei = ethers.parseEther("0.000001");
+    const differenceWei = releaseAmountWei >= expectedAmountWei
+      ? releaseAmountWei - expectedAmountWei
+      : expectedAmountWei - releaseAmountWei;
+
+    if (releaseAmountWei <= 0n || differenceWei > allowedDifferenceWei) {
+      return NextResponse.json({ message: "Released amount in the verified event does not match the escrow amount" }, { status: 400 });
+    }
+    const eventAmount = Number(ethers.formatEther(releaseAmountWei));
 
     // Check the contract's current state for this escrow and these parties.
     const chainContract = new ethers.Contract(escrow.contractAddress, escrowAbi, getServerProvider());
