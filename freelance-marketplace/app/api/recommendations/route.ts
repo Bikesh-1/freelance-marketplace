@@ -18,9 +18,6 @@ export async function GET() {
 
     const recommendations = await prisma.aIRecommendation.findMany({
       where: { userId: session.user.id, jobId: { not: null } },
-      include: {
-        user: { select: { id: true } },
-      },
       orderBy: [{ score: "desc" }, { createdAt: "desc" }],
       take: 50,
     });
