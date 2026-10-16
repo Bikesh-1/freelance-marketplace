@@ -8,7 +8,11 @@ export async function verifyTransaction(txHash: string) {
 
   const provider = getServerProvider();
   const network = await provider.getNetwork();
-  const expectedChainId = BigInt(process.env.NEXT_PUBLIC_BLOCKCHAIN_CHAIN_ID || "11155111");
+  const expectedChainId = BigInt(
+    process.env.BLOCKCHAIN_CHAIN_ID ||
+    process.env.NEXT_PUBLIC_BLOCKCHAIN_CHAIN_ID ||
+    "11155111"
+  );
 
   if (network.chainId !== expectedChainId) {
     throw new Error(
@@ -29,5 +33,5 @@ export async function verifyTransaction(txHash: string) {
     throw new Error("Transaction not found on the configured blockchain");
   }
 
-  return { receipt, transaction };
+  return { receipt, transaction, chainId: network.chainId };
 }
