@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import ImageUploader from "@/components/upload/ImageUploader";
+import Link from "next/link";
 
 export default function NewPortfolioPage() {
   const [title, setTitle] = useState("");
@@ -9,6 +10,7 @@ export default function NewPortfolioPage() {
   const [githubUrl, setGithubUrl] = useState("");
   const [liveUrl, setLiveUrl] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [projectUrl, setProjectUrl] = useState("");
 
   const [loading, setLoading] = useState(false);
 
@@ -37,6 +39,7 @@ export default function NewPortfolioPage() {
           githubUrl,
           liveUrl,
           imageUrl,
+          projectUrl,
         }),
       });
 
@@ -57,6 +60,9 @@ export default function NewPortfolioPage() {
     <main className="min-h-screen bg-[#f7f7f8] px-4 py-8 text-neutral-900 sm:px-6 lg:py-12">
 
       <div className="mx-auto max-w-3xl">
+        <div className="mb-5">
+          <Link href="/freelancer/portfolio" className="text-sm font-semibold text-neutral-600 hover:text-red-500">← Back to portfolio</Link>
+        </div>
 
         {/* =====================================================
             HEADER
@@ -231,7 +237,12 @@ export default function NewPortfolioPage() {
 
                 {/* Live URL */}
 
-                <div>
+                            <div>
+              <label htmlFor="projectUrl" className="mb-2 block text-xs font-semibold text-neutral-800">Project URL <span className="font-normal text-neutral-400">(optional)</span></label>
+              <input id="projectUrl" type="url" placeholder="https://example.com/project" value={projectUrl} disabled={loading} onChange={(e) => setProjectUrl(e.target.value)} className="h-12 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 text-sm text-neutral-900 outline-none focus:border-red-400 focus:bg-white" />
+            </div>
+
+<div>
 
                   <label
                     htmlFor="liveUrl"
