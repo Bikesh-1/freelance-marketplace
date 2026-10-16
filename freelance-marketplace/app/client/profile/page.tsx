@@ -8,6 +8,8 @@ export default function ClientProfilePage() {
 
   const [form, setForm] = useState({
     companyName: "",
+    companyBio: "",
+    website: "",
     country: "",
   });
 
@@ -19,7 +21,8 @@ export default function ClientProfilePage() {
 
       window.location.href = "/client/dashboard";
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      alert(axios.isAxiosError(error) ? error.response?.data?.message || "Could not save client profile" : "Could not save client profile");
     } finally {
       setLoading(false);
     }
@@ -157,6 +160,16 @@ export default function ClientProfilePage() {
                 Add the country where your company is based.
               </p>
 
+            </div>
+
+            <div>
+              <label htmlFor="company-bio" className="mb-2 block text-xs font-semibold text-neutral-800">Company Description</label>
+              <textarea id="company-bio" rows={5} maxLength={5000} required placeholder="Describe your company and the work you hire for..." value={form.companyBio} disabled={loading} onChange={(e) => setForm({ ...form, companyBio: e.target.value })} className="w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 outline-none transition focus:border-red-400 focus:bg-white focus:ring-2 focus:ring-red-500/10 disabled:opacity-60" />
+            </div>
+
+            <div>
+              <label htmlFor="website" className="mb-2 block text-xs font-semibold text-neutral-800">Company Website <span className="font-normal text-neutral-400">(optional)</span></label>
+              <input id="website" type="url" placeholder="https://yourcompany.com" value={form.website} disabled={loading} onChange={(e) => setForm({ ...form, website: e.target.value })} className="h-12 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 text-sm text-neutral-900 outline-none transition focus:border-red-400 focus:bg-white focus:ring-2 focus:ring-red-500/10 disabled:opacity-60" />
             </div>
 
             {/* =================================================
