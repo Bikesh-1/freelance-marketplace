@@ -201,13 +201,16 @@ export async function POST(req: NextRequest) {
     // Check the contract's current state for this escrow and these parties.
     const chainContract = new ethers.Contract(escrow.contractAddress, escrowAbi, getServerProvider());
     const chainEscrow = await chainContract.getEscrow(blockchainEscrowId);
+    // FreelanceEscrow.releasePayment sets escrow.amount = 0 before emitting
+    // PaymentReleased. Therefore, after a successful release the stored on-chain
+    // amount is expected to be zero; compare the event amount above to the DB
+    // amount, and validate parties + RELEASED status here.
     if (
       chainEscrow[0].toLowerCase() !== clientProfile.user.walletAddress.toLowerCase() ||
       chainEscrow[1].toLowerCase() !== freelancerWallet.toLowerCase() ||
-      Math.abs(Number(ethers.formatEther(chainEscrow[2])) - escrow.amount) > 0.000001 ||
       Number(chainEscrow[3]) !== 2
     ) {
-      return NextResponse.json({ message: "On-chain escrow client, freelancer, amount, or released status does not match this milestone" }, { status: 409 });
+      return NextResponse.json({ message: "On-chain escrow client, freelancer, or released status does not match this milestone" }, { status: 409 });
     }
 
     // A stale database ID can be repaired from the release transaction plus
