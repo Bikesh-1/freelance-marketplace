@@ -139,10 +139,9 @@ export async function POST(req: NextRequest) {
       })
       .filter((item): item is NonNullable<typeof item> => item !== null);
 
-    // The database can contain a stale blockchainEscrowId from an earlier
-    // local-network deployment. Identify the escrow ID emitted by the verified
-    // release event, then validate its parties and RELEASED state on-chain before
-    // repairing that database mapping.
+    // Match the release event by recipient and amount first, then compare its
+    // on-chain escrow ID with this database record. Never silently attach a
+    // release for a different escrow to this record.
     const expectedAmountWei = ethers.parseEther(String(escrow.amount));
     const allowedDifferenceWei = ethers.parseEther("0.000001");
     const matchedRelease = releaseEvents.find(({ event, legacy }) => {
@@ -165,6 +164,11 @@ export async function POST(req: NextRequest) {
     const blockchainEscrowId = BigInt(matchedRelease.event.args[0].toString());
     if (blockchainEscrowId > BigInt(Number.MAX_SAFE_INTEGER)) {
       return NextResponse.json({ message: "The on-chain escrow ID is outside the supported range" }, { status: 400 });
+    }
+    if (blockchainEscrowId !== BigInt(escrow.blockchainEscrowId!)) {
+      return NextResponse.json({
+        message: `This transaction released on-chain escrow ${blockchainEscrowId.toString()}, but this database record is linked to escrow ${escrow.blockchainEscrowId}. Nothing was changed. Do not reuse this transaction for this escrow.`,
+      }, { status: 409 });
     }
 
     let releaseAmountWei: bigint;
@@ -201,7 +205,7 @@ export async function POST(req: NextRequest) {
     const result = await prisma.$transaction(async (tx) => {
       const escrowChanged = await tx.escrow.updateMany({
         where: { id: escrow.id, status: { in: ["FUNDED", "RELEASED"] } },
-        data: { transactionHash: txHash, status: "RELEASED", network, blockchainEscrowId: Number(blockchainEscrowId) },
+        data: { transactionHash: txHash, status: "RELEASED", network },
       });
       if (escrowChanged.count !== 1) throw new Error("ESCROW_STATUS_CHANGED");
 
