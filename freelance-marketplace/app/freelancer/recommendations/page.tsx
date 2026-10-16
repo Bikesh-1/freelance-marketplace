@@ -78,6 +78,7 @@ export default function RecommendationsPage() {
              </div>
              <p className="mt-4 line-clamp-4 whitespace-pre-line text-sm leading-6 text-neutral-600">{item.job.description}</p>
              <p className="mt-3 text-sm font-semibold">{item.job.jobType === "FIXED" ? "Fixed price" : item.job.jobType} · Budget {item.job.budget}</p>
+             <p className="mt-1 text-xs text-neutral-500">{item.job.duration ? `Duration: ${item.job.duration} · ` : ""}Deadline: {new Date(item.job.deadline).toLocaleDateString()}</p>
              <p className="mt-3 rounded-lg bg-neutral-50 p-3 text-xs leading-5 text-neutral-600">{item.reason}</p>
              <div className="mt-3 flex flex-wrap gap-2">{[...new Set([...item.job.requiredSkills, ...item.job.skills.map(skill => skill.skill.name)])].map(skill => <span key={skill} className="rounded-full border border-neutral-200 px-2.5 py-1 text-xs text-neutral-600">{skill}</span>)}</div>
              <div className="mt-auto pt-5"><Link href={`/jobs/${item.job.id}`} className="inline-flex rounded-xl bg-neutral-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-red-500">View job →</Link></div>
