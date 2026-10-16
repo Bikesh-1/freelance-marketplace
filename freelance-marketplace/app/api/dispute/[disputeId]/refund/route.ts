@@ -1,75 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { NextResponse } from "next/server";
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: Promise<{ disputeId: string }> }
-) {
-  try {
-    const { disputeId } = await params;
-
-    const dispute =
-      await prisma.dispute.findUnique({
-        where: { id: disputeId },
-        include: {
-          milestone: {
-            include: {
-              escrow: true,
-            },
-          },
-        },
-      });
-
-    if (!dispute) {
-      return NextResponse.json(
-        { message: "Dispute not found" },
-        { status: 404 }
-      );
-    }
-
-    await prisma.dispute.update({
-      where: { id: disputeId },
-
-      data: {
-        status: "RESOLVED",
-        resolvedAt: new Date(),
-      },
-    });
-
-    await prisma.milestone.update({
-      where: {
-        id: dispute.milestoneId,
-      },
-
-      data: {
-        status: "REFUNDED",
-      },
-    });
-
-    if (dispute.milestone.escrowId) {
-      await prisma.escrow.update({
-        where: {
-          id: dispute.milestone.escrowId,
-        },
-
-        data: {
-          status: "REFUNDED",
-        },
-      });
-    }
-    
-
-    return NextResponse.json({
-      success: true,
-      escrowId:
-        dispute.milestone.escrowId,
-    });
-  } catch (error) {
-    console.error(error);
-
-    return NextResponse.json(
-      { message: "Server Error" },
-      { status: 500 }
-    );
-  }
+/**
+ * Refunds must go through POST /api/dispute/refund, which authenticates the
+ * client and verifies the confirmed PaymentRefunded event on-chain.
+ * This legacy dynamic route is intentionally disabled because it previously
+ * marked escrow records as refunded without verifying a blockchain transaction.
+ */
+export async function POST() {
+  return NextResponse.json(
+    {
+      message: "This legacy refund endpoint is disabled. Use the verified refund flow at /api/dispute/refund.",
+    },
+    { status: 410 },
+  );
 }
