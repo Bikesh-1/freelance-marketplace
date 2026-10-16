@@ -5,6 +5,21 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { verifyTransaction } from "@/lib/blockchain/verifyTransaction";
 
+export async function GET() {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+  if (session.user.role !== "FREELANCER") {
+    return NextResponse.json({ message: "Only freelancers can deposit to the platform wallet" }, { status: 403 });
+  }
+  const depositAddress = process.env.WALLET_DEPOSIT_ADDRESS?.trim();
+  if (!depositAddress || !/^0x[a-fA-F0-9]{40}$/.test(depositAddress)) {
+    return NextResponse.json({ message: "Wallet deposits are not configured on this server" }, { status: 503 });
+  }
+  return NextResponse.json({ depositAddress });
+}
+
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
