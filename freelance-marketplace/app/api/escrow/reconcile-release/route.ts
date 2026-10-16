@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
           include: {
             job: {
               include: {
-                selectedFreelancer: { select: { user: { select: { walletAddress: true } } } },
+                selectedFreelancer: { select: { userId: true, user: { select: { walletAddress: true } } } },
               },
             },
           },
@@ -291,6 +291,30 @@ export async function POST(req: NextRequest) {
             status: "CONFIRMED",
             blockNumber: receipt.blockNumber,
             gasUsed: receipt.gasUsed.toString(),
+          },
+        });
+      }
+
+      // Wallet Dashboard history reads WalletTransaction, not the escrow
+      // transaction tables. Add the received payment there as well so it
+      // appears for the freelancer after a successful reconciliation.
+      const freelancerUserId = escrow.milestone!.job.selectedFreelancer!.userId;
+      const existingWalletTx = await tx.walletTransaction.findUnique({
+        where: { txHash },
+        select: { id: true, userId: true },
+      });
+      if (existingWalletTx && existingWalletTx.userId !== freelancerUserId) {
+        throw new Error("TX_HASH_ALREADY_USED");
+      }
+      if (!existingWalletTx) {
+        await tx.walletTransaction.create({
+          data: {
+            userId: freelancerUserId,
+            txHash,
+            amount: eventAmount,
+            type: "EARNING",
+            network,
+            walletAddress: freelancerWallet,
           },
         });
       }
