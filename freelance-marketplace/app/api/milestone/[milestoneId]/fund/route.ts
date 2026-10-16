@@ -9,6 +9,12 @@ import { verifyTransaction } from "@/lib/blockchain/verifyTransaction";
 import { escrowAbi } from "@/lib/blockchain/escrowAbi";
 import { getServerProvider } from "@/lib/blockchain/provider";
 
+function getNetworkLabel(chainId: bigint): string {
+  if (chainId === 11155111n) return "sepolia";
+  if (chainId === 31337n) return "hardhat-local";
+  return `chain-${chainId.toString()}`;
+}
+
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ milestoneId: string }> }
@@ -83,7 +89,7 @@ export async function POST(
       return NextResponse.json({ message: "Funding amount does not match milestone amount" }, { status: 400 });
     }
 
-    const { receipt, transaction } = await verifyTransaction(transactionHash);
+    const { receipt, transaction, chainId } = await verifyTransaction(transactionHash);
     if (
       !transaction.to ||
       transaction.to.toLowerCase() !== contractAddress.toLowerCase() ||
@@ -139,7 +145,7 @@ export async function POST(
       return NextResponse.json({ message: "On-chain escrow parties, amount, or status do not match this milestone" }, { status: 400 });
     }
 
-    const network = process.env.BLOCKCHAIN_NETWORK || "hardhat-local";
+    const network = getNetworkLabel(chainId);
     const result = await prisma.$transaction(async (tx) => {
       const changed = await tx.milestone.updateMany({
         where: { id: milestoneId, status: "PENDING", escrowId: null },
