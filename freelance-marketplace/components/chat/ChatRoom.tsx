@@ -7,324 +7,174 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import { useSocket } from "@/hooks/useSocket";
 import { useMessages } from "@/hooks/useMessages";
+import type { JobMessagesResponse, MessageRecord } from "@/services/message.service";
 
-export default function ChatRoom({
-  jobId,
-}: {
-  jobId: string;
-}) {
+export default function ChatRoom({ jobId }: { jobId: string }) {
   const { data: session } = useSession();
-
   const userId = session?.user?.id || "";
-
   const socket = useSocket(jobId, userId);
-
   const queryClient = useQueryClient();
+  const { data: chatData, isLoading, isError } = useMessages(jobId);
+  const messages = chatData?.messages ?? [];
+  const otherUserId = chatData?.receiverId ?? "";
 
-  const { data: messages } = useMessages(jobId);
-  const [onlineUsers, setOnlineUsers,] = useState<string[]>([]);
+  const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
   const [message, setMessage] = useState("");
   const [typingUser, setTypingUser] = useState("");
-
+  const [error, setError] = useState("");
+  const [sending, setSending] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  const otherUserId =
-    messages?.find(
-      (m: any) =>
-        m.senderId !==
-        userId
-    )?.senderId || "";
-
-  // Auto scroll
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({
-      behavior: "smooth",
-    });
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
   useEffect(() => {
-    socket.on(
-      "online-users",
-      (users: string[]) => {
-        setOnlineUsers(users);
+    const onOnlineUsers = (users: string[]) => setOnlineUsers(users);
+    const onReceiveMessage = (incoming: MessageRecord) => {
+      if (incoming.jobId !== jobId) return;
+      queryClient.setQueryData<JobMessagesResponse>(["messages", jobId], (old) => {
+        if (!old) return { messages: [incoming], receiverId: incoming.senderId === userId ? incoming.receiverId : incoming.senderId };
+        if (old.messages.some((item) => item.id === incoming.id)) return old;
+        return { ...old, messages: [...old.messages, incoming] };
+      });
+
+      if (incoming.receiverId === userId) {
+        void axios.post("/api/messages/read", { jobId }).catch((readError) => {
+          console.error("Mark incoming message as read error:", readError);
+        });
       }
-    );
+    };
+    const onTyping = ({ userId: typingUserId }: { userId: string }) => {
+      if (typingUserId !== userId) setTypingUser(typingUserId);
+    };
+    const onStopTyping = () => setTypingUser("");
+    const onMessagesRead = ({ userId: readerId }: { userId: string }) => {
+      queryClient.setQueryData<JobMessagesResponse>(["messages", jobId], (old) => {
+        if (!old) return old;
+        return {
+          ...old,
+          messages: old.messages.map((item) =>
+            item.senderId === userId && item.receiverId === readerId
+              ? { ...item, isRead: true, readAt: new Date().toISOString() }
+              : item
+          ),
+        };
+      });
+    };
+    const onMessageError = ({ message: errorMessage }: { message: string }) => {
+      setError(errorMessage || "Message could not be sent.");
+      setSending(false);
+    };
+
+    socket.on("online-users", onOnlineUsers);
+    socket.on("receive-message", onReceiveMessage);
+    socket.on("typing", onTyping);
+    socket.on("stop-typing", onStopTyping);
+    socket.on("messages-read", onMessagesRead);
+    socket.on("message-error", onMessageError);
 
     return () => {
-      socket.off(
-        "online-users"
-      );
+      socket.off("online-users", onOnlineUsers);
+      socket.off("receive-message", onReceiveMessage);
+      socket.off("typing", onTyping);
+      socket.off("stop-typing", onStopTyping);
+      socket.off("messages-read", onMessagesRead);
+      socket.off("message-error", onMessageError);
     };
-  }, [socket]);
-  // Mark messages as read when chat opens
+  }, [socket, queryClient, jobId, userId]);
+
   useEffect(() => {
     if (!jobId || !userId) return;
-
-    const markRead = async () => {
-      try {
-        await axios.post(
-          "/api/messages/read",
-          {
-            jobId,
-            receiverId: userId,
-          }
-        );
-
-        socket.emit(
-          "messages-read",
-          {
-            jobId,
-            userId,
-          }
-        );
-
-        // Update TanStack cache
-        queryClient.setQueryData(
-          [
-            "messages",
-            jobId,
-          ],
-          (
-            old: any[] = []
-          ) =>
-            old.map(
-              (msg) =>
-                msg.receiverId ===
-                  userId &&
-                  !msg.isRead
-                  ? {
-                    ...msg,
-                    isRead: true,
-                    readAt:
-                      new Date().toISOString(),
-                  }
-                  : msg
-            )
-        );
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    markRead();
-  }, [
-    jobId,
-    userId,
-    socket,
-    queryClient,
-  ]);
-
-  // Socket listeners
-  useEffect(() => {
-    socket.on(
-      "receive-message",
-      (msg) => {
-        queryClient.setQueryData(
-          [
-            "messages",
-            jobId,
-          ],
-          (
-            old: any[] = []
-          ) => [
-              ...old,
-              msg,
-            ]
-        );
-      }
-    );
-
-    socket.on(
-      "typing",
-      ({ userId }) => {
-        setTypingUser(
-          userId
-        );
-      }
-    );
-
-    socket.on(
-      "stop-typing",
-      () => {
-        setTypingUser(
-          ""
-        );
-      }
-    );
-
-    socket.on(
-      "messages-read",
-      ({ userId }) => {
-        queryClient.setQueryData(
-          [
-            "messages",
-            jobId,
-          ],
-          (
-            old: any[] = []
-          ) =>
-            old.map(
-              (msg) =>
-                msg.senderId ===
-                  userId
-                  ? {
-                    ...msg,
-                    isRead: true,
-                  }
-                  : msg
-            )
-        );
-      }
-    );
-
-    return () => {
-      socket.off(
-        "receive-message"
-      );
-      socket.off(
-        "typing"
-      );
-      socket.off(
-        "stop-typing"
-      );
-      socket.off(
-        "messages-read"
-      );
-    };
-  }, [
-    socket,
-    queryClient,
-    jobId,
-  ]);
+    axios.post("/api/messages/read", { jobId }).then(() => {
+      queryClient.setQueryData<JobMessagesResponse>(["messages", jobId], (old) => {
+        if (!old) return old;
+        return {
+          ...old,
+          messages: old.messages.map((item) =>
+            item.receiverId === userId && !item.isRead
+              ? { ...item, isRead: true, readAt: new Date().toISOString() }
+              : item
+          ),
+        };
+      });
+      socket.emit("messages-read", { jobId });
+    }).catch((readError) => {
+      console.error("Mark messages read error:", readError);
+    });
+  }, [jobId, userId, socket, queryClient]);
 
   const sendMessage = () => {
-    if (!message.trim())
+    const trimmed = message.trim();
+    if (!trimmed || sending || !jobId) return;
+    if (!otherUserId) {
+      setError("This job does not have another assigned participant yet.");
       return;
-
-    socket.emit(
-      "send-message",
-      {
-        jobId,
-        userId,
-        content: message,
-      }
-    );
-
+    }
+    if (!socket.connected) {
+      setError("Chat connection is unavailable. Please try again in a moment.");
+      return;
+    }
+    setError("");
+    setSending(true);
+    socket.emit("send-message", { jobId, content: trimmed });
     setMessage("");
+    // The persisted receive-message event is broadcast to both participants.
+    // Clear the pending state after the server has had time to process it.
+    window.setTimeout(() => setSending(false), 1500);
   };
 
-  const handleTyping = (
-    value: string
-  ) => {
+  const handleTyping = (value: string) => {
     setMessage(value);
-
-    socket.emit(
-      "typing",
-      {
-        jobId,
-        userId,
-      }
-    );
-
-    setTimeout(() => {
-      socket.emit(
-        "stop-typing",
-        {
-          jobId,
-          userId,
-        }
-      );
-    }, 1000);
+    if (!jobId || !socket.connected) return;
+    socket.emit("typing", { jobId });
+    window.setTimeout(() => socket.emit("stop-typing", { jobId }), 800);
   };
 
   return (
     <div className="flex h-[600px] flex-col rounded-2xl border border-slate-800 bg-slate-900">
       <div className="flex-1 space-y-3 overflow-y-auto p-4">
-        {messages?.map(
-          (msg: any) => (
-            <div
-              key={msg.id}
-              className={`max-w-[75%] rounded-xl px-4 py-3 ${msg.senderId ===
-                  userId
-                  ? "ml-auto bg-indigo-600 text-white"
-                  : "bg-slate-800 text-slate-100"
-                }`}
-            >
-              <p className="text-xs opacity-70 mb-1">
-                {
-                  msg.sender
-                    ?.name
-                }
-              </p>
-
-              <p>
-                {msg.content}
-              </p>
-
-              {msg.senderId ===
-                userId && (
-                  <p className="mt-1 text-[10px] opacity-70">
-                    {msg.isRead
-                      ? "Seen"
-                      : "Sent"}
-                  </p>
-                )}
-            </div>
-          )
-        )}
-
-        {typingUser && (
-          <p className="text-sm text-slate-400">
-            Someone is typing...
-          </p>
-        )}
-
+        {isLoading ? (
+          <p className="text-sm text-slate-400">Loading messages…</p>
+        ) : isError ? (
+          <p className="text-sm text-red-300">Could not load this conversation.</p>
+        ) : messages.length === 0 ? (
+          <p className="py-10 text-center text-sm text-slate-400">No messages yet. Start the conversation below.</p>
+        ) : messages.map((msg) => (
+          <div key={msg.id} className={`max-w-[75%] rounded-xl px-4 py-3 ${msg.senderId === userId ? "ml-auto bg-indigo-600 text-white" : "bg-slate-800 text-slate-100"}`}>
+            <p className="mb-1 text-xs opacity-70">{msg.sender?.name ?? "User"}</p>
+            <p className="whitespace-pre-wrap break-words">{msg.content}</p>
+            {msg.senderId === userId && <p className="mt-1 text-[10px] opacity-70">{msg.isRead ? "Seen" : "Sent"}</p>}
+          </div>
+        ))}
+        {typingUser && <p className="text-sm text-slate-400">Someone is typing…</p>}
         <div ref={bottomRef} />
       </div>
+
       <div className="flex items-center justify-between border-b border-slate-800 p-4">
         <div>
-          <h2 className="text-lg font-semibold text-white">
-            Conversation
-          </h2>
-
+          <h2 className="text-lg font-semibold text-white">Conversation</h2>
           <div className="mt-1 flex items-center gap-2">
-            <div
-              className={`h-2 w-2 rounded-full ${onlineUsers.includes(
-                otherUserId
-              )
-                  ? "bg-green-500"
-                  : "bg-slate-600"
-                }`}
-            />
-
-            <span className="text-sm text-slate-400">
-              {onlineUsers.includes(
-                otherUserId
-              )
-                ? "Online"
-                : "Offline"}
-            </span>
+            <div className={`h-2 w-2 rounded-full ${otherUserId && onlineUsers.includes(otherUserId) ? "bg-green-500" : "bg-slate-600"}`} />
+            <span className="text-sm text-slate-400">{otherUserId && onlineUsers.includes(otherUserId) ? "Online" : "Offline"}</span>
           </div>
         </div>
       </div>
-      <div className="flex gap-3 border-t border-slate-800 p-4">
+
+      {error && <p role="alert" className="px-4 pt-3 text-sm text-red-300">{error}</p>}
+      <form className="flex gap-3 border-t border-slate-800 p-4" onSubmit={(event) => { event.preventDefault(); sendMessage(); }}>
         <input
           value={message}
-          onChange={(e) =>
-            handleTyping(
-              e.target.value
-            )
-          }
-          className="flex-1 rounded-lg border border-slate-700 bg-slate-950 p-3 text-white outline-none focus:border-indigo-500"
-          placeholder="Type a message..."
+          onChange={(event) => handleTyping(event.target.value)}
+          maxLength={5000}
+          className="min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-950 p-3 text-white outline-none focus:border-indigo-500 disabled:opacity-60"
+          placeholder="Type a message…"
+          disabled={sending || !otherUserId}
         />
-
-        <button
-          onClick={sendMessage}
-          className="rounded-lg bg-indigo-600 px-6 py-3 font-medium text-white hover:bg-indigo-500"
-        >
-          Send
+        <button type="submit" disabled={sending || !message.trim() || !otherUserId} className="rounded-lg bg-indigo-600 px-6 py-3 font-medium text-white hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50">
+          {sending ? "Sending…" : "Send"}
         </button>
-      </div>
+      </form>
     </div>
   );
 }
