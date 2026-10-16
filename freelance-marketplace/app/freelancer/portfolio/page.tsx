@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import PortfolioCard from "@/components/profile/PortfolioCard";
 
@@ -89,6 +90,10 @@ export default function PortfolioPage() {
               </p>
 
             </div>
+
+            <Link href="/freelancer/portfolio/new" className="inline-flex w-fit items-center justify-center rounded-xl bg-red-500 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-red-600">
+              + Add project
+            </Link>
 
             {/* Project Count */}
 
