@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ethers } from "ethers";
 import axios from "axios";
-import {getBrowserProvider,switchToHardhatLocal,} from "@/lib/blockchain/provider";
+import { getBrowserProvider, switchToHardhatLocal, getConfiguredChainId } from "@/lib/blockchain/provider";
 import { getEscrowContract } from "@/lib/blockchain/escrow";
 
 export function useEscrow() {
@@ -215,7 +215,7 @@ const createAndFundEscrow = async (
     const signer = await provider.getSigner();
     const signerAddress = await signer.getAddress();
     const network = await provider.getNetwork();
-    const expectedChainId = BigInt(process.env.NEXT_PUBLIC_BLOCKCHAIN_CHAIN_ID || "31337");
+    const expectedChainId = getConfiguredChainId();
 
     if (network.chainId !== expectedChainId) {
         throw new Error(`Wrong network. Expected ${expectedChainId}, got ${network.chainId}`);
