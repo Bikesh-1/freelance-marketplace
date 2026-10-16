@@ -152,7 +152,7 @@ export async function POST(req: NextRequest) {
       const eventFreelancer = String(event.args[1] ?? "").toLowerCase();
       const indexedFreelancer = receipt.logs.find((log) => {
         if (log.address.toLowerCase() !== escrow.contractAddress.toLowerCase()) return false;
-        if (log.topics.length < 3 || log.topics[0].toLowerCase() !== event.topicHash.toLowerCase()) return false;
+        if (log.topics.length < 3 || log.topics[0].toLowerCase() !== ethers.id(event.signature).toLowerCase()) return false;
         return log.topics[2].slice(-40).toLowerCase() === freelancerWallet.slice(2).toLowerCase();
       });
       return eventFreelancer === freelancerWallet.toLowerCase() || Boolean(indexedFreelancer);
