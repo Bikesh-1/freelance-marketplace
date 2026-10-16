@@ -22,7 +22,7 @@ export default function TransactionHistory({
             >
               <div>
                 <p className="font-medium text-white">
-                  {tx.status}
+                  {tx.type ?? tx.status ?? "TRANSACTION"}
                 </p>
 
                 <p className="text-sm text-slate-400">
