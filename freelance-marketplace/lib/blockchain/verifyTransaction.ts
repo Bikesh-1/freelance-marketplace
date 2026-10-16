@@ -8,7 +8,7 @@ export async function verifyTransaction(txHash: string) {
 
   const provider = getServerProvider();
   const network = await provider.getNetwork();
-  const expectedChainId = BigInt(process.env.BLOCKCHAIN_CHAIN_ID || "31337");
+  const expectedChainId = BigInt(process.env.NEXT_PUBLIC_BLOCKCHAIN_CHAIN_ID || "11155111");
 
   if (network.chainId !== expectedChainId) {
     throw new Error(

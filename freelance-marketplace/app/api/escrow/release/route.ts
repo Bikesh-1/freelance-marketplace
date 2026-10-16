@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
     if (!escrow.milestone) {
       return NextResponse.json({ message: "Milestone escrow not found" }, { status: 404 });
     }
-    if (escrow.milestone.status !== "APPROVED" || escrow.status !== "FUNDED") {
+    if (escrow.milestone?.status !== "APPROVED" || escrow.status !== "FUNDED") {
       return NextResponse.json({ message: "Only funded escrows with approved milestones can be released" }, { status: 409 });
     }
     if (escrow.blockchainEscrowId === null || !ethers.isAddress(escrow.contractAddress)) {
