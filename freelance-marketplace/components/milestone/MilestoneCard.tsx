@@ -48,6 +48,7 @@ export default function MilestoneCard({
 
   const [approving, setApproving] = useState(false);
   const [releasing, setReleasing] = useState(false);
+  const [syncingRelease, setSyncingRelease] = useState(false);
 
   const handleFund = async () => {
     try {
@@ -116,6 +117,42 @@ export default function MilestoneCard({
   // -----------------------------------------
   // RELEASE PAYMENT
   // -----------------------------------------
+
+  const handleSyncReleasedPayment = async () => {
+    try {
+      if (!milestone.escrow) {
+        throw new Error("Escrow not found");
+      }
+      if (milestone.escrow.blockchainEscrowId === null) {
+        throw new Error("Blockchain escrow ID not found");
+      }
+
+      const txHash = window.prompt(
+        "Paste the successful release transaction hash. This verifies and syncs the payment; it will not send ETH."
+      )?.trim();
+
+      if (!txHash) return;
+
+      setSyncingRelease(true);
+      const response = await axios.post("/api/escrow/reconcile-release", {
+        escrowId: milestone.escrow.id,
+        txHash,
+      });
+
+      alert(response.data?.message || "Payment verified and synced successfully");
+      window.location.reload();
+    } catch (err) {
+      console.error("Sync released payment error:", err);
+      const message = axios.isAxiosError(err)
+        ? String(err.response?.data?.message || err.message)
+        : err instanceof Error
+          ? err.message
+          : "Failed to sync released payment";
+      alert(message);
+    } finally {
+      setSyncingRelease(false);
+    }
+  };
 
   const handleRelease = async () => {
     try {
@@ -428,6 +465,16 @@ export default function MilestoneCard({
               </>
             )}
           </button>
+
+          {milestone.escrow?.status === "FUNDED" && milestone.escrow.blockchainEscrowId !== null && (
+            <button
+              onClick={handleSyncReleasedPayment}
+              disabled={syncingRelease}
+              className="mt-3 flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-green-200 bg-green-50 px-5 text-sm font-semibold text-green-700 transition hover:bg-green-100 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {syncingRelease ? "Verifying Existing Transaction..." : "Sync Existing Successful Payment"}
+            </button>
+          )}
 
         </div>
       )}
