@@ -184,6 +184,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Milestone has already been processed" }, { status: 409 });
     }
     console.error("Release payment error:", error);
-    return NextResponse.json({ message: "Unable to verify payment release" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Unable to verify payment release";
+    return NextResponse.json({ message }, { status: 500 });
   }
 }
