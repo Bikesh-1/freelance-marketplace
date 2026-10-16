@@ -492,14 +492,36 @@ const createAndFundEscrow = async (
       }
 
       if (prismaEscrowId) {
-        await axios.post("/api/escrow/release",{
+        try {
+          await axios.post("/api/escrow/release", {
             escrowId: prismaEscrowId,
             txHash: receipt.hash,
             amount,
-            fromAddress:await signer.getAddress(),
-            toAddress:freelancerAddress,
+            fromAddress: signerAddress,
+            toAddress: freelancerAddress,
+          });
+        } catch (releaseSyncError: unknown) {
+          // The chain transaction is already confirmed at this point. If the
+          // regular endpoint rejects a legacy event or a stale DB escrow ID,
+          // try the read-only reconciliation endpoint; it verifies the same
+          // transaction and never submits another payment.
+          try {
+            await axios.post("/api/escrow/reconcile-release", {
+              escrowId: prismaEscrowId,
+              txHash: receipt.hash,
+            });
+          } catch (reconcileError: unknown) {
+            const apiMessage = (err: unknown) =>
+              axios.isAxiosError(err)
+                ? String(err.response?.data?.message || err.message)
+                : err instanceof Error
+                  ? err.message
+                  : "Unknown sync error";
+            throw new Error(
+              `On-chain release is CONFIRMED, but database sync failed. Transaction: ${receipt.hash}. Release API: ${apiMessage(releaseSyncError)}. Reconciliation: ${apiMessage(reconcileError)}. Do not release again; retry syncing this transaction.`
+            );
           }
-        );
+        }
       }
 
       return {
