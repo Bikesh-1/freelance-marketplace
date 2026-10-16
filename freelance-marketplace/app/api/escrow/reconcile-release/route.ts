@@ -98,26 +98,18 @@ export async function POST(req: NextRequest) {
     const { receipt, transaction, chainId } = await verifyTransaction(txHash);
     const network = getNetworkLabel(chainId);
 
+    // The transaction may be sent through a wallet/router contract, so its
+    // top-level "to" and calldata need not be the escrow contract/function.
+    // Authenticate the initiating client here; the escrow-specific PaymentReleased
+    // event and on-chain state below are the authoritative proof of this release.
     if (
       !transaction.to ||
-      transaction.to.toLowerCase() !== escrow.contractAddress.toLowerCase() ||
       transaction.from.toLowerCase() !== clientProfile.user.walletAddress.toLowerCase()
     ) {
-      return NextResponse.json({ message: "Transaction contract or sender does not match this escrow" }, { status: 400 });
+      return NextResponse.json({ message: "Transaction sender does not match this client" }, { status: 400 });
     }
 
     const iface = new ethers.Interface(escrowAbi);
-    const parsedTransaction = iface.parseTransaction({
-      data: transaction.data,
-      value: transaction.value,
-    });
-    if (
-      !parsedTransaction ||
-      parsedTransaction.name !== "releasePayment" ||
-      BigInt(parsedTransaction.args[0].toString()) !== BigInt(escrow.blockchainEscrowId)
-    ) {
-      return NextResponse.json({ message: "Transaction does not release this blockchain escrow" }, { status: 400 });
-    }
 
     const releasedEvent = receipt.logs
       .filter((log) => log.address.toLowerCase() === escrow.contractAddress.toLowerCase())
