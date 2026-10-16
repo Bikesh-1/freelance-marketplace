@@ -177,11 +177,27 @@ export async function POST(req: NextRequest) {
       };
     });
 
+    // Mark the job complete only after every milestone's payment has been released.
+    const remainingMilestones = await prisma.milestone.count({
+      where: {
+        jobId: escrow.milestone!.jobId,
+        status: { not: "RELEASED" },
+      },
+    });
+    const jobCompleted = remainingMilestones === 0;
+    if (jobCompleted) {
+      await prisma.job.updateMany({
+        where: { id: escrow.milestone!.jobId, status: { not: "COMPLETED" } },
+        data: { status: "COMPLETED" },
+      });
+    }
+
     return NextResponse.json({
       success: true,
       message: "Payment released successfully",
       escrow: result.escrow,
       milestone: result.milestone,
+      jobCompleted,
     });
   } catch (error) {
     if (error instanceof Error && error.message === "ESCROW_ALREADY_PROCESSED") {
