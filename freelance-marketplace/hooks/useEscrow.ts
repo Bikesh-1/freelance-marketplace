@@ -100,6 +100,7 @@ export function useEscrow() {
       const contract = getEscrowContract(signer);
 
       const escrow = await contract.getEscrow(escrowId);
+      
 
       const clientAddress = escrow[0];
       const freelancerAddress = escrow[1];
@@ -213,14 +214,12 @@ const createAndFundEscrow = async (
     const provider = await switchToHardhatLocal();
     const signer = await provider.getSigner();
     const signerAddress = await signer.getAddress();
-
     const network = await provider.getNetwork();
+    const expectedChainId = BigInt(process.env.NEXT_PUBLIC_BLOCKCHAIN_CHAIN_ID || "31337");
 
-    if (network.chainId !== 11155111n) {
-      throw new Error(
-        `Wrong network. Expected 11155111, got ${network.chainId.toString()}`
-      );
-    }
+    if (network.chainId !== expectedChainId) {
+        throw new Error(`Wrong network. Expected ${expectedChainId}, got ${network.chainId}`);
+      }
 
     // --------------------------------------------------
     // STEP 2: GET ESCROW CONTRACT
@@ -451,53 +450,54 @@ const createAndFundEscrow = async (
   // RELEASE PAYMENT
   // --------------------------------------------------
 
-  const releasePayment = async (
-    escrowId: number,
-    prismaEscrowId: string,
-    freelancerAddress: string,
-    amount: number
-  ) => {
+  const releasePayment = async (escrowId: number,prismaEscrowId: string,freelancerAddress: string,amount: number) => {
     try {
       setLoading(true);
       setError(null);
 
       if (!freelancerAddress) {
-        throw new Error(
-          "Freelancer wallet address is required"
-        );
+        throw new Error("Freelancer wallet address is required");
       }
 
       const provider = getBrowserProvider();
       const signer = await provider.getSigner();
+      const signerAddress = await signer.getAddress();
+      const contract = getEscrowContract(signer);
+      const network = await provider.getNetwork();
+      const expectedChainId = BigInt(process.env.NEXT_PUBLIC_BLOCKCHAIN_CHAIN_ID || "31337");
 
-      const contract =
-        getEscrowContract(signer);
+      if (network.chainId !== expectedChainId) {throw new Error("Please connect to the configured blockchain network.");
+      }
 
-      const tx =
-        await contract.releasePayment(
-          escrowId
-        );
+      const escrow = await contract.getEscrow(escrowId);
+      const clientAddress = escrow[0];
+      const status = Number(escrow[3]);
 
-      const receipt =
-        await tx.wait();
+      if (clientAddress.toLowerCase() !== signerAddress.toLowerCase()) {
+        throw new Error("Only the escrow client can release payment.");
+      }
+
+      if (status !== 1) {
+  throw new Error(
+    `Escrow ${escrowId} is not funded. On-chain status: ${status}`
+  );
+}
+
+
+      const tx =await contract.releasePayment(escrowId);
+      const receipt = await tx.wait();
 
       if (!receipt) {
-        throw new Error(
-          "Payment release transaction failed"
-        );
+        throw new Error("Payment release transaction failed");
       }
 
       if (prismaEscrowId) {
-        await axios.post(
-          "/api/escrow/release",
-          {
+        await axios.post("/api/escrow/release",{
             escrowId: prismaEscrowId,
             txHash: receipt.hash,
             amount,
-            fromAddress:
-              await signer.getAddress(),
-            toAddress:
-              freelancerAddress,
+            fromAddress:await signer.getAddress(),
+            toAddress:freelancerAddress,
           }
         );
       }
@@ -607,36 +607,20 @@ const createAndFundEscrow = async (
   // ADMIN RELEASE
   // --------------------------------------------------
 
-  const adminReleasePayment = async (
-    escrowId: number
-  ) => {
+  const adminReleasePayment = async (escrowId: number) => {
     try {
       setLoading(true);
       setError(null);
 
-      const provider =
-        getBrowserProvider();
-
-      const signer =
-        await provider.getSigner();
-
-      const contract =
-        getEscrowContract(signer);
-
-      const tx =
-        await contract.adminReleasePayment(
-          escrowId
-        );
-
-      const receipt =
-        await tx.wait();
+      const provider = getBrowserProvider();
+      const signer = await provider.getSigner();
+      const contract = getEscrowContract(signer);
+      const tx = await contract.adminReleasePayment(escrowId);
+      const receipt = await tx.wait();
 
       return receipt;
     } catch (err: unknown) {
-      console.error(
-        "Admin release error:",
-        err
-      );
+      console.error("Admin release error:",err);
 
       const errorObj = err as {
         shortMessage?: string;
@@ -658,55 +642,24 @@ const createAndFundEscrow = async (
     }
   };
 
-  // --------------------------------------------------
-  // ADMIN REFUND
-  // --------------------------------------------------
 
-  const adminRefundClient = async (
-    escrowId: number
-  ) => {
+  const adminRefundClient = async (escrowId: number) => {
     try {
       setLoading(true);
       setError(null);
 
-      const provider =
-        getBrowserProvider();
-
-      const signer =
-        await provider.getSigner();
-
-      const contract =
-        getEscrowContract(signer);
-
-      const tx =
-        await contract.adminRefundClient(
-          escrowId
-        );
-
-      const receipt =
-        await tx.wait();
-
+      const provider = getBrowserProvider();
+      const signer = await provider.getSigner();
+      const contract = getEscrowContract(signer);
+      const tx = await contract.adminRefundClient(escrowId);
+      const receipt = await tx.wait();
       return receipt;
+
     } catch (err: unknown) {
-      console.error(
-        "Admin refund error:",
-        err
-      );
-
-      const errorObj = err as {
-        shortMessage?: string;
-        reason?: string;
-        message?: string;
-      };
-
-      const message =
-        errorObj.shortMessage ||
-        errorObj.reason ||
-        errorObj.message ||
-        "Admin refund failed";
-
+      console.error("Admin refund error:",err);
+      const errorObj = err as {shortMessage?: string;reason?: string;message?: string;};
+      const message = errorObj.shortMessage || errorObj.reason || errorObj.message ||"Admin refund failed";
       setError(message);
-
       throw new Error(message);
     } finally {
       setLoading(false);

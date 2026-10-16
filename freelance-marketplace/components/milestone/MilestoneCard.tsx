@@ -49,77 +49,40 @@ export default function MilestoneCard({
   const [approving, setApproving] = useState(false);
   const [releasing, setReleasing] = useState(false);
 
-  // -----------------------------------------
-  // FUND MILESTONE
-  // -----------------------------------------
-
   const handleFund = async () => {
     try {
       if (!freelancerAddress) {
-        throw new Error(
-          "Freelancer wallet address not found"
-        );
+        throw new Error("Freelancer wallet address not found");
       }
 
       if (!ethers.isAddress(freelancerAddress)) {
-        throw new Error(
-          "Invalid freelancer wallet address"
-        );
+        throw new Error("Invalid freelancer wallet address");
       }
 
-      if (
-        !milestone.amount ||
-        milestone.amount <= 0
-      ) {
-        throw new Error(
-          "Invalid milestone amount"
-        );
+      if (!milestone.amount ||milestone.amount <= 0) {
+        throw new Error("Invalid milestone amount");
       }
 
-      const result = await createAndFundEscrow(
-        freelancerAddress,
-        milestone.amount.toString()
-      );
+      const result = await createAndFundEscrow(freelancerAddress,milestone.amount.toString());
 
-      await axios.post(
-        `/api/milestone/${milestone.id}/fund`,
-        {
-          contractAddress:
-            process.env
-              .NEXT_PUBLIC_ESCROW_CONTRACT_ADDRESS,
-
-          transactionHash:
-            result.receipt.hash,
-
+      await axios.post(`/api/milestone/${milestone.id}/fund`,{
+          contractAddress:process.env.NEXT_PUBLIC_ESCROW_CONTRACT_ADDRESS,
+          transactionHash:result.receipt.hash,
           amount: milestone.amount,
-          network: "hardhat-local",
-          blockchainEscrowId:
-            result.escrowIndex,
+          network: "sepolia",
+          blockchainEscrowId:result.escrowIndex,
         }
       );
 
-      alert(
-        `Milestone funded successfully.\nBlockchain Escrow ID: ${result.escrowIndex}`
-      );
-
+      alert(`Milestone funded successfully.\nBlockchain Escrow ID: ${result.escrowIndex}`);
       window.location.reload();
     } catch (err) {
-      console.error(
-        "Fund milestone error:",
-        err
-      );
-
-      alert(
-        err instanceof Error
-          ? err.message
-          : "Failed to fund milestone"
-      );
+      console.error("Fund milestone error:",err);
+      alert(err instanceof Error? err.message: "Failed to fund milestone");
     }
   };
 
-  // -----------------------------------------
-  // APPROVE MILESTONE
-  // -----------------------------------------
+
 
   const handleApprove = async () => {
     try {
@@ -601,11 +564,8 @@ export default function MilestoneCard({
               <p className="mt-1 break-words text-xs leading-5 text-red-600">
                 {error}
               </p>
-
             </div>
-
           </div>
-
         </div>
       )}
 
