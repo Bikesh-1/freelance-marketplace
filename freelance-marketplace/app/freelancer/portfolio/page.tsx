@@ -3,9 +3,16 @@
 import Link from "next/link";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import PortfolioCard from "@/components/profile/PortfolioCard";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
 export default function PortfolioPage() {
   const { data: projects, isLoading } = usePortfolio();
+  const queryClient = useQueryClient();
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => axios.delete("/api/freelancer/portfolio", { params: { id } }),
+    onSuccess: async () => queryClient.invalidateQueries({ queryKey: ["portfolio"] }),
+  });
 
   /* ============================================================
      LOADING
@@ -169,6 +176,20 @@ export default function PortfolioPage() {
                   <PortfolioCard
                     project={project}
                   />
+                  <div className="flex justify-end px-4 pb-4">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (window.confirm(`Delete "${project.title}" from your portfolio?`)) {
+                          deleteMutation.mutate(project.id);
+                        }
+                      }}
+                      disabled={deleteMutation.isPending}
+                      className="rounded-lg border border-red-200 px-3 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-50 disabled:opacity-50"
+                    >
+                      {deleteMutation.isPending ? "Deleting…" : "Delete project"}
+                    </button>
+                  </div>
 
                 </div>
 
