@@ -7,6 +7,12 @@ import { prisma } from "@/lib/prisma";
 import { verifyTransaction } from "@/lib/blockchain/verifyTransaction";
 import { escrowAbi } from "@/lib/blockchain/escrowAbi";
 
+function getNetworkLabel(chainId: bigint): string {
+  if (chainId === 11155111n) return "sepolia";
+  if (chainId === 31337n) return "hardhat-local";
+  return `chain-${chainId.toString()}`;
+}
+
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -88,7 +94,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Client or freelancer wallet does not match this job" }, { status: 400 });
     }
 
-    const { receipt, transaction } = await verifyTransaction(txHash);
+    const { receipt, transaction, chainId } = await verifyTransaction(txHash);
+    const network = getNetworkLabel(chainId);
     if (!transaction.to || transaction.to.toLowerCase() !== escrow.contractAddress.toLowerCase() ||
         transaction.from.toLowerCase() !== clientProfile.user.walletAddress.toLowerCase()) {
       return NextResponse.json({ message: "Transaction contract or sender does not match this escrow" }, { status: 400 });
@@ -130,7 +137,7 @@ export async function POST(req: NextRequest) {
     const result = await prisma.$transaction(async (tx) => {
       const escrowChanged = await tx.escrow.updateMany({
         where: { id: escrow.id, status: "FUNDED" },
-        data: { transactionHash: txHash, status: "RELEASED" },
+        data: { transactionHash: txHash, status: "RELEASED", network },
       });
       if (escrowChanged.count !== 1) throw new Error("ESCROW_ALREADY_PROCESSED");
 
@@ -148,7 +155,7 @@ export async function POST(req: NextRequest) {
           amount: eventAmount,
           fromAddress: transaction.from,
           toAddress: freelancerWallet,
-          network: escrow.network,
+          network,
         },
       });
       await tx.transaction.create({
@@ -158,7 +165,7 @@ export async function POST(req: NextRequest) {
           amount: eventAmount,
           fromAddress: transaction.from,
           toAddress: freelancerWallet,
-          network: escrow.network,
+          network,
           status: "CONFIRMED",
           blockNumber: receipt.blockNumber,
         },
