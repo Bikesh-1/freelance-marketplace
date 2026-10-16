@@ -165,10 +165,62 @@ export async function POST(req: NextRequest) {
     if (blockchainEscrowId > BigInt(Number.MAX_SAFE_INTEGER)) {
       return NextResponse.json({ message: "The on-chain escrow ID is outside the supported range" }, { status: 400 });
     }
+    let repairBlockchainEscrowId = false;
     if (blockchainEscrowId !== BigInt(escrow.blockchainEscrowId!)) {
-      return NextResponse.json({
-        message: `This transaction released on-chain escrow ${blockchainEscrowId.toString()}, but this database record is linked to escrow ${escrow.blockchainEscrowId}. Nothing was changed. Do not reuse this transaction for this escrow.`,
-      }, { status: 409 });
+      // Repair a stale database ID only when the original funding transaction
+      // independently proves that this same on-chain escrow was funded.
+      // Never attach a release from a different escrow to this milestone.
+      if (!escrow.transactionHash) {
+        return NextResponse.json({
+          message: `Release transaction belongs to on-chain escrow ${blockchainEscrowId.toString()}, but this database record points to escrow ${escrow.blockchainEscrowId} and has no funding transaction to verify. Nothing was changed.`,
+        }, { status: 409 });
+      }
+
+      try {
+        const funding = await verifyTransaction(escrow.transactionHash);
+        const fundingTx = funding.transaction;
+        const fundingIface = new ethers.Interface(escrowAbi);
+        let parsedFunding: ethers.TransactionDescription | null = null;
+        try {
+          parsedFunding = fundingIface.parseTransaction({
+            data: fundingTx.data,
+            value: fundingTx.value,
+          });
+        } catch {
+          parsedFunding = null;
+        }
+
+        const fundedEvent = funding.receipt.logs
+          .filter((log) => log.address.toLowerCase() === escrow.contractAddress.toLowerCase())
+          .map((log) => {
+            try { return fundingIface.parseLog({ topics: [...log.topics], data: log.data }); }
+            catch { return null; }
+          })
+          .find((event) => event?.name === "EscrowFunded" &&
+            BigInt(event.args[0].toString()) === blockchainEscrowId &&
+            Math.abs(Number(ethers.formatEther(event.args[1])) - escrow.amount) <= 0.000001);
+
+        const fundingMatchesReleasedEscrow =
+          funding.chainId === chainId &&
+          !!fundingTx.to &&
+          fundingTx.to.toLowerCase() === escrow.contractAddress.toLowerCase() &&
+          fundingTx.from.toLowerCase() === clientProfile.user.walletAddress.toLowerCase() &&
+          parsedFunding?.name === "fundEscrow" &&
+          BigInt(parsedFunding.args[0].toString()) === blockchainEscrowId &&
+          !!fundedEvent;
+
+        if (!fundingMatchesReleasedEscrow) {
+          return NextResponse.json({
+            message: `Release transaction belongs to on-chain escrow ${blockchainEscrowId.toString()}, but the stored funding transaction does not prove that escrow was funded for this milestone (database ID: ${escrow.blockchainEscrowId}). Nothing was changed. Do not release another payment until the funding and release transactions are checked.`,
+          }, { status: 409 });
+        }
+        repairBlockchainEscrowId = true;
+      } catch (error) {
+        console.error("Could not verify stored funding transaction during reconciliation:", error);
+        return NextResponse.json({
+          message: "The release escrow ID differs from the database. The original funding transaction could not be verified, so nothing was changed.",
+        }, { status: 409 });
+      }
     }
 
     let releaseAmountWei: bigint;
@@ -205,7 +257,12 @@ export async function POST(req: NextRequest) {
     const result = await prisma.$transaction(async (tx) => {
       const escrowChanged = await tx.escrow.updateMany({
         where: { id: escrow.id, status: { in: ["FUNDED", "RELEASED"] } },
-        data: { transactionHash: txHash, status: "RELEASED", network },
+        data: {
+          transactionHash: txHash,
+          status: "RELEASED",
+          network,
+          ...(repairBlockchainEscrowId ? { blockchainEscrowId: Number(blockchainEscrowId) } : {}),
+        },
       });
       if (escrowChanged.count !== 1) throw new Error("ESCROW_STATUS_CHANGED");
 
