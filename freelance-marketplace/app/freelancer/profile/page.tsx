@@ -8,9 +8,15 @@ export default function FreelancerProfilePage() {
 
   const [form, setForm] = useState({
     fullName: "",
+    title: "",
     bio: "",
     country: "",
+    location: "",
+    github: "",
+    linkedin: "",
+    portfolio: "",
     hourlyRate: 10,
+    yearsOfExperience: 0,
     experienceLevel: "BEGINNER",
   });
 
@@ -22,7 +28,8 @@ export default function FreelancerProfilePage() {
 
       window.location.href = "/freelancer/dashboard";
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      alert(axios.isAxiosError(error) ? error.response?.data?.message || "Could not save profile" : "Could not save profile");
     } finally {
       setLoading(false);
     }
@@ -195,6 +202,38 @@ export default function FreelancerProfilePage() {
                 className="h-12 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 text-sm text-neutral-900 outline-none transition placeholder:text-neutral-400 focus:border-red-400 focus:bg-white focus:ring-2 focus:ring-red-500/10 disabled:cursor-not-allowed disabled:opacity-60"
               />
 
+            </div>
+
+            {/* Additional schema-backed profile fields */}
+            <div>
+              <label htmlFor="title" className="mb-2 block text-xs font-semibold text-neutral-800">Professional Title</label>
+              <input id="title" type="text" maxLength={150} required placeholder="e.g. Full-stack developer" value={form.title} disabled={loading} onChange={(e) => setForm({ ...form, title: e.target.value })} className="h-12 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 text-sm text-neutral-900 outline-none focus:border-red-400 focus:bg-white" />
+            </div>
+
+            <div>
+              <label htmlFor="location" className="mb-2 block text-xs font-semibold text-neutral-800">City / Location</label>
+              <input id="location" type="text" maxLength={150} placeholder="e.g. Bengaluru, India" value={form.location} disabled={loading} onChange={(e) => setForm({ ...form, location: e.target.value })} className="h-12 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 text-sm text-neutral-900 outline-none focus:border-red-400 focus:bg-white" />
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label htmlFor="github" className="mb-2 block text-xs font-semibold text-neutral-800">GitHub URL</label>
+                <input id="github" type="url" placeholder="https://github.com/username" value={form.github} disabled={loading} onChange={(e) => setForm({ ...form, github: e.target.value })} className="h-12 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 text-sm text-neutral-900 outline-none focus:border-red-400 focus:bg-white" />
+              </div>
+              <div>
+                <label htmlFor="linkedin" className="mb-2 block text-xs font-semibold text-neutral-800">LinkedIn URL</label>
+                <input id="linkedin" type="url" placeholder="https://linkedin.com/in/username" value={form.linkedin} disabled={loading} onChange={(e) => setForm({ ...form, linkedin: e.target.value })} className="h-12 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 text-sm text-neutral-900 outline-none focus:border-red-400 focus:bg-white" />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="portfolio" className="mb-2 block text-xs font-semibold text-neutral-800">Portfolio URL</label>
+              <input id="portfolio" type="url" placeholder="https://your-portfolio.example" value={form.portfolio} disabled={loading} onChange={(e) => setForm({ ...form, portfolio: e.target.value })} className="h-12 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 text-sm text-neutral-900 outline-none focus:border-red-400 focus:bg-white" />
+            </div>
+
+            <div>
+              <label htmlFor="yearsOfExperience" className="mb-2 block text-xs font-semibold text-neutral-800">Years of Experience</label>
+              <input id="yearsOfExperience" type="number" min="0" max="80" step="1" value={form.yearsOfExperience} disabled={loading} onChange={(e) => setForm({ ...form, yearsOfExperience: Number(e.target.value) || 0 })} className="h-12 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 text-sm text-neutral-900 outline-none focus:border-red-400 focus:bg-white" />
             </div>
 
             {/* =================================================
