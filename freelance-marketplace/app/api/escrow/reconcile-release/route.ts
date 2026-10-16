@@ -165,63 +165,10 @@ export async function POST(req: NextRequest) {
     if (blockchainEscrowId > BigInt(Number.MAX_SAFE_INTEGER)) {
       return NextResponse.json({ message: "The on-chain escrow ID is outside the supported range" }, { status: 400 });
     }
-    let repairBlockchainEscrowId = false;
-    if (blockchainEscrowId !== BigInt(escrow.blockchainEscrowId!)) {
-      // Repair a stale database ID only when the original funding transaction
-      // independently proves that this same on-chain escrow was funded.
-      // Never attach a release from a different escrow to this milestone.
-      if (!escrow.transactionHash) {
-        return NextResponse.json({
-          message: `Release transaction belongs to on-chain escrow ${blockchainEscrowId.toString()}, but this database record points to escrow ${escrow.blockchainEscrowId} and has no funding transaction to verify. Nothing was changed.`,
-        }, { status: 409 });
-      }
-
-      try {
-        const funding = await verifyTransaction(escrow.transactionHash);
-        const fundingTx = funding.transaction;
-        const fundingIface = new ethers.Interface(escrowAbi);
-        let parsedFunding: ethers.TransactionDescription | null = null;
-        try {
-          parsedFunding = fundingIface.parseTransaction({
-            data: fundingTx.data,
-            value: fundingTx.value,
-          });
-        } catch {
-          parsedFunding = null;
-        }
-
-        const fundedEvent = funding.receipt.logs
-          .filter((log) => log.address.toLowerCase() === escrow.contractAddress.toLowerCase())
-          .map((log) => {
-            try { return fundingIface.parseLog({ topics: [...log.topics], data: log.data }); }
-            catch { return null; }
-          })
-          .find((event) => event?.name === "EscrowFunded" &&
-            BigInt(event.args[0].toString()) === blockchainEscrowId &&
-            Math.abs(Number(ethers.formatEther(event.args[1])) - escrow.amount) <= 0.000001);
-
-        const fundingMatchesReleasedEscrow =
-          funding.chainId === chainId &&
-          !!fundingTx.to &&
-          fundingTx.to.toLowerCase() === escrow.contractAddress.toLowerCase() &&
-          fundingTx.from.toLowerCase() === clientProfile.user.walletAddress.toLowerCase() &&
-          parsedFunding?.name === "fundEscrow" &&
-          BigInt(parsedFunding.args[0].toString()) === blockchainEscrowId &&
-          !!fundedEvent;
-
-        if (!fundingMatchesReleasedEscrow) {
-          return NextResponse.json({
-            message: `Release transaction belongs to on-chain escrow ${blockchainEscrowId.toString()}, but the stored funding transaction does not prove that escrow was funded for this milestone (database ID: ${escrow.blockchainEscrowId}). Nothing was changed. Do not release another payment until the funding and release transactions are checked.`,
-          }, { status: 409 });
-        }
-        repairBlockchainEscrowId = true;
-      } catch (error) {
-        console.error("Could not verify stored funding transaction during reconciliation:", error);
-        return NextResponse.json({
-          message: "The release escrow ID differs from the database. The original funding transaction could not be verified, so nothing was changed.",
-        }, { status: 409 });
-      }
-    }
+    // The release event identifies the exact on-chain escrow. If its ID differs
+    // from the database, defer repair until the contract's current escrow record
+    // independently matches this client, freelancer, amount, and released status.
+    const repairBlockchainEscrowId = blockchainEscrowId !== BigInt(escrow.blockchainEscrowId!);
 
     let releaseAmountWei: bigint;
     if (matchedRelease.legacy) {
@@ -249,9 +196,30 @@ export async function POST(req: NextRequest) {
     if (
       chainEscrow[0].toLowerCase() !== clientProfile.user.walletAddress.toLowerCase() ||
       chainEscrow[1].toLowerCase() !== freelancerWallet.toLowerCase() ||
+      Math.abs(Number(ethers.formatEther(chainEscrow[2])) - escrow.amount) > 0.000001 ||
       Number(chainEscrow[3]) !== 2
     ) {
-      return NextResponse.json({ message: "On-chain escrow parties or released status do not match" }, { status: 409 });
+      return NextResponse.json({ message: "On-chain escrow client, freelancer, amount, or released status does not match this milestone" }, { status: 409 });
+    }
+
+    // A stale database ID can be repaired from the release transaction plus
+    // the contract's authoritative released escrow state. Prevent attaching the
+    // same on-chain escrow to a second database record.
+    if (repairBlockchainEscrowId) {
+      const conflictingEscrow = await prisma.escrow.findFirst({
+        where: {
+          id: { not: escrow.id },
+          contractAddress: escrow.contractAddress,
+          blockchainEscrowId: Number(blockchainEscrowId),
+          network,
+        },
+        select: { id: true },
+      });
+      if (conflictingEscrow) {
+        return NextResponse.json({
+          message: "This on-chain escrow is already linked to another database record. Nothing was changed.",
+        }, { status: 409 });
+      }
     }
 
     const result = await prisma.$transaction(async (tx) => {
