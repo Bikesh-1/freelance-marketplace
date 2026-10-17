@@ -130,8 +130,7 @@ export default function ChatRoom({ jobId }: { jobId: string }) {
         return { ...old, messages: [...old.messages, saved] };
       });
       setMessage("");
-      // Socket delivery is an enhancement; HTTP persistence is the source of truth.
-      if (socket.connected) socket.emit("send-message", { jobId, content: trimmed });
+      // The API stores the message; polling syncs both participants without requiring cross-origin socket cookies.
     }).catch((sendError) => {
       const messageText = axios.isAxiosError(sendError)
         ? String(sendError.response?.data?.message || sendError.message)
