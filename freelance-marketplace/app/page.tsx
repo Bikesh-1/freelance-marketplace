@@ -1,36 +1,30 @@
-import Navbar from "@/components/layout/navbar"
-import HersoSection from "@/components/GSAP/HeroSection";
+import Navbar from "@/components/layout/navbar";
+import HeroSection from "@/components/GSAP/HeroSection";
 import InfinityCard from "@/components/GSAP/InfintyCard";
+
 export default function Home() {
   return (
-    <>
-      <div className="min-h-screen w-full bg-white relative text-gray-800 overflow-x-hidden">
-
-        <Navbar />
-        <main className="min-h-screen bg-[#F7F4EE] text-black uppercase flex items-center justify-center">
-          <section className="mx-auto flex max-w-7xl flex-col items-center justify-center px-6 py-24 text-center">
-            <h1 className="font-oswald text-md -rotate-3 font-bold">
-              Freelance Marketplace
-            </h1>
-            <h1 className="font-oswald font-bold text-sm text-gray-400">Based on</h1>
-            <div className="p-4">
-                <HersoSection/>
-            </div>
-            
-            <h1 className="font-bold font-oswald text-xs">
-  Work Submitted by Freelancer
-</h1>
-                <div>
-<InfinityCard/>
-                </div>
-                
-            
-            
-          </section>
-        </main>
-      </div>
-
-
-    </>
-  )
+    <div className="relative min-h-screen w-full overflow-x-clip bg-white text-gray-800">
+      <Navbar />
+      <main className="flex min-h-screen items-center justify-center bg-[#F7F4EE] px-4 pb-8 pt-24 text-black sm:px-6 sm:pt-28 lg:px-8">
+        <section className="mx-auto flex w-full max-w-7xl flex-col items-center justify-center py-10 text-center sm:py-14 lg:py-20">
+          <h1 className="font-oswald text-sm font-bold uppercase tracking-wide sm:text-base md:text-lg">
+            Freelance Marketplace
+          </h1>
+          <p className="mt-3 font-oswald text-xs font-bold uppercase text-gray-400 sm:text-sm">
+            Based on
+          </p>
+          <div className="my-5 w-full min-w-0 sm:my-8">
+            <HeroSection />
+          </div>
+          <h2 className="mb-1 font-oswald text-xs font-bold uppercase tracking-wide sm:text-sm">
+            Work Submitted by Freelancer
+          </h2>
+          <div className="w-full min-w-0">
+            <InfinityCard />
+          </div>
+        </section>
+      </main>
+    </div>
+  );
 }
