@@ -143,49 +143,76 @@ export default function ChatRoom({ jobId }: { jobId: string }) {
   };
 
   return (
-    <div className="flex h-[600px] flex-col rounded-2xl border border-slate-800 bg-slate-900">
-      <div className="flex-1 space-y-3 overflow-y-auto p-4">
-        {isLoading ? (
-          <p className="text-sm text-slate-400">Loading messages…</p>
-        ) : isError ? (
-          <p className="text-sm text-red-300">Could not load this conversation.</p>
-        ) : messages.length === 0 ? (
-          <p className="py-10 text-center text-sm text-slate-400">No messages yet. Start the conversation below.</p>
-        ) : messages.map((msg) => (
-          <div key={msg.id} className={`max-w-[75%] rounded-xl px-4 py-3 ${msg.senderId === userId ? "ml-auto bg-indigo-600 text-white" : "bg-slate-800 text-slate-100"}`}>
-            <p className="mb-1 text-xs opacity-70">{msg.sender?.name ?? "User"}</p>
-            <p className="whitespace-pre-wrap break-words">{msg.content}</p>
-            {msg.senderId === userId && <p className="mt-1 text-[10px] opacity-70">{msg.isRead ? "Seen" : "Sent"}</p>}
-          </div>
-        ))}
-        {typingUser && <p className="text-sm text-slate-400">Someone is typing…</p>}
-        <div ref={bottomRef} />
-      </div>
-
-      <div className="flex items-center justify-between border-b border-slate-800 p-4">
+    <section className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
+      <header className="flex flex-col gap-3 border-b border-neutral-100 bg-neutral-950 p-5 text-white sm:flex-row sm:items-center sm:justify-between sm:px-6">
         <div>
-          <h2 className="text-lg font-semibold text-white">Conversation</h2>
-          <div className="mt-1 flex items-center gap-2">
-            <div className={`h-2 w-2 rounded-full ${otherUserId && onlineUsers.includes(otherUserId) ? "bg-green-500" : "bg-slate-600"}`} />
-            <span className="text-sm text-slate-400">{otherUserId && onlineUsers.includes(otherUserId) ? "Online" : "Offline"}</span>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-neutral-500">Project workspace</p>
+          <h2 className="mt-1 text-lg font-bold">Conversation</h2>
+          <div className="mt-2 flex items-center gap-2">
+            <span className={`h-2 w-2 rounded-full ${otherUserId && onlineUsers.includes(otherUserId) ? "bg-emerald-400" : "bg-neutral-500"}`} />
+            <span className="text-xs text-neutral-400">{otherUserId && onlineUsers.includes(otherUserId) ? "Online" : "Chat available"}</span>
           </div>
         </div>
-      </div>
+        <span className="w-fit rounded-full border border-white/15 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-neutral-300">
+          {messages.length} {messages.length === 1 ? "message" : "messages"}
+        </span>
+      </header>
 
-      {error && <p role="alert" className="px-4 pt-3 text-sm text-red-300">{error}</p>}
-      <form className="flex gap-3 border-t border-slate-800 p-4" onSubmit={(event) => { event.preventDefault(); sendMessage(); }}>
-        <input
-          value={message}
-          onChange={(event) => handleTyping(event.target.value)}
-          maxLength={5000}
-          className="min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-950 p-3 text-white outline-none focus:border-indigo-500 disabled:opacity-60"
-          placeholder="Type a message…"
-          disabled={sending || !otherUserId}
-        />
-        <button type="submit" disabled={sending || !message.trim() || !otherUserId} className="rounded-lg bg-indigo-600 px-6 py-3 font-medium text-white hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50">
-          {sending ? "Sending…" : "Send"}
-        </button>
-      </form>
-    </div>
+      <div className="flex h-[min(62vh,620px)] min-h-[360px] flex-col bg-[#fbfbfc]">
+        <div className="flex-1 space-y-4 overflow-y-auto p-4 sm:p-6">
+          {isLoading ? (
+            <div className="flex h-full items-center justify-center">
+              <p className="text-sm text-neutral-400">Loading conversation…</p>
+            </div>
+          ) : isError ? (
+            <div role="alert" className="rounded-xl border border-red-100 bg-red-50 p-4 text-sm text-red-600">
+              Could not load this conversation. Please refresh and try again.
+            </div>
+          ) : messages.length === 0 ? (
+            <div className="flex h-full flex-col items-center justify-center text-center">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-neutral-200 bg-white text-2xl text-red-500 shadow-sm">✉</div>
+              <p className="mt-4 text-sm font-semibold text-neutral-800">Start the conversation</p>
+              <p className="mt-1 max-w-xs text-xs leading-5 text-neutral-500">Send a message to discuss project details, milestones, or updates.</p>
+            </div>
+          ) : messages.map((msg) => {
+            const ownMessage = msg.senderId === userId;
+            return (
+              <div key={msg.id} className={`flex ${ownMessage ? "justify-end" : "justify-start"}`}>
+                <div className={`max-w-[88%] rounded-2xl px-4 py-3 shadow-sm sm:max-w-[75%] ${ownMessage ? "rounded-br-md bg-red-500 text-white" : "rounded-bl-md border border-neutral-200 bg-white text-neutral-800"}`}>
+                  <p className={`mb-1 text-[10px] font-semibold uppercase tracking-wide ${ownMessage ? "text-red-100" : "text-neutral-400"}`}>
+                    {ownMessage ? "You" : (msg.sender?.name ?? "Client")}
+                  </p>
+                  <p className="whitespace-pre-wrap break-words text-sm leading-6">{msg.content}</p>
+                  <p className={`mt-2 text-right text-[10px] ${ownMessage ? "text-red-100" : "text-neutral-400"}`}>
+                    {ownMessage ? (msg.isRead ? "Seen" : "Sent") : ""}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+          {typingUser && <p className="text-xs text-neutral-400">Someone is typing…</p>}
+          <div ref={bottomRef} />
+        </div>
+
+        {error && <p role="alert" className="mx-4 mb-2 rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-sm text-red-600 sm:mx-6">{error}</p>}
+        <form className="border-t border-neutral-200 bg-white p-3 sm:p-4" onSubmit={(event) => { event.preventDefault(); sendMessage(); }}>
+          <div className="flex items-end gap-2 sm:gap-3">
+            <input
+              value={message}
+              onChange={(event) => handleTyping(event.target.value)}
+              maxLength={5000}
+              className="min-w-0 flex-1 rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 outline-none transition placeholder:text-neutral-400 focus:border-red-400 focus:bg-white focus:ring-2 focus:ring-red-100 disabled:opacity-60"
+              placeholder={otherUserId ? "Write your message…" : "No assigned participant yet"}
+              disabled={sending || !otherUserId}
+            />
+            <button type="submit" disabled={sending || !message.trim() || !otherUserId} className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-red-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-red-400 disabled:cursor-not-allowed disabled:opacity-50 sm:px-5">
+              {sending ? "Sending…" : "Send"}
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+          <p className="mt-2 px-1 text-[10px] text-neutral-400">Keep project communication clear and professional.</p>
+        </form>
+      </div>
+    </section>
   );
 }
