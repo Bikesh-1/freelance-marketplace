@@ -18,7 +18,9 @@ export type JobMessagesResponse = {
 };
 
 export async function getMessages(jobId: string): Promise<JobMessagesResponse> {
-  const { data } = await axios.get<JobMessagesResponse>(`/api/messages/${encodeURIComponent(jobId)}`);
+  const { data } = await axios.get<JobMessagesResponse>(`/api/messages/${encodeURIComponent(jobId)}`, {
+    headers: { "Cache-Control": "no-cache", Pragma: "no-cache" },
+  });
   return data;
 }
 
