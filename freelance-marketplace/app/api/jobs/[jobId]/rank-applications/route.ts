@@ -95,6 +95,9 @@ export async function POST(
       );
     }
 
+    // The AI service accepts at most 300 candidates per request.
+    const candidatesToRank = applications.slice(0, 300);
+
     const payload = {
       project: {
         id: job.id,
@@ -106,7 +109,7 @@ export async function POST(
             : job.skills.map((item) => item.skill.name),
         budget: job.budget,
       },
-      freelancers: applications.map(({ freelancer }) => {
+      freelancers: candidatesToRank.map(({ freelancer }) => {
         const ratings = freelancer.reviews.map((review) => review.rating);
         const reviewAverage =
           ratings.length > 0
@@ -129,7 +132,7 @@ export async function POST(
           average_rating: reviewAverage,
         };
       }),
-      top_k: Math.min(applications.length, 50),
+      top_k: Math.min(candidatesToRank.length, 50),
     };
 
     let serviceResponse: Response;
@@ -179,7 +182,7 @@ export async function POST(
     }
 
     const validFreelancerIds = new Set(
-      applications.map((application) => application.freelancerId)
+      candidatesToRank.map((application) => application.freelancerId)
     );
     const validRecommendations = recommendations.filter(
       (item) =>
@@ -206,6 +209,8 @@ export async function POST(
     return NextResponse.json({
       message: "Freelancers ranked successfully.",
       count: validRecommendations.length,
+      evaluatedCount: candidatesToRank.length,
+      truncated: applications.length > candidatesToRank.length,
       recommendations: validRecommendations,
     });
   } catch (error) {
