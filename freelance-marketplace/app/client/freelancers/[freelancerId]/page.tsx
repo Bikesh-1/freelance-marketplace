@@ -46,10 +46,10 @@ export default async function ClientFreelancerProfilePage({
       <main className="min-h-screen bg-[#f7f7f8] px-4 py-8 text-neutral-900 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-5xl">
           <Link
-            href="javascript:history.back()"
+            href="/client/jobs"
             className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-neutral-600 transition hover:text-red-500"
           >
-            <span aria-hidden="true">←</span> Back
+            <span aria-hidden="true">←</span> Back to My Jobs
           </Link>
 
           <section className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8">
