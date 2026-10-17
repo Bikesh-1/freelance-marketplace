@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
 type Application = {
@@ -26,6 +27,7 @@ export default function ApplicationCard({
   jobId: string;
 }) {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const [loading, setLoading] = useState(false);
 
@@ -54,9 +56,9 @@ export default function ApplicationCard({
         );
       }
 
-      alert("Freelancer accepted successfully");
-
+      await queryClient.invalidateQueries({ queryKey: ["applications", jobId] });
       router.refresh();
+      alert("Freelancer accepted successfully");
     } catch (error: unknown) {
       const message =
         error instanceof Error
@@ -94,9 +96,9 @@ export default function ApplicationCard({
         );
       }
 
-      alert("Application rejected");
-
+      await queryClient.invalidateQueries({ queryKey: ["applications", jobId] });
       router.refresh();
+      alert("Application rejected");
     } catch (error: unknown) {
       const message =
         error instanceof Error
