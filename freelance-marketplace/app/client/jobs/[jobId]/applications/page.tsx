@@ -38,7 +38,11 @@ export default function ApplicationsPage() {
       }
 
       await queryClient.invalidateQueries({ queryKey: ["applications", jobId] });
-      setRankMessage(`AI ranked ${result.count} freelancer(s). Applications are sorted by match score.`);
+      setRankMessage(
+        `AI scored the top ${result.count} freelancer(s) from ${result.evaluatedCount} evaluated application(s). Applications are sorted by match score.${
+          result.truncated ? " The service limit means only the first 300 applications were evaluated." : ""
+        }`
+      );
     } catch (error) {
       setRankError(true);
       setRankMessage(error instanceof Error ? error.message : "AI ranking failed. Please try again.");
