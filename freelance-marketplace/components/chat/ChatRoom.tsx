@@ -126,7 +126,11 @@ export default function ChatRoom({ jobId }: { jobId: string }) {
         return { ...old, messages: [...old.messages, saved] };
       });
       setMessage("");
-      // The API stores the message; polling syncs both participants without requiring cross-origin socket cookies.
+      // The API has already persisted this message. Ask the authenticated socket server
+      // to broadcast that existing record to both participants (without creating a duplicate).
+      if (socket.connected) {
+        socket.emit("message-created", { jobId, messageId: saved.id });
+      }
     }).catch((sendError) => {
       const messageText = axios.isAxiosError(sendError)
         ? String(sendError.response?.data?.message || sendError.message)
