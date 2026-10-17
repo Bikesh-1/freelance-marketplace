@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 
 import Navbar from "@/components/layout/navbar";
 import { useApplications } from "@/hooks/useApplications";
@@ -15,6 +17,35 @@ export default function ApplicationsPage() {
     data: applications,
     isLoading,
   } = useApplications(jobId);
+  const queryClient = useQueryClient();
+  const [ranking, setRanking] = useState(false);
+  const [rankMessage, setRankMessage] = useState("");
+  const [rankError, setRankError] = useState(false);
+
+  const handleRankApplications = async () => {
+    setRanking(true);
+    setRankMessage("");
+    setRankError(false);
+
+    try {
+      const response = await fetch(`/api/jobs/${jobId}/rank-applications`, {
+        method: "POST",
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "AI ranking failed.");
+      }
+
+      await queryClient.invalidateQueries({ queryKey: ["applications", jobId] });
+      setRankMessage(`AI ranked ${result.count} freelancer(s). Applications are sorted by match score.`);
+    } catch (error) {
+      setRankError(true);
+      setRankMessage(error instanceof Error ? error.message : "AI ranking failed. Please try again.");
+    } finally {
+      setRanking(false);
+    }
+  };
 
   return (
     <>
@@ -53,17 +84,47 @@ export default function ApplicationsPage() {
 
               </div>
 
-              <Link
-                href="/client/jobs"
-                className="inline-flex w-fit items-center gap-2 rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-xs font-semibold text-neutral-700 shadow-sm transition hover:border-neutral-300 hover:text-red-500"
-              >
-                <span>←</span>
-                Back to My Jobs
-              </Link>
+              <div className="flex flex-wrap items-center gap-3">
+                <Link
+                  href="/client/jobs"
+                  className="inline-flex w-fit items-center gap-2 rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-xs font-semibold text-neutral-700 shadow-sm transition hover:border-neutral-300 hover:text-red-500"
+                >
+                  <span>←</span>
+                  Back to My Jobs
+                </Link>
+                <button
+                  type="button"
+                  onClick={handleRankApplications}
+                  disabled={ranking || isLoading || !applications?.length}
+                  className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-neutral-950 px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {ranking ? (
+                    <>
+                      <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                      Ranking...
+                    </>
+                  ) : (
+                    <>✦ Rank with AI</>
+                  )}
+                </button>
+              </div>
 
             </div>
 
           </section>
+
+          {rankMessage && (
+            <div
+              role="status"
+              className={`mb-5 rounded-xl border px-4 py-3 text-sm ${
+                rankError
+                  ? "border-red-200 bg-red-50 text-red-700"
+                  : "border-green-200 bg-green-50 text-green-700"
+              }`}
+            >
+              {rankMessage}
+            </div>
+          )}
 
           {/* =====================================================
               APPLICATION SUMMARY
@@ -186,7 +247,9 @@ export default function ApplicationsPage() {
 
             <section className="space-y-4">
 
-              {applications?.map((application: any) => (
+              {[...(applications ?? [])]
+                .sort((a: any, b: any) => (b.aiScore ?? -1) - (a.aiScore ?? -1))
+                .map((application: any) => (
 
                 <div
                   key={application.id}
