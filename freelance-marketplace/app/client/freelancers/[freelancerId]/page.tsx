@@ -35,10 +35,12 @@ export default async function ClientFreelancerProfilePage({
   if (!freelancer) notFound();
 
   const averageRating =
-    freelancer.reviews.length > 0
-      ? freelancer.reviews.reduce((sum, review) => sum + review.rating, 0) /
-        freelancer.reviews.length
-      : freelancer.averageRating;
+    freelancer.averageRating > 0
+      ? freelancer.averageRating
+      : freelancer.reviews.length > 0
+        ? freelancer.reviews.reduce((sum, review) => sum + review.rating, 0) /
+          freelancer.reviews.length
+        : 0;
 
   return (
     <>
