@@ -9,6 +9,7 @@ type Application = {
   coverLetter: string;
   proposedBudget: number;
   status: string;
+  aiScore: number | null;
   freelancer: {
     id: string;
     fullName: string | null;
@@ -224,6 +225,42 @@ export default function ApplicationCard({
 
             </div>
 
+          </div>
+
+          {/* AI MATCH SCORE */}
+
+          <div className="mt-3 rounded-xl border border-neutral-200 bg-white p-4">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-neutral-400">
+                AI Match Score
+              </p>
+              <span className="rounded-full bg-neutral-100 px-2 py-1 text-[10px] font-semibold text-neutral-600">
+                {application.aiScore !== null && application.aiScore !== undefined
+                  ? "Ranked"
+                  : "Not ranked"}
+              </span>
+            </div>
+            {application.aiScore !== null && application.aiScore !== undefined ? (
+              <>
+                <p className="mt-2 text-2xl font-bold tracking-tight text-neutral-950">
+                  {application.aiScore.toFixed(1)}
+                  <span className="ml-1 text-sm font-medium text-neutral-400">/ 100</span>
+                </p>
+                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-neutral-100">
+                  <div
+                    className="h-full rounded-full bg-red-500 transition-all"
+                    style={{ width: `${Math.max(0, Math.min(100, application.aiScore))}%` }}
+                  />
+                </div>
+                <p className="mt-2 text-[11px] leading-5 text-neutral-400">
+                  A matching aid based on skills, profile, experience and ratings — not a hiring guarantee.
+                </p>
+              </>
+            ) : (
+              <p className="mt-2 text-xs leading-5 text-neutral-500">
+                Run AI ranking to compare this applicant with the job requirements.
+              </p>
+            )}
           </div>
 
           {/* Actions */}
