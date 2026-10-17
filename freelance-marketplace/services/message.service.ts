@@ -18,9 +18,13 @@ export type JobMessagesResponse = {
 };
 
 export async function getMessages(jobId: string): Promise<JobMessagesResponse> {
-  const { data } = await axios.get<JobMessagesResponse>(`/api/messages/${encodeURIComponent(jobId)}`, {
-    headers: { "Cache-Control": "no-cache", Pragma: "no-cache" },
-  });
+  const cacheBuster = Date.now();
+  const { data } = await axios.get<JobMessagesResponse>(
+    `/api/messages/${encodeURIComponent(jobId)}?_=${cacheBuster}`,
+    {
+      headers: { "Cache-Control": "no-cache", Pragma: "no-cache" },
+    }
+  );
   return data;
 }
 
