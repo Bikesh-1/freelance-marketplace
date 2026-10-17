@@ -51,10 +51,14 @@ export async function GET(
       },
       include: {
         freelancer: {
-          include: {
+          select: {
+            id: true,
+            fullName: true,
+            title: true,
+            experienceLevel: true,
             skills: {
-              include: {
-                skill: true,
+              select: {
+                skill: { select: { id: true, name: true } },
               },
             },
           },
