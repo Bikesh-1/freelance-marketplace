@@ -52,7 +52,6 @@ export async function GET(
       include: {
         freelancer: {
           include: {
-            user: true,
             skills: {
               include: {
                 skill: true,
