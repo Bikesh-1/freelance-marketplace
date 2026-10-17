@@ -21,9 +21,9 @@ export default function Home() {
           <h2 className="mt-1 mb-0 font-oswald text-xs font-bold uppercase tracking-wide sm:text-sm">
             Work Submitted by Freelancer
           </h2>
-          <div className="relative left-1/2 w-screen min-w-0 -translate-x-1/2">
-            <InfinityCard />
-          </div>
+        </section>
+        <section aria-label="Freelancer portfolio carousel" className="relative left-1/2 w-screen max-w-none -translate-x-1/2 overflow-hidden">
+          <InfinityCard />
         </section>
         <HomeSections />
       </main>
