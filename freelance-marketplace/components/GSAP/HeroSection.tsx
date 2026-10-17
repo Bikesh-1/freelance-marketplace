@@ -24,32 +24,29 @@ export default function HeroSection() {
         .fromTo(".hero-word-label", { y: 18, opacity: 0, letterSpacing: "0.35em" }, {
           y: 0, opacity: 1, letterSpacing: "0.08em", duration: 0.9,
         })
-        .fromTo(".hero-word-subtitle", { y: 12, opacity: 0 }, {
-          y: 0, opacity: 1, duration: 0.65,
-        }, "-=0.45")
         .fromTo(lineRef.current, { scaleX: 0, opacity: 0 }, {
           scaleX: 1, opacity: 1, duration: 0.8, transformOrigin: "center",
-        }, "-=0.25");
+        }, "-=0.35");
 
-      wordsRef.current.forEach((_, i) => {
-        const heading = wordsRef.current[i];
+      const wordTimeline = gsap.timeline({ repeat: -1, repeatDelay: 0.15 });
+      wordsRef.current.forEach((heading, i) => {
         const red = redRef.current[i];
         const black = blackRef.current[i];
         if (!heading || !red || !black) return;
 
-        gsap.set(heading, { autoAlpha: 0, y: 34, scale: 0.94, filter: "blur(8px)" });
+        gsap.set(heading, { autoAlpha: 0, y: 28, scale: 0.94, filter: "blur(8px)" });
         gsap.set(red, { x: -35 });
         gsap.set(black, { x: 35 });
 
-        const wordTimeline = gsap.timeline({ repeat: -1, repeatDelay: 0.25, delay: i * 0.1 });
         wordTimeline
           .to(heading, { autoAlpha: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 0.55, ease: "power3.out" })
           .to(red, { x: 0, duration: 0.65, ease: "expo.out" }, "<")
           .to(black, { x: 0, duration: 0.8, ease: "expo.out" }, "<0.08")
-          .to(heading, { scale: 1.035, duration: 0.5, ease: "power1.inOut" }, "+=0.75")
-          .to(heading, { scale: 1, duration: 0.45, ease: "power1.inOut" })
-          .to(heading, { autoAlpha: 0, y: -24, filter: "blur(6px)", duration: 0.45, ease: "power2.in" }, "+=0.2");
+          .to(heading, { scale: 1.035, duration: 0.45, ease: "power1.inOut" }, "+=0.65")
+          .to(heading, { scale: 1, duration: 0.35, ease: "power1.inOut" })
+          .to(heading, { autoAlpha: 0, y: -22, filter: "blur(6px)", duration: 0.42, ease: "power2.in" }, "+=0.15");
       });
+
       gsap.to(".hero-glow", { scale: 1.18, opacity: 0.65, duration: 2.6, yoyo: true, repeat: -1, ease: "sine.inOut" });
       gsap.to(".hero-spark", { y: -8, rotate: 8, duration: 2.2, yoyo: true, repeat: -1, ease: "sine.inOut" });
     }, rootRef);
