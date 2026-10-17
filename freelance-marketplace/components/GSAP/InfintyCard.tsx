@@ -142,7 +142,7 @@ export default function InfinityCard() {
                 className="flex w-max will-change-transform"
             >
                 {/* FIRST SET */}
-                <div className="card-set flex shrink-0 gap-8 pr-8">
+                <div className="card-set flex shrink-0 gap-3 pr-3 sm:gap-5 sm:pr-5 lg:gap-8 lg:pr-8">
                     {images.map((image, index) => (
                         <div
                             key={`first-${index}`}
@@ -150,8 +150,12 @@ export default function InfinityCard() {
                                 infinity-card
                                 group
                                 relative
-                                h-60
-                                w-80
+                                h-40
+                                w-[min(72vw,20rem)]
+                                sm:h-52
+                                sm:w-72
+                                lg:h-60
+                                lg:w-80
                                 shrink-0
                                 overflow-hidden
                                 rounded-2xl
@@ -209,7 +213,7 @@ export default function InfinityCard() {
                 </div>
 
                 {/* SECOND SET */}
-                <div className="card-set flex shrink-0 gap-8">
+                <div className="card-set flex shrink-0 gap-3 sm:gap-5 lg:gap-8">
                     {images.map((image, index) => (
                         <div
                             key={`second-${index}`}
@@ -217,8 +221,12 @@ export default function InfinityCard() {
                                 infinity-card
                                 group
                                 relative
-                                h-60
-                                w-80
+                                h-40
+                                w-[min(72vw,20rem)]
+                                sm:h-52
+                                sm:w-72
+                                lg:h-60
+                                lg:w-80
                                 shrink-0
                                 overflow-hidden
                                 rounded-2xl
