@@ -112,10 +112,6 @@ export default function ChatRoom({ jobId }: { jobId: string }) {
       setError("This job does not have another assigned participant yet.");
       return;
     }
-    if (!socket.connected) {
-      setError("Chat connection is unavailable. Please try again in a moment.");
-      return;
-    }
     setError("");
     setSending(true);
     void axios.post("/api/messages", {
