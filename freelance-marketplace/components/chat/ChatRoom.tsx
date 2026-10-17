@@ -118,9 +118,26 @@ export default function ChatRoom({ jobId }: { jobId: string }) {
     }
     setError("");
     setSending(true);
-    socket.emit("send-message", { jobId, content: trimmed });
-    setMessage("");
-    // The server broadcasts the persisted message after the database write succeeds.
+    void axios.post("/api/messages", {
+      jobId,
+      receiverId: otherUserId,
+      content: trimmed,
+    }).then(({ data }) => {
+      const saved = data.message as MessageRecord;
+      queryClient.setQueryData<JobMessagesResponse>(["messages", jobId], (old) => {
+        if (!old) return { messages: [saved], receiverId: otherUserId };
+        if (old.messages.some((item) => item.id === saved.id)) return old;
+        return { ...old, messages: [...old.messages, saved] };
+      });
+      setMessage("");
+      // Socket delivery is an enhancement; HTTP persistence is the source of truth.
+      if (socket.connected) socket.emit("send-message", { jobId, content: trimmed });
+    }).catch((sendError) => {
+      const messageText = axios.isAxiosError(sendError)
+        ? String(sendError.response?.data?.message || sendError.message)
+        : "Message could not be sent. Please try again.";
+      setError(messageText);
+    }).finally(() => setSending(false));
   };
 
   const handleTyping = (value: string) => {
