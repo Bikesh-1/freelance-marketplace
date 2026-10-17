@@ -58,9 +58,6 @@ export default function Navbar() {
       {menuOpen && (
         <div className="mx-4 rounded-2xl border border-black/10 bg-[#F7F4EE] p-4 shadow-xl sm:hidden">
           <nav className="flex flex-col gap-2">
-            <Link href="/" onClick={() => setMenuOpen(false)} className="rounded-xl bg-black px-4 py-3 text-sm font-semibold text-white">Home</Link>
-            <Link href="/about" onClick={() => setMenuOpen(false)} className="rounded-xl px-4 py-3 text-sm font-semibold text-black hover:bg-black/5">About</Link>
-            <Link href="/about" onClick={() => setMenuOpen(false)} className="rounded-xl px-4 py-3 text-sm font-semibold text-black hover:bg-black/5">Contact</Link>
             {session ? (
               <>
                 <Link href="/dashboard" onClick={() => setMenuOpen(false)} className="rounded-xl px-4 py-3 text-sm font-semibold text-black hover:bg-black/5">Dashboard</Link>
