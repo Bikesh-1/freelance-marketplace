@@ -63,6 +63,51 @@ export function registerSocketHandlers(io: Server) {
       socket.to(jobId).emit("messages-read", { userId: authenticatedUserId });
     });
 
+    // Broadcast a message that was already saved by the authenticated HTTP API.
+    // This event deliberately does not create a second database record.
+    socket.on("message-created", async ({ jobId, messageId } = {}) => {
+      if (
+        typeof jobId !== "string" ||
+        typeof messageId !== "string" ||
+        !socket.rooms.has(jobId)
+      ) return;
+
+      try {
+        const job = await prisma.job.findUnique({
+          where: { id: jobId },
+          include: {
+            client: { select: { userId: true } },
+            selectedFreelancer: { select: { userId: true } },
+          },
+        });
+
+        const participantIds = [
+          job?.client.userId,
+          job?.selectedFreelancer?.userId,
+        ].filter((id): id is string => Boolean(id));
+
+        if (!job || !participantIds.includes(authenticatedUserId)) return;
+
+        const message = await prisma.message.findUnique({
+          where: { id: messageId },
+          include: {
+            sender: { select: { id: true, name: true } },
+          },
+        });
+
+        // Only the authenticated sender may broadcast their own saved message.
+        if (
+          !message ||
+          message.jobId !== jobId ||
+          message.senderId !== authenticatedUserId
+        ) return;
+
+        io.to(jobId).emit("receive-message", message);
+      } catch (error) {
+        console.error("Broadcast persisted message error:", error);
+      }
+    });
+
     socket.on("send-message", async (payload) => {
       if (!payload || typeof payload.jobId !== "string" ||
           typeof payload.content !== "string" || !payload.content.trim() ||
