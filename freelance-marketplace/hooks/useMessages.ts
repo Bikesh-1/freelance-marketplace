@@ -15,6 +15,8 @@ export function useMessages(
 
     enabled: !!jobId,
 
-    staleTime: Infinity,
+    staleTime: 0,
+    refetchInterval: 3000,
+    refetchIntervalInBackground: true,
   });
 }
