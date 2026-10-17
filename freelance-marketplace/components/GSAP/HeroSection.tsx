@@ -30,9 +30,9 @@ export default function HeroSection() {
   }, []);
 
   const words = [
-    { red: "Block", black: "chain" },
-    { red: "Artificial", black: " Intelligence" },
-    { red: "Escrow", black: " Payment" },
+    { red: "BLOCK", black: " CHAIN" },
+    { red: "ARTIFICIAL", black: " INTELLIGENCE" },
+    { red: "ESCROW", black: " PAYMENT" },
     { red: "SMART", black: " CONTRACT" },
   ];
 
