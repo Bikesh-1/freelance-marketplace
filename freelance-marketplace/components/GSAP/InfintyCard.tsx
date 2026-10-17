@@ -132,7 +132,7 @@ export default function InfinityCard() {
     return (
         <section
             ref={containerRef}
-            className="relative w-full overflow-x-hidden py-16"
+            className="relative w-full overflow-x-hidden py-5 sm:py-7 lg:py-9"
             style={{
                 perspective: "1200px",
             }}
