@@ -113,10 +113,10 @@ export async function GET(
                     id !== session.user.id
             ) || null;
 
-        return NextResponse.json({
-            messages,
-            receiverId,
-        });
+        return NextResponse.json(
+            { messages, receiverId },
+            { headers: { "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate" } }
+        );
     } catch (error) {
         console.error(
             "Get messages error:",
