@@ -29,11 +29,6 @@ export default function FreelancerMoreMenu({ unreadNotificationsCount }: Props) 
         className="inline-flex h-12 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50"
       >
         <span>More</span>
-        {unreadNotificationsCount > 0 && (
-          <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
-            {unreadNotificationsCount}
-          </span>
-        )}
         <svg aria-hidden="true" className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`} viewBox="0 0 20 20" fill="none">
           <path d="m5 7.5 5 5 5-5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
@@ -62,7 +57,7 @@ export default function FreelancerMoreMenu({ unreadNotificationsCount }: Props) 
                   <span className="mt-0.5 block text-xs text-slate-500">{item.detail}</span>
                 </span>
                 {item.href === "/notifications" && unreadNotificationsCount > 0 ? (
-                  <span className="rounded-full bg-red-50 px-2 py-1 text-xs font-bold text-red-600">{unreadNotificationsCount} new</span>
+                  <span className="rounded-full bg-red-50 px-2 py-1 text-xs font-bold text-red-600">{unreadNotificationsCount > 99 ? "99+" : unreadNotificationsCount} unread</span>
                 ) : (
                   <span aria-hidden="true" className="text-slate-300">→</span>
                 )}

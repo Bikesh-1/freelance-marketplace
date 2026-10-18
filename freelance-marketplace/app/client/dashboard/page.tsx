@@ -6,6 +6,7 @@ import Link from "next/link";
 
 import Navbar from "@/components/layout/navbar";
 import ConnectWalletButton from "@/components/wallet/ConnectWalletButton";
+import CompleteJobButton from "@/components/jobs/CompleteJobButton";
 
 export default async function ClientDashboard() {
   const session = await getServerSession(authOptions);
@@ -94,6 +95,14 @@ export default async function ClientDashboard() {
     where: {
       clientId: profile.id,
     },
+    include: {
+      milestones: {
+        select: {
+          id: true,
+          status: true,
+        },
+      },
+    },
     orderBy: {
       createdAt: "desc",
     },
@@ -145,15 +154,11 @@ export default async function ClientDashboard() {
     take: 5,
   });
 
-  const notifications = await prisma.notification.findMany({
+  const unreadNotificationsCount = await prisma.notification.count({
     where: {
       userId: session.user.id,
       isRead: false,
     },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: 5,
   });
 
   /*
@@ -205,7 +210,7 @@ export default async function ClientDashboard() {
 
                   {notifications.length > 0 && (
                     <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
-                      {notifications.length}
+                      {unreadNotificationsCount}
                     </span>
                   )}
                 </Link>
@@ -457,49 +462,46 @@ export default async function ClientDashboard() {
 
                   <div className="space-y-2">
 
-                    {recentJobs.map((job) => (
+                    {recentJobs.map((job) => {
+                      const canComplete =
+                        job.status === "IN_PROGRESS" &&
+                        job.milestones.length > 0 &&
+                        job.milestones.every((milestone) => milestone.status === "RELEASED");
 
-                      <Link
-                        key={job.id}
-                        href={`/client/jobs/${job.id}`}
-                        className="group block rounded-xl border border-neutral-100 bg-neutral-50 p-4 transition hover:border-neutral-200 hover:bg-white hover:shadow-sm"
-                      >
-
-                        <div className="flex items-start justify-between gap-4">
-
-                          <div className="min-w-0">
-
-                            <h3 className="truncate text-sm font-semibold text-neutral-900 transition group-hover:text-red-500">
-                              {job.title}
-                            </h3>
-
-                            <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-neutral-500">
-
-                              <span className="font-semibold text-neutral-700">
-                                ${job.budget}
+                      return (
+                        <div
+                          key={job.id}
+                          className="rounded-xl border border-neutral-100 bg-neutral-50 p-4 transition hover:border-neutral-200 hover:bg-white hover:shadow-sm"
+                        >
+                          <Link
+                            href={`/client/jobs/${job.id}`}
+                            className="group block"
+                          >
+                            <div className="flex items-start justify-between gap-4">
+                              <div className="min-w-0">
+                                <h3 className="truncate text-sm font-semibold text-neutral-900 transition group-hover:text-red-500">
+                                  {job.title}
+                                </h3>
+                                <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-neutral-500">
+                                  <span className="font-semibold text-neutral-700">${job.budget}</span>
+                                  <span className="text-neutral-300">•</span>
+                                  <span>Posted recently</span>
+                                </div>
+                              </div>
+                              <span className="shrink-0 rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-neutral-600">
+                                {job.status.replace("_", " ")}
                               </span>
-
-                              <span className="text-neutral-300">
-                                •
-                              </span>
-
-                              <span>
-                                Posted recently
-                              </span>
-
                             </div>
-
-                          </div>
-
-                          <span className="shrink-0 rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-neutral-600">
-                            {job.status.replace("_", " ")}
-                          </span>
-
+                          </Link>
+                          {canComplete && (
+                            <div className="mt-3 border-t border-neutral-200 pt-3">
+                              <p className="mb-2 text-xs text-green-700">All milestone payments are released. This job is ready to complete.</p>
+                              <CompleteJobButton jobId={job.id} />
+                            </div>
+                          )}
                         </div>
-
-                      </Link>
-
-                    ))}
+                      );
+                    })}
 
                   </div>
 

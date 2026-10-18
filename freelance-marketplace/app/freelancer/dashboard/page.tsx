@@ -202,14 +202,14 @@ export default async function FreelancerDashboard() {
               <div className="flex flex-wrap items-center gap-2 xl:justify-end">
                 <Link
                   href="/freelancer/recommendations"
-                  className="group flex min-h-12 items-center gap-3 rounded-xl bg-red-500 px-5 py-3 text-sm font-bold text-white shadow-sm shadow-red-500/20 transition hover:bg-red-600 sm:px-6"
+                  className="group inline-flex min-h-12 shrink-0 items-center gap-2 rounded-xl bg-red-500 px-4 py-2.5 text-sm font-bold text-white shadow-sm shadow-red-500/20 transition hover:bg-red-600 sm:px-4"
                 >
-                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/15 text-lg">✦</span>
-                  <span className="text-left">
-                    <span className="block">Recommended Jobs</span>
-                    <span className="mt-0.5 block text-xs font-medium text-red-100">Find your next project</span>
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/15 text-base">✦</span>
+                  <span className="text-left leading-tight">
+                    <span className="block whitespace-nowrap">Recommended Jobs</span>
+                    <span className="mt-1 block text-[11px] font-medium text-red-100">Find your next project</span>
                   </span>
-                  <span aria-hidden="true" className="ml-1 transition-transform group-hover:translate-x-0.5">→</span>
+                  <span aria-hidden="true" className="ml-0.5 transition-transform group-hover:translate-x-0.5">→</span>
                 </Link>
                 <FreelancerMoreMenu unreadNotificationsCount={unreadNotificationsCount} />
                 <ConnectWalletButton />
