@@ -30,6 +30,13 @@ export async function POST(req: NextRequest) {
       const hourlyRate = Number(input.hourlyRate);
       const yearsOfExperience = input.yearsOfExperience === undefined ? 0 : Number(input.yearsOfExperience);
       const experienceLevel = input.experienceLevel;
+      const rawSkillIds = input.skillIds;
+      if (!Array.isArray(rawSkillIds) || rawSkillIds.length === 0 || rawSkillIds.length > 100 || !rawSkillIds.every(id => typeof id === "string" && id.trim().length > 0)) {
+        return NextResponse.json({ success: false, message: "Please select at least one valid skill" }, { status: 400 });
+      }
+      const skillIds = [...new Set((rawSkillIds as string[]).map(id => id.trim()))];
+      const skillCount = await prisma.skill.count({ where: { id: { in: skillIds } } });
+      if (skillCount !== skillIds.length) return NextResponse.json({ success: false, message: "One or more selected skills do not exist" }, { status: 400 });
 
       if (!fullName || fullName.length > 150 || !title || title.length > 150 || !bio || bio.length > 5000 ||
           country.length > 100 || location.length > 150 || github.length > 500 || linkedin.length > 500 || portfolio.length > 500 ||
@@ -39,7 +46,8 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ success: false, message: "Please provide valid freelancer profile details" }, { status: 400 });
       }
 
-      const profile = await prisma.freelancerProfile.update({
+      const profile = await prisma.$transaction(async tx => {
+        const updatedProfile = await tx.freelancerProfile.update({
         where: { userId: user.id },
         data: {
           fullName,
@@ -55,6 +63,10 @@ export async function POST(req: NextRequest) {
           experienceLevel: experienceLevel as ExperienceLevel,
           isProfileCompleted: true,
         },
+      });
+        await tx.freelancerSkill.deleteMany({ where: { freelancerId: updatedProfile.id } });
+        await tx.freelancerSkill.createMany({ data: skillIds.map(skillId => ({ freelancerId: updatedProfile.id, skillId })) });
+        return tx.freelancerProfile.findUnique({ where: { id: updatedProfile.id }, include: { skills: { include: { skill: true } } } });
       });
       return NextResponse.json({ success: true, message: "Profile completed successfully", profile });
     }
