@@ -32,13 +32,6 @@ export default async function FreelancerDashboard() {
     redirect("/freelancer/profile");
   }
 
-  const activeJobsCount = await prisma.job.count({
-    where: {
-      selectedFreelancerId: profile.id,
-      status: "IN_PROGRESS",
-    },
-  });
-
   const completedJobsCount = await prisma.job.count({
     where: {
       selectedFreelancerId: profile.id,
