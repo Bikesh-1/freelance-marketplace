@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import ConnectWalletButton from "@/components/wallet/ConnectWalletButton";
 import Loginnavbar from "@/components/layout/loginNavbar";
+import FreelancerMoreMenu from "@/components/freelancer/FreelancerMoreMenu";
 
 export default async function FreelancerDashboard() {
   const session = await getServerSession(authOptions);
@@ -198,43 +199,19 @@ export default async function FreelancerDashboard() {
                   Stay on top of your work, applications, milestones and earnings.
                 </p>
               </div>
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2 xl:justify-end">
                 <Link
                   href="/freelancer/recommendations"
-                  className="flex h-11 items-center rounded-xl border border-neutral-200 bg-white px-4 text-sm font-semibold text-neutral-700 shadow-sm transition hover:border-red-300 hover:text-red-500"
+                  className="group flex min-h-12 items-center gap-3 rounded-xl bg-red-500 px-5 py-3 text-sm font-bold text-white shadow-sm shadow-red-500/20 transition hover:bg-red-600 sm:px-6"
                 >
-                  Recommended jobs
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/15 text-lg">✦</span>
+                  <span className="text-left">
+                    <span className="block">Recommended Jobs</span>
+                    <span className="mt-0.5 block text-xs font-medium text-red-100">Find your next project</span>
+                  </span>
+                  <span aria-hidden="true" className="ml-1 transition-transform group-hover:translate-x-0.5">→</span>
                 </Link>
-                <Link
-                  href="/freelancer/experience"
-                  className="flex h-11 items-center rounded-xl border border-neutral-200 bg-white px-4 text-sm font-semibold text-neutral-700 shadow-sm transition hover:border-red-300 hover:text-red-500"
-                >
-                  Work experience
-                </Link>
-                <Link
-                  href="/freelancer/settings"
-                  className="flex h-11 items-center rounded-xl border border-neutral-200 bg-white px-4 text-sm font-semibold text-neutral-700 shadow-sm transition hover:border-red-300 hover:text-red-500"
-                >
-                  Skills
-                </Link>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2 xl:justify-end">
-                {/* Notifications */}
-                <Link
-                  href="/notifications"
-                  className="relative flex h-11 items-center gap-2 rounded-xl border border-neutral-200 bg-white px-4 text-sm font-medium text-neutral-700 shadow-sm transition hover:border-neutral-300 hover:bg-neutral-50"
-                >
-                  <span className="text-base">♢</span>
-                  <span className="hidden sm:inline">Notifications</span>
-
-                  {unreadNotificationsCount > 0 && (
-                    <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
-                      {unreadNotificationsCount}
-                    </span>
-                  )}
-                </Link>
-
+                <FreelancerMoreMenu unreadNotificationsCount={unreadNotificationsCount} />
                 <ConnectWalletButton />
               </div>
             </div>
@@ -348,51 +325,18 @@ export default async function FreelancerDashboard() {
           </section>
 
           {/* =====================================================
-              QUICK ACTIONS
+              JOB DISCOVERY CTA
           ===================================================== */}
-          <section className="mb-8 overflow-hidden rounded-2xl bg-neutral-950 shadow-sm">
-            <div className="flex flex-col gap-5 p-5 sm:p-6 lg:flex-row lg:items-center lg:justify-between">
-
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.15em] text-neutral-500">
-                  Get things done
-                </p>
-
-                <h2 className="mt-1 text-lg font-semibold text-white">
-                  Quick actions
-                </h2>
+          <section className="mb-8 overflow-hidden rounded-3xl border border-red-100 bg-gradient-to-r from-rose-50 via-white to-orange-50 shadow-sm">
+            <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-7">
+              <div className="max-w-2xl">
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-red-500">Ready for your next project?</p>
+                <h2 className="mt-2 text-xl font-bold tracking-tight text-slate-950 sm:text-2xl">Discover work that fits your skills</h2>
+                <p className="mt-2 text-sm leading-6 text-slate-600">Explore personalized matches or browse all open jobs to find your next opportunity.</p>
               </div>
-
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-
-                <Link
-                  href="/jobs"
-                  className="rounded-xl bg-red-500 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-red-400"
-                >
-                  Browse Jobs
-                </Link>
-
-                <Link
-                  href="/freelancer/applications"
-                  className="rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-center text-sm font-medium text-neutral-200 transition hover:border-neutral-700 hover:bg-neutral-800"
-                >
-                  Applications
-                </Link>
-
-                <Link
-                  href="/message"
-                  className="rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-center text-sm font-medium text-neutral-200 transition hover:border-neutral-700 hover:bg-neutral-800"
-                >
-                  Messages
-                </Link>
-
-                <Link
-                  href="/wallet"
-                  className="rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-center text-sm font-medium text-neutral-200 transition hover:border-neutral-700 hover:bg-neutral-800"
-                >
-                  Wallet
-                </Link>
-
+              <div className="flex shrink-0 flex-wrap gap-2">
+                <Link href="/jobs" className="inline-flex min-h-11 items-center justify-center rounded-xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800">Browse all jobs →</Link>
+                <Link href="/freelancer/recommendations" className="inline-flex min-h-11 items-center justify-center rounded-xl border border-red-200 bg-white px-5 py-3 text-sm font-semibold text-red-600 transition hover:bg-red-50">View recommendations</Link>
               </div>
             </div>
           </section>
