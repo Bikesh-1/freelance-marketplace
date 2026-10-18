@@ -169,36 +169,27 @@ export default async function ClientDashboard() {
     <>
       <Navbar />
 
-      <main className="min-h-screen bg-[#f7f7f8] text-neutral-900">
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
+      <main className="min-h-screen bg-[#f5f6f8] pt-16 text-slate-900 sm:pt-20">
+        <div className="mx-auto max-w-[1440px] px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
 
           {/* =====================================================
               HEADER
           ===================================================== */}
 
           <section className="mb-8">
-            <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-
+            <div className="flex flex-col gap-5 rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-7 lg:flex-row lg:items-center lg:justify-between">
               <div>
-                <div className="mb-2 flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-red-500" />
-
-                  <span className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500">
-                    Client Workspace
-                  </span>
+                <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-rose-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-rose-600">
+                  <span className="h-1.5 w-1.5 rounded-full bg-rose-500" /> Client workspace
                 </div>
-
-                <h1 className="text-3xl font-bold tracking-tight text-neutral-950 sm:text-4xl">
+                <h1 className="text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">
                   Welcome back, {profile.companyName}
                 </h1>
-
-                <p className="mt-2 max-w-xl text-sm leading-6 text-neutral-500">
-                  Manage your projects, freelancers, payments and milestones
-                  from one place.
+                <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">
+                  Your projects, applications and payments — all in one place.
                 </p>
               </div>
-
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-2">
 
                 {/* Notifications */}
 
@@ -229,7 +220,7 @@ export default async function ClientDashboard() {
               STATS
           ===================================================== */}
 
-          <section className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          <section className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:gap-4">
 
             {/* Wallet */}
 
@@ -341,7 +332,7 @@ export default async function ClientDashboard() {
               QUICK ACTIONS
           ===================================================== */}
 
-          <section className="mb-8 overflow-hidden rounded-2xl bg-neutral-950 shadow-sm">
+          <section className="mb-6 overflow-hidden rounded-3xl bg-slate-950 shadow-sm">
 
             <div className="flex flex-col gap-5 p-5 sm:p-6 lg:flex-row lg:items-center lg:justify-between">
 
@@ -398,13 +389,13 @@ export default async function ClientDashboard() {
               JOBS + APPLICATIONS
           ===================================================== */}
 
-          <div className="grid gap-6 lg:grid-cols-2">
+          <div className="grid gap-5 xl:grid-cols-2">
 
             {/* =================================================
                 RECENT JOBS
             ================================================= */}
 
-            <section className="rounded-2xl border border-neutral-200 bg-white shadow-sm">
+            <section className="rounded-3xl border border-slate-200 bg-white shadow-sm">
 
               <div className="flex items-center justify-between border-b border-neutral-100 px-5 py-5 sm:px-6">
 
@@ -638,7 +629,7 @@ export default async function ClientDashboard() {
               MILESTONE PROGRESS
           ===================================================== */}
 
-          <section className="mt-6 rounded-2xl border border-neutral-200 bg-white shadow-sm">
+          <section className="mt-5 rounded-3xl border border-slate-200 bg-white shadow-sm">
 
             <div className="flex items-center justify-between border-b border-neutral-100 px-5 py-5 sm:px-6">
 
