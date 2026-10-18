@@ -179,37 +179,25 @@ export default async function FreelancerDashboard() {
 
   return (
     <>
-
-
-      <main className="min-h-screen bg-[#f7f7f8] text-neutral-900">
-        
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-6">
-<Loginnavbar/>
+      <Loginnavbar />
+        <main className="min-h-screen bg-[#f5f6f8] pt-16 text-slate-900 sm:pt-20">
+        <div className="mx-auto max-w-[1440px] px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
           {/* =====================================================
               HEADER
           ===================================================== */}
           <section className="mb-8">
-            <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-
+            <div className="flex flex-col gap-5 rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-7 xl:flex-row xl:items-center xl:justify-between">
               <div>
-                <div className="mb-2 flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-red-500" />
-
-                  <span className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500">
-                    Freelancer Workspace
-                  </span>
+                <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-rose-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-rose-600">
+                  <span className="h-1.5 w-1.5 rounded-full bg-rose-500" /> Freelancer workspace
                 </div>
-
-                <h1 className="text-3xl font-bold tracking-tight text-neutral-950 sm:text-4xl">
+                <h1 className="text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">
                   Welcome back, {freelancerName.split(" ")[0]}
                 </h1>
-
-                <p className="mt-2 max-w-xl text-sm leading-6 text-neutral-500">
-                  Manage your projects, applications, milestones and earnings
-                  from one place.
+                <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">
+                  Stay on top of your work, applications, milestones and earnings.
                 </p>
               </div>
-
               <div className="flex flex-wrap items-center gap-2">
                 <Link
                   href="/freelancer/recommendations"
@@ -231,7 +219,7 @@ export default async function FreelancerDashboard() {
                 </Link>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-2 xl:justify-end">
                 {/* Notifications */}
                 <Link
                   href="/notifications"
@@ -255,7 +243,7 @@ export default async function FreelancerDashboard() {
           {/* =====================================================
               STATS
           ===================================================== */}
-          <section className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+          <section className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
 
             {/* Earnings */}
             <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
@@ -412,12 +400,12 @@ export default async function FreelancerDashboard() {
           {/* =====================================================
               MAIN CONTENT
           ===================================================== */}
-          <div className="grid gap-6 lg:grid-cols-2">
+          <div className="grid gap-5 xl:grid-cols-2">
 
             {/* =================================================
                 ACTIVE JOBS
             ================================================= */}
-            <section className="rounded-2xl border border-neutral-200 bg-white shadow-sm">
+            <section className="rounded-3xl border border-slate-200 bg-white shadow-sm">
 
               <div className="flex items-center justify-between border-b border-neutral-100 px-5 py-5 sm:px-6">
 
@@ -887,7 +875,7 @@ export default async function FreelancerDashboard() {
           {/* =====================================================
               WALLET
           ===================================================== */}
-          <section className="mt-6 overflow-hidden rounded-2xl bg-neutral-950 shadow-sm">
+          <section className="mt-5 overflow-hidden rounded-3xl bg-slate-950 shadow-sm">
 
             <div className="border-b border-neutral-800 px-5 py-5 sm:px-6">
 
