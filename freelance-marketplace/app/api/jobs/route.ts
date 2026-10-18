@@ -81,10 +81,10 @@ export async function POST(req: NextRequest) {
       !Object.values(JobType).includes(jobType as JobType) ||
       !Number.isFinite(deadline.getTime()) || deadline.getTime() <= Date.now() ||
       (duration !== null && duration.length > 100) ||
-      requiredSkills.length > 50 ||
+      requiredSkills.length === 0 || requiredSkills.length > 50 ||
       !requiredSkills.every((skill): skill is string => typeof skill === "string" && skill.trim().length > 0 && skill.trim().length <= 80) ||
       !Array.isArray(skillIds) ||
-      skillIds.length > 50 ||
+      skillIds.length === 0 || skillIds.length > 50 ||
       !skillIds.every((id): id is string => typeof id === "string" && id.trim().length > 0)
     ) {
       return NextResponse.json({ message: "Invalid job details" }, { status: 400 });
