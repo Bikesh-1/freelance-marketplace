@@ -1,11 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { useSkills } from "@/hooks/useSkills";
+import SkillSelector from "@/components/profile/SkillSelector";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
 export default function CreateJobPage() {
   const router = useRouter();
+  const { data: skills = [], isLoading: skillsLoading } = useSkills();
+  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
 
   const [form, setForm] = useState({
     title: "",
@@ -25,9 +29,10 @@ export default function CreateJobPage() {
       !form.description ||
       !form.budget ||
       !form.jobType ||
-      !form.deadline
+      !form.deadline ||
+      selectedSkills.length === 0
     ) {
-      alert("Please fill all required fields");
+      alert(selectedSkills.length === 0 ? "Please select at least one required skill." : "Please fill all required fields");
       return;
     }
 
@@ -37,7 +42,8 @@ export default function CreateJobPage() {
       await axios.post("/api/jobs", {
         ...form,
         budget: Number(form.budget),
-        skillIds: [],
+        requiredSkills: skills.filter((skill: { id: string }) => selectedSkills.includes(skill.id)).map((skill: { name: string }) => skill.name),
+        skillIds: selectedSkills,
       });
 
       router.push("/client/dashboard");
@@ -324,6 +330,16 @@ export default function CreateJobPage() {
 
             </div>
 
+            <section className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <h2 className="text-sm font-semibold text-neutral-900">Required Skills <span className="text-red-500">*</span></h2>
+                <span className="text-xs text-neutral-500">{selectedSkills.length} selected</span>
+              </div>
+              <p className="mb-4 text-xs leading-5 text-neutral-500">Select the skills freelancers need for this project. They will appear on the job listing and help matching.</p>
+              {skillsLoading ? <p className="text-sm text-neutral-500">Loading skills…</p> : <SkillSelector skills={skills} selectedSkills={selectedSkills} setSelectedSkills={setSelectedSkills} />}
+              {!skillsLoading && skills.length === 0 && <p className="mt-3 text-sm text-neutral-500">No skills are available yet. Ask an administrator to add skills before posting a job.</p>}
+            </section>
+
             {/* =================================================
                 PROJECT PREVIEW
             ================================================= */}
@@ -365,6 +381,8 @@ export default function CreateJobPage() {
                       </span>
                     )}
 
+                    {selectedSkills.length > 0 && <span className="rounded-lg bg-white px-2.5 py-1 text-[10px] font-medium text-neutral-500">{selectedSkills.length} required skill{selectedSkills.length === 1 ? "" : "s"}</span>}
+
                     {form.deadline && (
                       <span className="rounded-lg bg-white px-2.5 py-1 text-[10px] font-medium text-neutral-500">
                         Deadline: {form.deadline}
@@ -386,7 +404,7 @@ export default function CreateJobPage() {
             <button
               type="button"
               onClick={submitHandler}
-              disabled={loading}
+              disabled={loading || skillsLoading || skills.length === 0 || selectedSkills.length === 0}
               className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-red-500 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-red-400 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? (
