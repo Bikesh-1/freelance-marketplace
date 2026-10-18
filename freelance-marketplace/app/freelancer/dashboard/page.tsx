@@ -184,12 +184,12 @@ export default async function FreelancerDashboard() {
       <Loginnavbar />
       <DashboardSidebar role="FREELANCER" />
       <main className="min-h-screen bg-[#f5f6f8] pt-16 text-slate-900 sm:pt-20 lg:pl-64">
-        <div className="mx-auto max-w-[1440px] px-4 py-5 sm:px-6 lg:px-10 lg:py-6">
+        <div className="mx-auto max-w-[1360px] px-4 py-4 sm:px-5 lg:px-8 lg:py-5">
           {/* =====================================================
               HEADER
           ===================================================== */}
-          <section className="mb-8">
-            <div className="flex flex-col gap-5 rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-7 xl:flex-row xl:items-center xl:justify-between">
+          <section className="mb-5">
+            <div className="flex flex-col gap-5 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-5 xl:flex-row xl:items-center xl:justify-between">
               <div>
                 <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-rose-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-rose-600">
                   <span className="h-1.5 w-1.5 rounded-full bg-rose-500" /> Freelancer workspace
@@ -220,113 +220,29 @@ export default async function FreelancerDashboard() {
           </section>
 
           {/* =====================================================
-              STATS
+              QUICK STATS
           ===================================================== */}
-          <section className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
-
-            {/* Earnings */}
-            <div className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
-              <div className="mb-4 flex items-center justify-between">
-                <span className="text-xs font-medium text-neutral-500">
-                  Total Earnings
-                </span>
-
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-50 text-sm text-red-500">
-                  ↗
-                </span>
+          <section className="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div className="rounded-xl border border-neutral-200 bg-white p-3.5 shadow-sm">
+              <div className="mb-2 flex items-center justify-between">
+                <span className="text-xs font-medium text-neutral-500">Applications</span>
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-neutral-100 text-sm">≡</span>
               </div>
-
-              <p className="text-2xl font-bold tracking-tight text-neutral-950">
-                {totalEarnings.toFixed(4)}
-              </p>
-
-              <p className="mt-1 text-xs text-neutral-400">ETH</p>
+              <p className="text-xl font-bold tracking-tight text-neutral-950">{pendingApplicationsCount}</p>
+              <p className="mt-1 text-xs text-neutral-400">Awaiting response</p>
             </div>
 
-            {/* Active Jobs */}
-            <div className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
-              <div className="mb-4 flex items-center justify-between">
-                <span className="text-xs font-medium text-neutral-500">
-                  Active Jobs
-                </span>
-
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-neutral-100 text-sm">
-                  ◷
-                </span>
+            <div className="rounded-xl border border-neutral-200 bg-white p-3.5 shadow-sm">
+              <div className="mb-2 flex items-center justify-between">
+                <span className="text-xs font-medium text-neutral-500">Rating</span>
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-yellow-50 text-sm">★</span>
               </div>
-
-              <p className="text-2xl font-bold tracking-tight text-neutral-950">
-                {activeJobsCount}
-              </p>
-
-              <p className="mt-1 text-xs text-neutral-400">
-                Currently working
-              </p>
-            </div>
-
-            {/* Applications */}
-            <div className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
-              <div className="mb-4 flex items-center justify-between">
-                <span className="text-xs font-medium text-neutral-500">
-                  Applications
-                </span>
-
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-neutral-100 text-sm">
-                  ≡
-                </span>
-              </div>
-
-              <p className="text-2xl font-bold tracking-tight text-neutral-950">
-                {pendingApplicationsCount}
-              </p>
-
-              <p className="mt-1 text-xs text-neutral-400">
-                Awaiting response
-              </p>
-            </div>
-
-            {/* Escrow */}
-            <div className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
-              <div className="mb-4 flex items-center justify-between">
-                <span className="text-xs font-medium text-neutral-500">
-                  In Escrow
-                </span>
-
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-neutral-100 text-sm">
-                  ◇
-                </span>
-              </div>
-
-              <p className="text-2xl font-bold tracking-tight text-neutral-950">
-                {escrowBalance}
-              </p>
-
-              <p className="mt-1 text-xs text-neutral-400">ETH secured</p>
-            </div>
-
-            {/* Rating */}
-            <div className="col-span-2 rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm sm:col-span-1">
-              <div className="mb-4 flex items-center justify-between">
-                <span className="text-xs font-medium text-neutral-500">
-                  Rating
-                </span>
-
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-yellow-50 text-sm">
-                  ★
-                </span>
-              </div>
-
-              <p className="text-2xl font-bold tracking-tight text-neutral-950">
-                {averageRating.toFixed(1)}
-              </p>
-
-              <p className="mt-1 text-xs text-neutral-400">
-                From completed work
-              </p>
+              <p className="text-xl font-bold tracking-tight text-neutral-950">{averageRating.toFixed(1)}</p>
+              <p className="mt-1 text-xs text-neutral-400">From completed work</p>
             </div>
           </section>
 
-          {/* =====================================================
+                    {/* =====================================================
               MAIN CONTENT
           ===================================================== */}
           <div className="grid gap-4 xl:grid-cols-2">
