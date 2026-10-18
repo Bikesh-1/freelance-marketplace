@@ -154,15 +154,11 @@ export default async function ClientDashboard() {
     take: 5,
   });
 
-  const notifications = await prisma.notification.findMany({
+  const unreadNotificationsCount = await prisma.notification.count({
     where: {
       userId: session.user.id,
       isRead: false,
     },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: 5,
   });
 
   /*
@@ -214,7 +210,7 @@ export default async function ClientDashboard() {
 
                   {notifications.length > 0 && (
                     <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
-                      {notifications.length}
+                      {unreadNotificationsCount}
                     </span>
                   )}
                 </Link>
