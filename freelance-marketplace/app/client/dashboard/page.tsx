@@ -7,6 +7,7 @@ import Link from "next/link";
 import Navbar from "@/components/layout/navbar";
 import ConnectWalletButton from "@/components/wallet/ConnectWalletButton";
 import CompleteJobButton from "@/components/jobs/CompleteJobButton";
+import DashboardSidebar from "@/components/layout/DashboardSidebar";
 
 export default async function ClientDashboard() {
   const session = await getServerSession(authOptions);
@@ -173,8 +174,9 @@ export default async function ClientDashboard() {
   return (
     <>
       <Navbar />
+      <DashboardSidebar role="CLIENT" />
 
-      <main className="min-h-screen bg-[#f5f6f8] pt-16 text-slate-900 sm:pt-20">
+      <main className="min-h-screen bg-[#f5f6f8] pt-16 text-slate-900 sm:pt-20 lg:pl-64">
         <div className="mx-auto max-w-[1440px] px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
 
           {/* =====================================================

@@ -6,6 +6,7 @@ import Link from "next/link";
 import ConnectWalletButton from "@/components/wallet/ConnectWalletButton";
 import Loginnavbar from "@/components/layout/loginNavbar";
 import FreelancerMoreMenu from "@/components/freelancer/FreelancerMoreMenu";
+import DashboardSidebar from "@/components/layout/DashboardSidebar";
 
 export default async function FreelancerDashboard() {
   const session = await getServerSession(authOptions);
@@ -181,7 +182,8 @@ export default async function FreelancerDashboard() {
   return (
     <>
       <Loginnavbar />
-        <main className="min-h-screen bg-[#f5f6f8] pt-16 text-slate-900 sm:pt-20">
+      <DashboardSidebar role="FREELANCER" />
+      <main className="min-h-screen bg-[#f5f6f8] pt-16 text-slate-900 sm:pt-20 lg:pl-64">
         <div className="mx-auto max-w-[1440px] px-4 py-5 sm:px-6 lg:px-10 lg:py-6">
           {/* =====================================================
               HEADER
