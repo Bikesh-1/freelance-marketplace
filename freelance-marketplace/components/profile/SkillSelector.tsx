@@ -27,7 +27,7 @@ export default function SkillSelector({
   };
 
   const addSkill = async () => {
-    const name = newSkill.trim().replace(/\\s+/g, " ");
+    const name = newSkill.trim().replace(/\s+/g, " ");
     if (!name) {
       setError("Enter a skill name first.");
       return;
