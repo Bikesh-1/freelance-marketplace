@@ -208,7 +208,7 @@ export default async function ClientDashboard() {
                     Notifications
                   </span>
 
-                  {notifications.length > 0 && (
+                  {unreadNotificationsCount > 0 && (
                     <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
                       {unreadNotificationsCount}
                     </span>
