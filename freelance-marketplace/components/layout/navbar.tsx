@@ -14,7 +14,7 @@ export default function Navbar() {
     "rounded-full px-4 py-2 text-xs font-bold tracking-wide text-[#111] transition-colors hover:bg-red-500 hover:text-white sm:px-5";
 
   return (
-    <header className="absolute left-0 top-0 z-50 w-full">
+    <header className="fixed left-0 top-0 z-50 w-full border-b border-slate-200/80 bg-white/95 shadow-sm backdrop-blur">
       <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
         <Link href="/" aria-label="Freelance Marketplace home" className="shrink-0">
           <Image src="/logo.png" alt="Freelance Marketplace logo" width={44} height={44} priority />
