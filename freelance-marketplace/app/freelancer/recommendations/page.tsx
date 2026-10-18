@@ -46,7 +46,7 @@ export default function RecommendationsPage() {
 
   return (
     <main className="min-h-screen bg-[#f7f7f8] px-4 py-8 text-neutral-900 sm:px-6 lg:px-8 lg:py-12">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-7xl">
         <div className="mb-7 flex flex-wrap items-center justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-red-500">Personalized job discovery</p>
@@ -70,17 +70,17 @@ export default function RecommendationsPage() {
            <p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-neutral-500">Generate your first set of matches from open jobs. Recommendations update whenever you refresh them.</p>
            <button onClick={() => generate.mutate()} disabled={generate.isPending} className="mt-5 rounded-xl bg-red-500 px-5 py-3 text-sm font-semibold text-white disabled:opacity-60">{generate.isPending ? "Matching…" : "Generate recommendations"}</button>
          </section> :
-         <section className="grid gap-4 lg:grid-cols-2">
-           {query.data.map(item => <article key={item.id ?? item.job.id} className="flex flex-col rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+         <section className="grid items-stretch gap-6 xl:grid-cols-2">
+           {query.data.map(item => <article key={item.id ?? item.job.id} className="flex min-h-[360px] flex-col rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-neutral-300 hover:shadow-md sm:p-7">
              <div className="flex items-start justify-between gap-3">
                <div className="min-w-0"><h2 className="text-lg font-bold">{item.job.title}</h2><p className="mt-1 text-sm text-neutral-500">{item.job.client.companyName}{item.job.client.country ? ` · ${item.job.client.country}` : ""}</p></div>
                <span className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-bold ${item.score >= 60 ? "bg-green-50 text-green-700" : item.score > 0 ? "bg-amber-50 text-amber-800" : "bg-neutral-100 text-neutral-600"}`}>{item.score}% match</span>
              </div>
-             <p className="mt-4 line-clamp-4 whitespace-pre-line text-sm leading-6 text-neutral-600">{item.job.description}</p>
+             <p className="mt-5 line-clamp-5 whitespace-pre-line text-sm leading-7 text-neutral-600">{item.job.description}</p>
              <p className="mt-3 text-sm font-semibold">{item.job.jobType === "FIXED" ? "Fixed price" : item.job.jobType} · Budget {item.job.budget}</p>
              <p className="mt-1 text-xs text-neutral-500">{item.job.duration ? `Duration: ${item.job.duration} · ` : ""}Deadline: {new Date(item.job.deadline).toLocaleDateString()}</p>
-             <p className="mt-3 rounded-lg bg-neutral-50 p-3 text-xs leading-5 text-neutral-600">{item.reason}</p>
-             <div className="mt-3 flex flex-wrap gap-2">{[...new Set([...item.job.requiredSkills, ...item.job.skills.map(skill => skill.skill.name)])].map(skill => <span key={skill} className="rounded-full border border-neutral-200 px-2.5 py-1 text-xs text-neutral-600">{skill}</span>)}</div>
+             <p className="mt-4 rounded-xl bg-neutral-50 p-4 text-sm leading-6 text-neutral-600">{item.reason}</p>
+             <div className="mt-4 flex flex-wrap gap-2.5">{[...new Set([...item.job.requiredSkills, ...item.job.skills.map(skill => skill.skill.name)])].map(skill => <span key={skill} className="rounded-full border border-neutral-200 px-2.5 py-1 text-xs text-neutral-600">{skill}</span>)}</div>
              <div className="mt-auto pt-5"><Link href={`/jobs/${item.job.id}`} className="inline-flex rounded-xl bg-neutral-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-red-500">View job →</Link></div>
            </article>)}
          </section>}
