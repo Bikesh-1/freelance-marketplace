@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     if (!body || typeof body !== "object" || Array.isArray(body)) return NextResponse.json({ message: "Invalid request body" }, { status: 400 });
 
     const rawName = (body as Record<string, unknown>).name;
-    const name = typeof rawName === "string" ? rawName.trim().replace(/\\s+/g, " ") : "";
+    const name = typeof rawName === "string" ? rawName.trim().replace(/\s+/g, " ") : "";
     if (!name || name.length > 80) return NextResponse.json({ message: "Skill name must be between 1 and 80 characters" }, { status: 400 });
 
     const existing = await prisma.skill.findUnique({ where: { name }, select: { id: true, name: true } });
