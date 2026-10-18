@@ -202,7 +202,6 @@ export default async function FreelancerDashboard() {
                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/15 text-base">✦</span>
                   <span className="text-left leading-tight">
                     <span className="block whitespace-nowrap">Recommended Jobs</span>
-                    <span className="mt-1 block text-[11px] font-medium text-red-100">Find your next project</span>
                   </span>
                   <span aria-hidden="true" className="ml-0.5 transition-transform group-hover:translate-x-0.5">→</span>
                 </Link>
