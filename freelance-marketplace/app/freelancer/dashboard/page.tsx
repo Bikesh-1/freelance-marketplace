@@ -179,10 +179,7 @@ export default async function FreelancerDashboard() {
 
   return (
     <>
-
-
-      <>
-        <Loginnavbar />
+      <Loginnavbar />
         <main className="min-h-screen bg-[#f5f6f8] pt-16 text-slate-900 sm:pt-20">
         <div className="mx-auto max-w-[1440px] px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
           {/* =====================================================
@@ -1034,7 +1031,7 @@ export default async function FreelancerDashboard() {
           </div>
 
         </div>
-        </main>
-      </>
+      </main>
+    </>
   );
 }
