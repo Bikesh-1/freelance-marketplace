@@ -2,9 +2,13 @@
 
 import { useState } from "react";
 import axios from "axios";
+import { useSkills } from "@/hooks/useSkills";
+import SkillSelector from "@/components/profile/SkillSelector";
 
 export default function FreelancerProfilePage() {
   const [loading, setLoading] = useState(false);
+  const { data: skills = [], isLoading: skillsLoading } = useSkills();
+  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
 
   const [form, setForm] = useState({
     fullName: "",
@@ -24,7 +28,11 @@ export default function FreelancerProfilePage() {
     try {
       setLoading(true);
 
-      await axios.post("/api/profile/complete", form);
+      if (selectedSkills.length === 0) {
+        alert("Please select at least one skill.");
+        return;
+      }
+      await axios.post("/api/profile/complete", { ...form, skillIds: selectedSkills });
 
       window.location.href = "/freelancer/dashboard";
     } catch (error) {
@@ -340,6 +348,16 @@ export default function FreelancerProfilePage() {
 
             </div>
 
+            <section className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <h2 className="text-sm font-semibold text-neutral-900">Your Skills <span className="text-red-500">*</span></h2>
+                <span className="text-xs text-neutral-500">{selectedSkills.length} selected</span>
+              </div>
+              <p className="mb-4 text-xs leading-5 text-neutral-500">Select the skills you can offer to clients. These will appear on your public freelancer profile.</p>
+              {skillsLoading ? <p className="text-sm text-neutral-500">Loading skills…</p> : <SkillSelector skills={skills} selectedSkills={selectedSkills} setSelectedSkills={setSelectedSkills} />}
+              {!skillsLoading && skills.length === 0 && <p className="mt-3 text-sm text-neutral-500">No skills available yet. Please ask an administrator to add skills before completing your profile.</p>}
+            </section>
+
             {/* =================================================
                 PROFILE PREVIEW
             ================================================= */}
@@ -408,7 +426,7 @@ export default function FreelancerProfilePage() {
             <button
               type="button"
               onClick={submitHandler}
-              disabled={loading}
+              disabled={loading || skillsLoading || skills.length === 0 || selectedSkills.length === 0}
               className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-red-500 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-red-400 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? (
