@@ -182,7 +182,7 @@ export default async function FreelancerDashboard() {
     <>
       <Loginnavbar />
         <main className="min-h-screen bg-[#f5f6f8] pt-16 text-slate-900 sm:pt-20">
-        <div className="mx-auto max-w-[1440px] px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
+        <div className="mx-auto max-w-[1440px] px-4 py-5 sm:px-6 lg:px-10 lg:py-6">
           {/* =====================================================
               HEADER
           ===================================================== */}
@@ -223,7 +223,7 @@ export default async function FreelancerDashboard() {
           <section className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
 
             {/* Earnings */}
-            <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+            <div className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
               <div className="mb-4 flex items-center justify-between">
                 <span className="text-xs font-medium text-neutral-500">
                   Total Earnings
@@ -242,7 +242,7 @@ export default async function FreelancerDashboard() {
             </div>
 
             {/* Active Jobs */}
-            <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+            <div className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
               <div className="mb-4 flex items-center justify-between">
                 <span className="text-xs font-medium text-neutral-500">
                   Active Jobs
@@ -263,7 +263,7 @@ export default async function FreelancerDashboard() {
             </div>
 
             {/* Applications */}
-            <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+            <div className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
               <div className="mb-4 flex items-center justify-between">
                 <span className="text-xs font-medium text-neutral-500">
                   Applications
@@ -284,7 +284,7 @@ export default async function FreelancerDashboard() {
             </div>
 
             {/* Escrow */}
-            <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+            <div className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
               <div className="mb-4 flex items-center justify-between">
                 <span className="text-xs font-medium text-neutral-500">
                   In Escrow
@@ -303,7 +303,7 @@ export default async function FreelancerDashboard() {
             </div>
 
             {/* Rating */}
-            <div className="col-span-2 rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm sm:col-span-1">
+            <div className="col-span-2 rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm sm:col-span-1">
               <div className="mb-4 flex items-center justify-between">
                 <span className="text-xs font-medium text-neutral-500">
                   Rating
@@ -325,26 +325,9 @@ export default async function FreelancerDashboard() {
           </section>
 
           {/* =====================================================
-              JOB DISCOVERY CTA
-          ===================================================== */}
-          <section className="mb-8 overflow-hidden rounded-3xl border border-red-100 bg-gradient-to-r from-rose-50 via-white to-orange-50 shadow-sm">
-            <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-7">
-              <div className="max-w-2xl">
-                <p className="text-xs font-bold uppercase tracking-[0.16em] text-red-500">Ready for your next project?</p>
-                <h2 className="mt-2 text-xl font-bold tracking-tight text-slate-950 sm:text-2xl">Discover work that fits your skills</h2>
-                <p className="mt-2 text-sm leading-6 text-slate-600">Explore personalized matches or browse all open jobs to find your next opportunity.</p>
-              </div>
-              <div className="flex shrink-0 flex-wrap gap-2">
-                <Link href="/jobs" className="inline-flex min-h-11 items-center justify-center rounded-xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800">Browse all jobs →</Link>
-                <Link href="/freelancer/recommendations" className="inline-flex min-h-11 items-center justify-center rounded-xl border border-red-200 bg-white px-5 py-3 text-sm font-semibold text-red-600 transition hover:bg-red-50">View recommendations</Link>
-              </div>
-            </div>
-          </section>
-
-          {/* =====================================================
               MAIN CONTENT
           ===================================================== */}
-          <div className="grid gap-5 xl:grid-cols-2">
+          <div className="grid gap-4 xl:grid-cols-2">
 
             {/* =================================================
                 ACTIVE JOBS
