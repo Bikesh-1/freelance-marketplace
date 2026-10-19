@@ -176,8 +176,8 @@ export default async function FreelancerDashboard() {
     <>
       <Loginnavbar />
       <DashboardSidebar role="FREELANCER" />
-      <main className="min-h-screen bg-[#f5f6f8] pt-16 text-slate-900 sm:pt-20 lg:pl-64">
-        <div className="mx-auto max-w-[1360px] px-4 py-4 sm:px-5 lg:px-8 lg:py-5">
+      <main className="min-h-screen bg-[#f5f6f8] pt-16 text-slate-900 sm:pt-20 lg:pl-[272px]">
+        <div className="mx-auto max-w-[1600px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
           {/* =====================================================
               HEADER
           ===================================================== */}
@@ -214,8 +214,8 @@ export default async function FreelancerDashboard() {
           {/* =====================================================
               QUICK STATS
           ===================================================== */}
-          <section className="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <div className="rounded-xl border border-neutral-200 bg-white p-3.5 shadow-sm">
+          <section className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <div className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md">
               <div className="mb-2 flex items-center justify-between">
                 <span className="text-xs font-medium text-neutral-500">Applications</span>
                 <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-neutral-100 text-sm">≡</span>
