@@ -176,14 +176,14 @@ export default async function ClientDashboard() {
       <Navbar />
       <DashboardSidebar role="CLIENT" />
 
-      <main className="min-h-screen bg-[#f5f6f8] pt-16 text-slate-900 sm:pt-20 lg:pl-64">
-        <div className="mx-auto max-w-[1440px] px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
+      <main className="min-h-screen bg-[#f5f6f8] pt-16 text-slate-900 sm:pt-20 lg:pl-[272px]">
+        <div className="mx-auto max-w-[1600px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 
           {/* =====================================================
               HEADER
           ===================================================== */}
 
-          <section className="mb-8">
+          <section className="mb-6">
             <div className="flex flex-col gap-5 rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-7 lg:flex-row lg:items-center lg:justify-between">
               <div>
                 <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-rose-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-rose-600">
@@ -227,7 +227,7 @@ export default async function ClientDashboard() {
               STATS
           ===================================================== */}
 
-          <section className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:gap-4">
+          <section className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4 lg:gap-4">
 
             {/* Wallet */}
 
@@ -309,7 +309,7 @@ export default async function ClientDashboard() {
 
             {/* Applications */}
 
-            <div className="col-span-2 rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm sm:col-span-1">
+            <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
 
               <div className="mb-4 flex items-center justify-between">
 
