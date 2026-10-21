@@ -483,6 +483,20 @@ export default function MilestoneCard({
           DISPUTE
       ===================================================== */}
 
+      {milestone.status === "SUBMITTED" && milestone.submissionUrl && (
+        <div className="mt-5 rounded-xl border border-blue-100 bg-blue-50 p-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-blue-700">Freelancer submission</p>
+          <a
+            href={milestone.submissionUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 block break-all text-sm font-medium text-blue-700 underline underline-offset-2"
+          >
+            Open submitted work / attached file
+          </a>
+        </div>
+      )}
+
       {(milestone.status === "FUNDED" ||
         milestone.status === "SUBMITTED") && (
         <div className="mt-5 border-t border-neutral-100 pt-5">
