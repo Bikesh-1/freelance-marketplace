@@ -275,13 +275,24 @@ export default async function ApplicationsPage() {
 
                     </div>
 
-                    <Link
-                      href={`/jobs/${application.job.id}`}
-                      className="inline-flex w-fit items-center gap-2 rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-xs font-semibold text-neutral-700 transition hover:border-neutral-300 hover:bg-neutral-50 hover:text-red-500"
-                    >
-                      View Job
-                      <span>→</span>
-                    </Link>
+                    <div className="flex flex-wrap gap-2">
+                      <Link
+                        href={`/jobs/${application.job.id}`}
+                        className="inline-flex w-fit items-center gap-2 rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-xs font-semibold text-neutral-700 transition hover:border-neutral-300 hover:bg-neutral-50 hover:text-red-500"
+                      >
+                        View Job
+                        <span>→</span>
+                      </Link>
+                      {application.status === "ACCEPTED" && (
+                        <Link
+                          href={`/messages/${application.job.id}`}
+                          className="inline-flex w-fit items-center gap-2 rounded-xl bg-red-500 px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-red-400"
+                        >
+                          Message client
+                          <span aria-hidden="true">→</span>
+                        </Link>
+                      )}
+                    </div>
 
                   </div>
 
