@@ -44,12 +44,16 @@ export async function POST(
       );
     }
 
-    const existingUser =
-      await prisma.user.findFirst({
-        where: {
-          walletAddress,
+    // EVM addresses are case-insensitive. Use a case-insensitive lookup so
+    // checksum/lowercase variants cannot bypass the one-wallet-per-account rule.
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        walletAddress: {
+          equals: walletAddress,
+          mode: "insensitive",
         },
-      });
+      },
+    });
 
     if (
       existingUser &&
