@@ -54,7 +54,7 @@ export async function POST(
     const result = await prisma.$transaction(async (tx) => {
       const job = await tx.job.findUnique({
         where: { id: jobId },
-        select: { id: true, clientId: true, status: true, budget: true, selectedFreelancerId: true },
+        select: { id: true, clientId: true, status: true, selectedFreelancerId: true },
       });
       if (!job || job.clientId !== clientProfile.id) {
         throw new Error("JOB_NOT_FOUND_OR_FORBIDDEN");
@@ -100,8 +100,26 @@ export async function POST(
           status: "CREATED",
         },
       });
-      return { escrow };
+      return { escrow, freelancerId: application.freelancerId };
     });
+
+    // Tell the selected freelancer that the client accepted the proposal.
+    const freelancer = await prisma.freelancerProfile.findUnique({
+      where: { id: result.freelancerId },
+      select: { userId: true },
+    });
+    if (freelancer?.userId) {
+      await prisma.notification.create({
+        data: {
+          userId: freelancer.userId,
+          type: "APPLICATION_ACCEPTED",
+          title: "Proposal accepted",
+          message: "Your proposal was accepted. Open the job to message your client.",
+        },
+      }).catch((notificationError) => {
+        console.error("Application accepted notification error:", notificationError);
+      });
+    }
 
     return NextResponse.json({
       success: true,
