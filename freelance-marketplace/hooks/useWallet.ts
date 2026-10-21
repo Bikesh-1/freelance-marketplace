@@ -25,17 +25,9 @@ export function useWalletConnection() {
     try {
       const address = await getWalletAddress();
 
+      // Read the browser wallet without auto-linking it to the
+      // signed-in account. Linking is an explicit user action.
       setWalletAddress(address);
-
-      // MetaMask disconnected / no account
-      if (!address) {
-        return;
-      }
-
-      // Always sync currently selected MetaMask account
-      await axios.post("/api/wallet/connect", {
-        walletAddress: address,
-      });
     } catch (error) {
       console.error("Wallet sync error:", error);
     }
@@ -51,16 +43,8 @@ useEffect(() => {
 
       if (!mounted) return;
 
-      setWalletAddress(address);
-
-      if (address) {
-        await axios.post(
-          "/api/wallet/connect",
-          {
-            walletAddress: address,
-          }
-        );
-      }
+      // Do not silently link the currently selected MetaMask account.
+      // The user can explicitly connect it from the button.
     } catch (error) {
       console.error(
         "Initial wallet sync error:",
@@ -118,24 +102,11 @@ useEffect(() => {
       return;
     }
 
-    const address =
-      addresses[0];
-
+    const address = addresses[0];
+    // Track the selected MetaMask account locally. A wallet already
+    // linked to another user must not be re-linked automatically.
     setWalletAddress(address);
-
-    try {
-      await axios.post(
-        "/api/wallet/connect",
-        {
-          walletAddress: address,
-        }
-      );
-    } catch (error) {
-      console.error(
-        "Account change sync error:",
-        error
-      );
-    }
+    setError(null);
   };
 
   const handleChainChanged = () => {
@@ -189,14 +160,19 @@ useEffect(() => {
         error
       );
 
-      const message =
-        error instanceof Error
+      const message = axios.isAxiosError(error)
+        ? (typeof error.response?.data?.message === "string"
+            ? error.response.data.message
+            : error.response?.status === 409
+              ? "This wallet is already linked to another account. Disconnect it from that account first, or choose another wallet."
+              : error.message || "Failed to connect wallet")
+        : error instanceof Error
           ? error.message
           : "Failed to connect wallet";
 
       setError(message);
-
-      throw error;
+      // Keep the error in component state instead of creating an
+      // unhandled promise rejection in the click handler.
     } finally {
       setLoading(false);
     }
