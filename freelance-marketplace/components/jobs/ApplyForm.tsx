@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -13,8 +13,42 @@ export default function ApplyForm({
   const [coverLetter, setCoverLetter] = useState("");
   const [proposedAmount, setProposedAmount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [application, setApplication] = useState<{
+    id: string;
+    status: "PENDING" | "ACCEPTED" | "REJECTED";
+    proposedBudget: number;
+    createdAt: string;
+  } | null>(null);
+  const [checkingApplication, setCheckingApplication] = useState(true);
+  const [applicationError, setApplicationError] = useState("");
 
   const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === "loading" || !session || session.user.role !== "FREELANCER") return;
+    let cancelled = false;
+
+    const loadApplication = async () => {
+      setCheckingApplication(true);
+      try {
+        const response = await axios.get(`/api/jobs/${jobId}/my-application`);
+        if (!cancelled) {
+          setApplication(response.data.application ?? null);
+          setApplicationError("");
+        }
+      } catch (error: any) {
+        if (!cancelled) {
+          if (error?.response?.status === 404) setApplication(null);
+          else setApplicationError(error?.response?.data?.message || "Could not check your proposal status.");
+        }
+      } finally {
+        if (!cancelled) setCheckingApplication(false);
+      }
+    };
+
+    void loadApplication();
+    return () => { cancelled = true; };
+  }, [jobId, session, status]);
 
   /* ============================================================
      SESSION LOADING
@@ -91,6 +125,79 @@ export default function ApplyForm({
         </p>
 
       </div>
+    );
+  }
+
+  if (checkingApplication) {
+    return (
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="h-5 w-40 animate-pulse rounded bg-neutral-200" />
+        <div className="mt-4 h-24 animate-pulse rounded-xl bg-neutral-100" />
+      </div>
+    );
+  }
+
+  if (application) {
+    const accepted = application.status === "ACCEPTED";
+    const rejected = application.status === "REJECTED";
+    return (
+      <section className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
+        <div className={`p-5 text-white sm:p-6 ${accepted ? "bg-emerald-950" : rejected ? "bg-red-950" : "bg-neutral-950"}`}>
+          <div className="flex items-start gap-3">
+            <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-lg ${accepted ? "bg-emerald-400/15 text-emerald-300" : rejected ? "bg-red-400/15 text-red-300" : "bg-amber-400/15 text-amber-300"}`}>
+              {accepted ? "✓" : rejected ? "×" : "↗"}
+            </span>
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/50">Your proposal</p>
+              <h3 className="mt-1 text-xl font-bold">
+                {accepted ? "Proposal accepted!" : rejected ? "Application not selected" : "Proposal sent successfully"}
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-white/65">
+                {accepted
+                  ? "Great news — the client selected you. Your project conversation is ready."
+                  : rejected
+                    ? "The client has moved forward with another proposal. You can still explore other projects."
+                    : "Your proposal is with the client. You’re all set — we’ll show an update here when they respond."}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-4 p-5 sm:p-6">
+          <div className="flex items-center justify-between gap-4 rounded-xl border border-neutral-100 bg-neutral-50 p-4">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-neutral-400">Proposed amount</p>
+              <p className="mt-1 text-xl font-bold text-neutral-950">${application.proposedBudget.toLocaleString()}</p>
+            </div>
+            <span className={`rounded-full px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider ${accepted ? "bg-emerald-50 text-emerald-700" : rejected ? "bg-red-50 text-red-600" : "bg-amber-50 text-amber-700"}`}>
+              {application.status}
+            </span>
+          </div>
+          {application.createdAt && (
+            <p className="text-xs text-neutral-400">
+              Submitted {new Date(application.createdAt).toLocaleDateString()}
+            </p>
+          )}
+          {accepted ? (
+            <Link href={`/messages/${jobId}`} className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-red-500 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-red-400">
+              Message your client <span aria-hidden="true">→</span>
+            </Link>
+          ) : rejected ? (
+            <Link href="/jobs" className="flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-neutral-200 bg-white px-5 text-sm font-semibold text-neutral-800 transition hover:border-red-200 hover:text-red-500">
+              Explore other jobs <span aria-hidden="true">→</span>
+            </Link>
+          ) : (
+            <div className="flex items-start gap-3 rounded-xl border border-amber-100 bg-amber-50/70 p-4">
+              <span className="mt-0.5 text-amber-700">◷</span>
+              <div>
+                <p className="text-sm font-semibold text-amber-900">Waiting for client response</p>
+                <p className="mt-1 text-xs leading-5 text-amber-800/80">Your proposal is saved. Check back here for the latest status.</p>
+              </div>
+            </div>
+          )}
+          {applicationError && <p role="alert" className="text-xs text-red-600">{applicationError}</p>}
+        </div>
+      </section>
     );
   }
 
