@@ -224,7 +224,7 @@ export default async function FreelancerDashboard() {
               <p className="mt-1 text-xs text-neutral-400">Awaiting response</p>
             </div>
 
-            <div className="rounded-xl border border-neutral-200 bg-white p-3.5 shadow-sm">
+            <div className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md">
               <div className="mb-2 flex items-center justify-between">
                 <span className="text-xs font-medium text-neutral-500">Rating</span>
                 <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-yellow-50 text-sm">★</span>
