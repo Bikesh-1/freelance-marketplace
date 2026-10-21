@@ -27,7 +27,14 @@ export function useWalletConnection() {
 
       // Read the browser wallet without auto-linking it to the
       // signed-in account. Linking is an explicit user action.
-      setWalletAddress(address);
+      // Only show it as connected when it matches the account saved on this app.
+      const { data } = await axios.get("/api/wallet/summary").catch(() => ({ data: null }));
+      const linkedAddress = typeof data?.walletAddress === "string" ? data.walletAddress : null;
+      setWalletAddress(
+        address && linkedAddress && address.toLowerCase() === linkedAddress.toLowerCase()
+          ? linkedAddress
+          : null
+      );
     } catch (error) {
       console.error("Wallet sync error:", error);
     }
@@ -45,6 +52,13 @@ useEffect(() => {
 
       // Do not silently link the currently selected MetaMask account.
       // The user can explicitly connect it from the button.
+      const { data } = await axios.get("/api/wallet/summary").catch(() => ({ data: null }));
+      const linkedAddress = typeof data?.walletAddress === "string" ? data.walletAddress : null;
+      setWalletAddress(
+        address && linkedAddress && address.toLowerCase() === linkedAddress.toLowerCase()
+          ? linkedAddress
+          : null
+      );
     } catch (error) {
       console.error(
         "Initial wallet sync error:",
@@ -103,9 +117,20 @@ useEffect(() => {
     }
 
     const address = addresses[0];
-    // Track the selected MetaMask account locally. A wallet already
-    // linked to another user must not be re-linked automatically.
-    setWalletAddress(address);
+    // Track the selected account, but do not confuse it with the wallet
+    // already linked to this logged-in account.
+    try {
+      const { data } = await axios.get("/api/wallet/summary");
+      const linkedAddress = typeof data?.walletAddress === "string" ? data.walletAddress : null;
+      setWalletAddress(
+        linkedAddress && address.toLowerCase() === linkedAddress.toLowerCase()
+          ? linkedAddress
+          : null
+      );
+    } catch (error) {
+      console.error("Wallet status refresh error:", error);
+      setWalletAddress(null);
+    }
     setError(null);
   };
 
@@ -146,14 +171,11 @@ useEffect(() => {
       const { address } =
         await connectWallet();
 
-      setWalletAddress(address);
-
-      await axios.post(
+      const response = await axios.post(
         "/api/wallet/connect",
-        {
-          walletAddress: address,
-        }
+        { walletAddress: address }
       );
+      setWalletAddress(response.data.walletAddress ?? address);
     } catch (error: unknown) {
       console.error(
         "Wallet connection error:",
