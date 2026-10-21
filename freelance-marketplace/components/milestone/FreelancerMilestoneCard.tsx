@@ -45,7 +45,6 @@ export default function FreelancerMilestoneCard({
   const [submitting, setSubmitting] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<Array<{ url: string; name: string }>>([]);
   const [uploading, setUploading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files ?? []);
@@ -221,7 +220,6 @@ export default function FreelancerMilestoneCard({
               </label>
               <div className="rounded-xl border border-dashed border-neutral-300 bg-white p-4">
                 <input
-                  ref={fileInputRef}
                   type="file"
                   multiple
                   accept=".pdf,.jpg,.jpeg,.png,.webp,.txt,.zip,.docx,.xlsx,.pptx"
