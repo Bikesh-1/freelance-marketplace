@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { submitMilestone } from "@/services/milestone.action";
 import RaiseDisputeForm from "@/components/dispute/RaiseDisputeForm";
@@ -43,19 +43,66 @@ export default function FreelancerMilestoneCard({
   );
 
   const [submitting, setSubmitting] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<Array<{ url: string; name: string }>>([]);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files ?? []);
+    if (!files.length) return;
+
+    const allowedExtensions = /\.(pdf|jpe?g|png|webp|txt|zip|docx|xlsx|pptx)$/i;
+    const maxFileSize = 10 * 1024 * 1024;
+    const invalid = files.find((file) => !allowedExtensions.test(file.name) || file.size > maxFileSize);
+    if (invalid) {
+      alert(`"${invalid.name}" is not supported. Upload PDF, images, TXT, ZIP, DOCX, XLSX or PPTX files up to 10 MB each.`);
+      event.target.value = "";
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const uploaded = await Promise.all(files.map(async (file) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        const response = await fetch("/api/upload", { method: "POST", body: formData });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok || !data.url) {
+          throw new Error(data.message || `Could not upload ${file.name}`);
+        }
+        return { url: data.url as string, name: file.name };
+      }));
+
+      setUploadedFiles((current) => {
+        const combined = [...current, ...uploaded];
+        return combined.filter((item, index) => combined.findIndex((candidate) => candidate.url === item.url) === index);
+      });
+    } catch (error) {
+      console.error("Submission file upload error:", error);
+      alert(error instanceof Error ? error.message : "File upload failed. Please try again.");
+    } finally {
+      setUploading(false);
+      event.target.value = "";
+    }
+  };
 
   const handleSubmit = async () => {
     try {
-      if (!submissionUrl.trim()) {
-        alert("Submission URL is required");
+      if (!submissionUrl.trim() && uploadedFiles.length === 0) {
+        alert("Add a submission URL or upload at least one file.");
         return;
       }
 
       setSubmitting(true);
 
+      const fileLinks = uploadedFiles.map((file) => `${file.name}: ${file.url}`).join("\n");
+      const combinedNote = [submissionNote.trim(), fileLinks ? `Attached files:\n${fileLinks}` : ""]
+        .filter(Boolean)
+        .join("\n\n");
+
       await submitMilestone(milestone.id, {
-        submissionUrl: submissionUrl.trim(),
-        submissionNote: submissionNote.trim() || undefined,
+        submissionUrl: submissionUrl.trim() || uploadedFiles[0].url,
+        submissionNote: combinedNote || undefined,
       });
 
       alert("Milestone submitted successfully");
@@ -136,8 +183,7 @@ export default function FreelancerMilestoneCard({
             </h4>
 
             <p className="mt-1 text-xs leading-5 text-neutral-500">
-              Add the link to your completed work and an optional
-              note for the client.
+              Share a project link or attach the files you completed. You can also add a note for the client.
             </p>
 
           </div>
@@ -152,7 +198,7 @@ export default function FreelancerMilestoneCard({
                 htmlFor={`submission-url-${milestone.id}`}
                 className="mb-2 block text-xs font-semibold text-neutral-700"
               >
-                Submission URL
+                Submission URL <span className="font-normal text-neutral-400">(optional if you attach a file)</span>
               </label>
 
               <input
@@ -166,6 +212,53 @@ export default function FreelancerMilestoneCard({
                 className="h-12 w-full rounded-xl border border-neutral-200 bg-white px-4 text-sm text-neutral-900 outline-none transition placeholder:text-neutral-400 focus:border-red-400 focus:ring-2 focus:ring-red-500/10"
               />
 
+            </div>
+
+            {/* Work files */}
+            <div>
+              <label className="mb-2 block text-xs font-semibold text-neutral-700">
+                Attach Work Files <span className="font-normal text-neutral-400">(optional · max 10 MB each)</span>
+              </label>
+              <div className="rounded-xl border border-dashed border-neutral-300 bg-white p-4">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  accept=".pdf,.jpg,.jpeg,.png,.webp,.txt,.zip,.docx,.xlsx,.pptx"
+                  onChange={handleFileUpload}
+                  disabled={uploading || submitting}
+                  className="block w-full text-sm text-neutral-600 file:mr-3 file:rounded-lg file:border-0 file:bg-neutral-900 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-neutral-700 disabled:opacity-50"
+                />
+                <p className="mt-2 text-xs leading-5 text-neutral-500">
+                  PDF, JPG, PNG, WEBP, TXT, ZIP, DOCX, XLSX or PPTX. Files upload to Cloudinary.
+                </p>
+                {uploading && (
+                  <p className="mt-3 flex items-center gap-2 text-xs font-medium text-red-500">
+                    <span className="h-3 w-3 animate-spin rounded-full border-2 border-red-200 border-t-red-500" />
+                    Uploading files...
+                  </p>
+                )}
+                {uploadedFiles.length > 0 && (
+                  <ul className="mt-3 space-y-2">
+                    {uploadedFiles.map((file) => (
+                      <li key={file.url} className="flex items-center justify-between gap-3 rounded-lg border border-neutral-200 px-3 py-2">
+                        <a href={file.url} target="_blank" rel="noopener noreferrer" className="min-w-0 break-all text-xs font-medium text-red-500 hover:underline">
+                          {file.name}
+                        </a>
+                        <button
+                          type="button"
+                          onClick={() => setUploadedFiles((current) => current.filter((item) => item.url !== file.url))}
+                          disabled={submitting || uploading}
+                          aria-label={`Remove ${file.name}`}
+                          className="shrink-0 text-xs font-semibold text-neutral-500 hover:text-red-500 disabled:opacity-50"
+                        >
+                          Remove
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             </div>
 
             {/* Submission Note */}
@@ -199,10 +292,12 @@ export default function FreelancerMilestoneCard({
 
             <button
               onClick={handleSubmit}
-              disabled={submitting}
+              disabled={submitting || uploading}
               className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-red-500 px-5 text-sm font-semibold text-white transition hover:bg-red-400 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {submitting ? (
+              {uploading ? (
+                <>Uploading files...</>
+              ) : submitting ? (
                 <>
                   <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                   Submitting...
@@ -278,15 +373,21 @@ export default function FreelancerMilestoneCard({
 
           {milestone.submissionNote && (
             <div className="mt-3 rounded-xl border border-neutral-200 bg-white p-3">
-
               <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-neutral-400">
-                Note
+                Note & attached files
               </p>
-
-              <p className="text-sm leading-6 text-neutral-600">
+              <p className="whitespace-pre-wrap text-sm leading-6 text-neutral-600">
                 {milestone.submissionNote}
               </p>
-
+              {milestone.submissionNote.split("\n").map((line, index) => {
+                const match = line.match(/^(.+): (https?:\/\/.+)$/);
+                if (!match) return null;
+                return (
+                  <a key={`${index}-${match[2]}`} href={match[2]} target="_blank" rel="noopener noreferrer" className="mt-1 block break-all text-xs font-medium text-red-500 hover:underline">
+                    ↗ {match[1]}
+                  </a>
+                );
+              })}
             </div>
           )}
 
