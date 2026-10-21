@@ -55,10 +55,22 @@ export default async function AdminDashboard() {
         </header>
 
         <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {stats.map(item => <article key={item.label} className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
-            <p className="text-xs font-medium text-neutral-500">{item.label}</p>
-            <p className="mt-2 text-3xl font-bold">{item.value.toLocaleString()}</p>
-          </article>)}
+          {stats.map((item) => {
+            const card = (
+              <>
+                <p className="text-xs font-medium text-neutral-500">{item.label}</p>
+                <p className="mt-2 text-3xl font-bold">{item.value.toLocaleString()}</p>
+                {"href" in item && item.href ? <p className="mt-3 text-xs font-semibold text-red-600">View all users →</p> : null}
+              </>
+            );
+            return "href" in item && item.href ? (
+              <Link key={item.label} href={item.href} className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-red-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-red-500">
+                {card}
+              </Link>
+            ) : (
+              <article key={item.label} className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">{card}</article>
+            );
+          })}
         </section>
 
         <section className="mt-6 grid gap-6 lg:grid-cols-2">
