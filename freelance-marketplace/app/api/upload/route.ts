@@ -1,18 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { v2 as cloudinary } from "cloudinary";
 
 import { authOptions } from "@/lib/auth";
-import configuredCloudinary from "@/lib/cloudinary";
+import cloudinary from "@/lib/cloudinary";
 
 export const runtime = "nodejs";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const ALLOWED_EXTENSIONS = /\.(pdf|jpe?g|png|webp|txt|zip|docx|xlsx|pptx)$/i;
-
-// Keep the existing Cloudinary initialization explicit for this route.
-void cloudinary;
-void configuredCloudinary;
 
 export async function POST(req: NextRequest) {
   try {
@@ -45,7 +40,7 @@ export async function POST(req: NextRequest) {
 
     const buffer = Buffer.from(await entry.arrayBuffer());
     const uploadResult = await new Promise<{ secure_url: string }>((resolve, reject) => {
-      configuredCloudinary.uploader
+      cloudinary.uploader
         .upload_stream(
           {
             folder: "freelance-marketplace/submissions",
