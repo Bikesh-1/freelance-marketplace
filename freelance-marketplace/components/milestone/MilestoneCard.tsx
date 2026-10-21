@@ -24,6 +24,7 @@ type Milestone = {
     | "REFUNDED";
 
   escrowId?: string | null;
+  submissionUrl?: string | null;
 
   escrow?: {
     id: string;
