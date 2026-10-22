@@ -6,7 +6,6 @@ import SkillSelector from "@/components/profile/SkillSelector";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { toast } from "sonner";
 
 export default function CreateJobPage() {
   const router = useRouter();
