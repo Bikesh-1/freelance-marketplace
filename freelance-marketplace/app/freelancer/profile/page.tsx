@@ -36,7 +36,7 @@ export default function FreelancerProfilePage() {
       await axios.post("/api/profile/complete", { ...form, skillIds: selectedSkills });
 
       toast.success("Profile saved", { description: "Your freelancer profile has been completed." });
-      toast.success("Profile saved", { description: "Your freelancer profile has been completed." });
+
       window.location.href = "/freelancer/dashboard";
     } catch (error) {
       console.error(error);
