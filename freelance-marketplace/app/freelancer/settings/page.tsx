@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
+import { toast } from "sonner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { useSkills } from "@/hooks/useSkills";
@@ -94,6 +95,7 @@ export default function SettingsPage() {
     },
     onSuccess: async () => {
       setMessage("Profile and skills saved successfully.");
+      toast.success("Profile and skills saved");
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["freelancer-profile"] }),
         queryClient.invalidateQueries({ queryKey: ["experience"] }),
@@ -101,6 +103,7 @@ export default function SettingsPage() {
     },
     onError: (error: unknown) => {
       setMessage(axios.isAxiosError(error) ? error.response?.data?.message || "Could not save profile." : "Could not save profile.");
+      toast.error("Could not save profile", { description: axios.isAxiosError(error) ? error.response?.data?.message : undefined });
     },
   });
 
