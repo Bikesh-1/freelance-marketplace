@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { createDispute } from "@/services/dispute.service";
+import { toast } from "sonner";
 
 export default function RaiseDisputeForm({
   milestoneId,
@@ -16,7 +17,7 @@ export default function RaiseDisputeForm({
   const handleSubmit = async () => {
     try {
       if (!reason.trim()) {
-        alert("Dispute reason is required");
+        toast.error("Reason required", { description: "Explain the issue before submitting a dispute." });
         return;
       }
 
@@ -28,7 +29,7 @@ export default function RaiseDisputeForm({
         evidence: evidence.trim() || undefined,
       });
 
-      alert("Dispute raised successfully");
+      toast.success("Dispute submitted", { description: "Your dispute has been sent for review." });
 
       window.location.reload();
     } catch (error) {
@@ -37,7 +38,7 @@ export default function RaiseDisputeForm({
         error
       );
 
-      alert("Failed to raise dispute");
+      toast.error("Could not submit dispute", { description: error instanceof Error ? error.message : "Please try again in a moment." });
     } finally {
       setLoading(false);
     }
