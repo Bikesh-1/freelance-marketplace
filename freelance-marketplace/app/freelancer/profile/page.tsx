@@ -4,6 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useSkills } from "@/hooks/useSkills";
 import SkillSelector from "@/components/profile/SkillSelector";
+import { toast } from "sonner";
 
 export default function FreelancerProfilePage() {
   const [loading, setLoading] = useState(false);
@@ -29,15 +30,16 @@ export default function FreelancerProfilePage() {
       setLoading(true);
 
       if (selectedSkills.length === 0) {
-        alert("Please select at least one skill.");
+        toast.error("Skills required", { description: "Select at least one skill to complete your profile." });
         return;
       }
       await axios.post("/api/profile/complete", { ...form, skillIds: selectedSkills });
 
+      toast.success("Profile saved", { description: "Your freelancer profile has been completed." });
       window.location.href = "/freelancer/dashboard";
     } catch (error) {
       console.error(error);
-      alert(axios.isAxiosError(error) ? error.response?.data?.message || "Could not save profile" : "Could not save profile");
+      toast.error("Could not save profile", { description: axios.isAxiosError(error) ? error.response?.data?.message || "Please try again." : "An unexpected error occurred. Please try again." });
     } finally {
       setLoading(false);
     }
