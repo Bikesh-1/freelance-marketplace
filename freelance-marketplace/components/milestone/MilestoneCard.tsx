@@ -194,7 +194,7 @@ export default function MilestoneCard({
         milestone.amount
       );
 
-      toast.error("Action unavailable", { description: "Payment released successfully" });
+      toast.success("Payment released", { description: "The payment was released successfully." });
 
       window.location.reload();
     } catch (err) {
@@ -203,11 +203,7 @@ export default function MilestoneCard({
         err
       );
 
-      alert(
-        err instanceof Error
-          ? err.message
-          : "Failed to release payment"
-      );
+      toast.error("Could not release payment", { description: err instanceof Error ? err.message : "Please try again in a moment." });
     } finally {
       setReleasing(false);
     }
