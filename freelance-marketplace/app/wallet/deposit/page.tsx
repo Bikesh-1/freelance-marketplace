@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ethers } from "ethers";
 import axios from "axios";
+import { toast } from "sonner";
 import Loginnavbar from "@/components/layout/loginNavbar";
 import { useWallet } from "@/hooks/useWallet";
 import { getBrowserProvider, getConfiguredChainId } from "@/lib/blockchain/provider";
@@ -58,6 +59,7 @@ export default function DepositPage() {
     onSuccess: async (hash) => {
       setMessageType("success");
       setMessage("Deposit confirmed and added to your wallet. Transaction: " + hash);
+      toast.success("Deposit successful", { description: "Your wallet has been updated." });
       setAmount("");
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["wallet", userId] }),
@@ -68,6 +70,7 @@ export default function DepositPage() {
       const text = axios.isAxiosError(error) ? error.response?.data?.message : null;
       setMessageType("error");
       setMessage(text || (error instanceof Error ? error.message : "Deposit failed. Please try again."));
+      toast.error("Deposit failed", { description: text || (error instanceof Error ? error.message : "Please try again.") });
     },
   });
 
@@ -77,11 +80,13 @@ export default function DepositPage() {
     if (!Number.isFinite(Number(amount)) || Number(amount) <= 0) {
       setMessageType("error");
       setMessage("Enter a valid ETH amount greater than zero.");
+      toast.error("Invalid amount", { description: "Enter an ETH amount greater than zero." });
       return;
     }
     if (Number(amount) > 1000000) {
       setMessageType("error");
       setMessage("Amount is too large.");
+      toast.error("Amount is too large");
       return;
     }
     depositMutation.mutate();
