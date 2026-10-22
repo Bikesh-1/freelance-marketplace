@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createMilestone } from "@/services/milestone.service";
+import { toast } from "sonner";
 
 export default function CreateMilestoneForm({
   jobId,
@@ -63,7 +64,7 @@ export default function CreateMilestoneForm({
         order: numericOrder,
       });
 
-      alert("Milestone created successfully");
+      toast.success("Milestone created", { description: "Your project milestone has been created successfully." });
 
       setTitle("");
       setDescription("");
