@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { submitMilestone } from "@/services/milestone.action";
 import RaiseDisputeForm from "@/components/dispute/RaiseDisputeForm";
+import { toast } from "sonner";
 
 type Milestone = {
   id: string;
@@ -54,7 +55,7 @@ export default function FreelancerMilestoneCard({
     const maxFileSize = 10 * 1024 * 1024;
     const invalid = files.find((file) => !allowedExtensions.test(file.name) || file.size > maxFileSize);
     if (invalid) {
-      alert(`"${invalid.name}" is not supported. Upload PDF, images, TXT, ZIP, DOCX, XLSX or PPTX files up to 10 MB each.`);
+      toast.error("Unsupported file", { description: `"${invalid.name}" is not supported. Upload PDF, images, TXT, ZIP, DOCX, XLSX or PPTX files up to 10 MB each.` });
       event.target.value = "";
       return;
     }
@@ -78,7 +79,7 @@ export default function FreelancerMilestoneCard({
       });
     } catch (error) {
       console.error("Submission file upload error:", error);
-      alert(error instanceof Error ? error.message : "File upload failed. Please try again.");
+      toast.error("File upload failed", { description: error instanceof Error ? error.message : "Please try again in a moment." });
     } finally {
       setUploading(false);
       event.target.value = "";
@@ -88,7 +89,7 @@ export default function FreelancerMilestoneCard({
   const handleSubmit = async () => {
     try {
       if (!submissionUrl.trim() && uploadedFiles.length === 0) {
-        alert("Add a submission URL or upload at least one file.");
+        toast.error("Submission required", { description: "Add a submission URL or upload at least one file." });
         return;
       }
 
@@ -104,12 +105,12 @@ export default function FreelancerMilestoneCard({
         submissionNote: combinedNote || undefined,
       });
 
-      alert("Milestone submitted successfully");
+      toast.success("Milestone submitted", { description: "Your work has been sent to the client for review." });
       window.location.reload();
     } catch (error) {
       console.error("Submit milestone error:", error);
 
-      alert("Failed to submit milestone");
+      toast.error("Could not submit milestone", { description: "Please try again in a moment." });
     } finally {
       setSubmitting(false);
     }
