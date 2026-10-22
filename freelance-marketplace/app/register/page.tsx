@@ -49,7 +49,7 @@ export default function RegisterPage() {
             }
 
             toast.success("Account created", { description: "Your account is ready. Sign in to continue." });
-            toast.success("Account created", { description: "Your account is ready. Sign in to continue." });
+
             router.push("/login");
         } catch (error) {
             console.error("Register error:", error);
