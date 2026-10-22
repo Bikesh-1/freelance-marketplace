@@ -1,9 +1,33 @@
+"use client";
+
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import Navbar from "@/components/layout/navbar";
 import HeroSection from "@/components/GSAP/HeroSection";
 import InfinityCard from "@/components/GSAP/InfintyCard";
 import HomeSections from "@/components/GSAP/HomeSections";
+import { getDashboardRoute } from "@/lib/routes";
 
 export default function Home() {
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status !== "authenticated") return;
+
+    const role = session?.user?.role;
+    if (role) router.replace(getDashboardRoute(role));
+  }, [status, session?.user?.role, router]);
+
+  if (status === "loading" || (status === "authenticated" && session?.user?.role)) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-[#F7F4EE] text-black">
+        <p className="text-sm font-medium">Taking you to your dashboard...</p>
+      </main>
+    );
+  }
+
   return (
     <div id="top" className="relative min-h-screen w-full overflow-x-clip bg-[#F7F4EE] text-[#111]">
       <Navbar />
