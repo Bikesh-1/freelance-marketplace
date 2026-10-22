@@ -5,7 +5,6 @@ import axios from "axios";
 import { useSkills } from "@/hooks/useSkills";
 import SkillSelector from "@/components/profile/SkillSelector";
 import { toast } from "sonner";
-import { toast } from "sonner";
 
 export default function FreelancerProfilePage() {
   const [loading, setLoading] = useState(false);
