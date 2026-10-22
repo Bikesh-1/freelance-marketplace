@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { useEscrow } from "@/hooks/useEscrow";
 import { toast } from "sonner";
+import { toast } from "sonner";
 
 export default function EscrowTest() {
   const {
@@ -81,7 +82,7 @@ export default function EscrowTest() {
 
   const handleRefund = async () => {
     if (!escrowId) {
-      alert("Enter escrow ID");
+      toast.error("Escrow ID required", { description: "Enter a valid escrow ID to continue." });
       return;
     }
 
