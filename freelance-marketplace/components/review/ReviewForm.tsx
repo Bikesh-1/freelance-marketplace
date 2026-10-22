@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import StarRating from "./StarRating";
 import { useCreateReview } from "@/hooks/useReviews";
+import { toast } from "sonner";
 
 export default function ReviewForm({
   clientId,
@@ -23,6 +24,7 @@ export default function ReviewForm({
 
   const submit =
     async () => {
+      try {
       await mutation.mutateAsync({
         clientId,
         freelancerId,
@@ -30,12 +32,13 @@ export default function ReviewForm({
         comment,
       });
 
-      alert(
-        "Review submitted successfully"
-      );
+      toast.success("Review submitted", { description: "Thanks for sharing your experience." });
 
       setComment("");
       setRating(5);
+      } catch (error) {
+        toast.error("Could not submit review", { description: error instanceof Error ? error.message : "Please try again in a moment." });
+      }
     };
 
   return (
