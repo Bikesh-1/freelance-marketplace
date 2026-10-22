@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getAdminDisputes, resolveDispute } from "@/services/dispute.service";
 import { useEscrow } from "@/hooks/useEscrow";
+import { toast } from "sonner";
 
 type Dispute = {
   id: string;
@@ -93,14 +94,10 @@ export default function AdminDisputesPage() {
           item.id === dispute.id ? { ...item, status: "RESOLVED" } : item
         )
       );
-      window.alert("Dispute resolved successfully");
+      toast.success("Dispute resolved", { description: "The dispute decision was saved successfully." });
     } catch (error) {
       console.error("Resolve dispute error:", error);
-      window.alert(
-        error instanceof Error
-          ? error.message
-          : "Dispute resolution failed. Please verify the transaction and try again."
-      );
+      toast.error("Could not resolve dispute", { description: error instanceof Error ? error.message : "Please try again in a moment." });
     } finally {
       setResolving(null);
     }
