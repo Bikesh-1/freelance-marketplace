@@ -106,7 +106,7 @@ export default function ApplicationCard({
           ? error.message
           : "Failed to reject application";
 
-      alert(message);
+      toast.error("Could not update application", { description: message });
     } finally {
       setLoading(false);
     }
