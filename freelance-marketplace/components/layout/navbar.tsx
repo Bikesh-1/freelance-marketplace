@@ -20,13 +20,7 @@ export default function Navbar() {
           <Image src="/logo.png" alt="Freelance Marketplace logo" width={44} height={44} priority />
         </Link>
 
-        <nav className="hidden items-center gap-1 rounded-full bg-[#EEECE7] p-1 font-bold md:flex">
-          <Link href="/" className="rounded-full bg-[#0D0D0D] px-5 py-2 text-xs tracking-wide text-white transition-colors hover:bg-red-500">
-            HOME
-          </Link>
-          <Link href="/#about" className={navLinkClass}>ABOUT</Link>
-          <Link href="/#contact" className={navLinkClass}>CONTACT</Link>
-        </nav>
+        
 
         <div className="hidden items-center gap-2 sm:flex">
           {session ? (
