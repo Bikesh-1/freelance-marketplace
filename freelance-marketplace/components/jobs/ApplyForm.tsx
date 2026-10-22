@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function ApplyForm({
   jobId,
@@ -207,12 +208,12 @@ export default function ApplyForm({
 
   const applyHandler = async () => {
     if (!coverLetter.trim()) {
-      alert("Please write a cover letter.");
+      toast.error("Cover letter required", { description: "Add a short cover letter before submitting your proposal." });
       return;
     }
 
     if (proposedAmount <= 0) {
-      alert("Please enter a valid proposed amount.");
+      toast.error("Invalid proposal amount", { description: "Enter a proposed amount greater than zero." });
       return;
     }
 
@@ -226,15 +227,12 @@ await axios.post(`/api/jobs/${jobId}/apply`, {
 });
 
 
-      alert("Application submitted successfully");
+      toast.success("Proposal submitted", { description: "Your proposal has been sent to the client." });
 
       setCoverLetter("");
       setProposedAmount(0);
     } catch (error: any) {
-      alert(
-        error?.response?.data?.message ||
-          "Failed to apply"
-      );
+      toast.error("Could not submit proposal", { description: error?.response?.data?.message || "Please try again in a moment." });
     } finally {
       setLoading(false);
     }
