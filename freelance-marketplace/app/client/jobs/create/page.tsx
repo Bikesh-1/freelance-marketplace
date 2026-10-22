@@ -5,6 +5,7 @@ import { useSkills } from "@/hooks/useSkills";
 import SkillSelector from "@/components/profile/SkillSelector";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function CreateJobPage() {
   const router = useRouter();
@@ -32,7 +33,7 @@ export default function CreateJobPage() {
       !form.deadline ||
       selectedSkills.length === 0
     ) {
-      alert(selectedSkills.length === 0 ? "Please select at least one required skill." : "Please fill all required fields");
+      toast.error("Incomplete job details", { description: selectedSkills.length === 0 ? "Select at least one required skill." : "Complete all required fields before publishing your job." });
       return;
     }
 
@@ -46,10 +47,11 @@ export default function CreateJobPage() {
         skillIds: selectedSkills,
       });
 
+      toast.success("Job posted", { description: "Your job has been published successfully." });
       router.push("/client/dashboard");
     } catch (error) {
       console.error(error);
-      alert("Failed to create job");
+      toast.error("Could not post job", { description: axios.isAxiosError(error) ? error.response?.data?.message || "Please review the details and try again." : "Please try again in a moment." });
     } finally {
       setLoading(false);
     }
