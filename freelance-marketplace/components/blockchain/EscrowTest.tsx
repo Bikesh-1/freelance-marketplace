@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { useEscrow } from "@/hooks/useEscrow";
+import { toast } from "sonner";
 
 export default function EscrowTest() {
   const {
@@ -25,7 +26,7 @@ export default function EscrowTest() {
 
   const handleCreate = async () => {
     if (!freelancerAddress) {
-      alert("Enter freelancer wallet");
+      toast.error("Wallet address required", { description: "Enter the freelancer wallet address to create escrow." });
       return;
     }
 
@@ -39,16 +40,12 @@ export default function EscrowTest() {
       receipt
     );
 
-    alert(
-      "Escrow created successfully"
-    );
+    toast.success("Escrow created", { description: "The escrow transaction completed successfully." });
   };
 
   const handleFund = async () => {
     if (!escrowId || !amount) {
-      alert(
-        "Enter escrow ID and amount"
-      );
+      toast.error("Missing payment details", { description: "Enter both the escrow ID and amount." });
       return;
     }
 
@@ -63,14 +60,12 @@ export default function EscrowTest() {
       receipt
     );
 
-    alert(
-      "Escrow funded successfully"
-    );
+    toast.success("Escrow funded", { description: "The escrow funding transaction completed successfully." });
   };
 
   const handleRelease = async () => {
     if (!escrowId) {
-      alert("Enter escrow ID");
+      toast.error("Escrow ID required", { description: "Enter a valid escrow ID to continue." });
       return;
     }
 
@@ -81,9 +76,7 @@ export default function EscrowTest() {
       Number(amount)
     );
 
-    alert(
-      "Payment released successfully"
-    );
+    toast.success("Payment released", { description: "The payment release transaction completed successfully." });
   };
 
   const handleRefund = async () => {
@@ -96,9 +89,7 @@ export default function EscrowTest() {
       Number(escrowId)
     );
 
-    alert(
-      "Payment refunded successfully"
-    );
+    toast.success("Refund completed", { description: "The refund transaction completed successfully." });
   };
 
   return (
