@@ -6,6 +6,7 @@ import SkillSelector from "@/components/profile/SkillSelector";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { toast } from "sonner";
 
 export default function CreateJobPage() {
   const router = useRouter();
@@ -47,6 +48,7 @@ export default function CreateJobPage() {
         skillIds: selectedSkills,
       });
 
+      toast.success("Job posted", { description: "Your job has been published successfully." });
       toast.success("Job posted", { description: "Your job has been published successfully." });
       router.push("/client/dashboard");
     } catch (error) {
