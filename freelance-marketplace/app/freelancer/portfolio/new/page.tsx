@@ -3,6 +3,7 @@
 import { useState } from "react";
 import ImageUploader from "@/components/upload/ImageUploader";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function NewPortfolioPage() {
   const [title, setTitle] = useState("");
@@ -16,12 +17,12 @@ export default function NewPortfolioPage() {
 
   const submitHandler = async () => {
     if (!title.trim()) {
-      alert("Please enter a project title.");
+      toast.error("Project title required", { description: "Add a title to your portfolio project before saving." });
       return;
     }
 
     if (!description.trim()) {
-      alert("Please enter a project description.");
+      toast.error("Project description required", { description: "Add a description so clients understand your work." });
       return;
     }
 
@@ -47,10 +48,11 @@ export default function NewPortfolioPage() {
         throw new Error("Failed to create portfolio project");
       }
 
+      toast.success("Portfolio project saved", { description: "Your project has been added to your portfolio." });
       window.location.href = "/freelancer/portfolio";
     } catch (error) {
       console.error(error);
-      alert("Failed to save portfolio project.");
+      toast.error("Could not save project", { description: error instanceof Error ? error.message : "Please try again in a moment." });
     } finally {
       setLoading(false);
     }
