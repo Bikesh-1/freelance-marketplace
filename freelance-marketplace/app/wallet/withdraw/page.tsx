@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { toast } from "sonner";
 import Loginnavbar from "@/components/layout/loginNavbar";
 import { useWallet } from "@/hooks/useWallet";
 
@@ -30,6 +31,7 @@ export default function WithdrawPage() {
     onSuccess: async () => {
       setMessageType("success");
       setMessage("Withdrawal verified and recorded successfully.");
+      toast.success("Withdrawal successful", { description: "Your withdrawal was verified and recorded." });
       setAmount("");
       setTxHash("");
       await Promise.all([
@@ -43,6 +45,7 @@ export default function WithdrawPage() {
         : null;
       setMessageType("error");
       setMessage(responseMessage || (error instanceof Error ? error.message : "Withdrawal could not be verified."));
+      toast.error("Withdrawal failed", { description: responseMessage || (error instanceof Error ? error.message : "Withdrawal could not be verified.") });
     },
   });
 
@@ -52,16 +55,19 @@ export default function WithdrawPage() {
     if (!Number.isFinite(Number(amount)) || Number(amount) <= 0) {
       setMessageType("error");
       setMessage("Enter a valid withdrawal amount greater than zero.");
+      toast.error("Invalid withdrawal amount");
       return;
     }
     if (!/^0x[a-fA-F0-9]{64}$/.test(txHash.trim())) {
       setMessageType("error");
       setMessage("Enter the transaction hash for the completed payout.");
+      toast.error("Invalid transaction hash", { description: "Enter the hash for the completed payout." });
       return;
     }
     if (Number(amount) > Number(wallet?.walletBalance ?? 0)) {
       setMessageType("error");
       setMessage("The amount is greater than your available wallet balance.");
+      toast.error("Insufficient balance");
       return;
     }
     withdrawMutation.mutate();
