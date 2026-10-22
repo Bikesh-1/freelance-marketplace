@@ -9,7 +9,6 @@ import Button from "@/components/ui/button";
 import { getDashboardRoute } from "@/lib/routes";
 import Navbar from "@/components/layout/navbar";
 import { toast } from "sonner";
-import { toast } from "sonner";
 
 export default function LoginPage() {
     const router = useRouter();
