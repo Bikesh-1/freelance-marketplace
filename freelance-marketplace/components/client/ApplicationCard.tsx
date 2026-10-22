@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { toast } from "sonner";
 
 type Application = {
   id: string;
@@ -58,14 +59,14 @@ export default function ApplicationCard({
 
       await queryClient.invalidateQueries({ queryKey: ["applications", jobId] });
       router.refresh();
-      alert("Freelancer accepted successfully");
+      toast.success("Freelancer accepted", { description: "The freelancer has been notified and the application is accepted." });
     } catch (error: unknown) {
       const message =
         error instanceof Error
           ? error.message
           : "Failed to accept application";
 
-      alert(message);
+      toast.error("Could not update application", { description: message });
     } finally {
       setLoading(false);
     }
@@ -98,7 +99,7 @@ export default function ApplicationCard({
 
       await queryClient.invalidateQueries({ queryKey: ["applications", jobId] });
       router.refresh();
-      alert("Application rejected");
+      toast.success("Application rejected", { description: "The application has been rejected." });
     } catch (error: unknown) {
       const message =
         error instanceof Error
