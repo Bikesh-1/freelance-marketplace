@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { toast } from "sonner";
 
 type Experience = {
   id: string;
@@ -57,10 +58,12 @@ export default function ExperiencePage() {
       setForm(emptyForm);
       setEditingId(null);
       setNotice("Experience saved.");
+      toast.success(editingId ? "Experience updated" : "Experience added");
       await client.invalidateQueries({ queryKey: ["experience"] });
     },
     onError: (error: unknown) => {
       setNotice(axios.isAxiosError(error) ? error.response?.data?.message || "Could not save experience." : "Could not save experience.");
+      toast.error("Could not save experience", { description: axios.isAxiosError(error) ? error.response?.data?.message : undefined });
     },
   });
 
@@ -68,13 +71,14 @@ export default function ExperiencePage() {
     mutationFn: async (id: string) => axios.delete("/api/freelancer/experience", { params: { id } }),
     onSuccess: async () => {
       setNotice("Experience deleted.");
+      toast.success("Experience deleted");
       await client.invalidateQueries({ queryKey: ["experience"] });
       if (editingId) {
         setEditingId(null);
         setForm(emptyForm);
       }
     },
-    onError: (error: unknown) => setNotice(axios.isAxiosError(error) ? error.response?.data?.message || "Could not delete experience." : "Could not delete experience."),
+    onError: (error: unknown) => { const message = axios.isAxiosError(error) ? error.response?.data?.message || "Could not delete experience." : "Could not delete experience."; setNotice(message); toast.error("Could not delete experience", { description: message }); },
   });
 
   function startEdit(item: Experience) {
@@ -95,6 +99,7 @@ export default function ExperiencePage() {
     setNotice("");
     if (form.endDate && form.startDate && form.endDate < form.startDate) {
       setNotice("End date must be on or after the start date.");
+      toast.error("Invalid dates", { description: "End date must be on or after the start date." });
       return;
     }
     saveMutation.mutate();
