@@ -3,6 +3,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
+import { toast } from "sonner";
 
 export default function ClientProfilePage() {
   const [loading, setLoading] = useState(false);
@@ -20,6 +21,7 @@ export default function ClientProfilePage() {
 
       await axios.post("/api/profile/complete", form);
 
+      toast.success("Profile saved", { description: "Your client profile has been completed." });
       toast.success("Profile saved", { description: "Your client profile has been completed." });
       window.location.href = "/client/dashboard";
     } catch (error) {
