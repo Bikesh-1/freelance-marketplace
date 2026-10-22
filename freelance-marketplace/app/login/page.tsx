@@ -8,6 +8,7 @@ import Card from "@/components/ui/card";
 import Button from "@/components/ui/button";
 import { getDashboardRoute } from "@/lib/routes";
 import Navbar from "@/components/layout/navbar";
+import { toast } from "sonner";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -20,7 +21,7 @@ export default function LoginPage() {
         e.preventDefault();
 
         if (!email || !password) {
-            alert("Please enter email and password");
+            toast.error("Missing details", { description: "Enter your email address and password to continue." });
             return;
         }
 
@@ -34,7 +35,7 @@ export default function LoginPage() {
             });
 
             if (res?.error) {
-                alert("Invalid credentials");
+                toast.error("Sign-in failed", { description: "The email or password is incorrect. Check your details and try again." });
                 return;
             }
 
@@ -52,7 +53,7 @@ export default function LoginPage() {
             router.push(getDashboardRoute(role));
         } catch (error) {
             console.error("Login error:", error);
-            alert("Something went wrong. Please try again.");
+            toast.error("Unable to sign in", { description: "Something went wrong. Please try again." });
         } finally {
             setLoading(false);
         }
