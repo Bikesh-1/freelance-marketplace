@@ -21,7 +21,7 @@ export default function ClientProfilePage() {
       await axios.post("/api/profile/complete", form);
 
       toast.success("Profile saved", { description: "Your client profile has been completed." });
-      toast.success("Profile saved", { description: "Your client profile has been completed." });
+
       window.location.href = "/client/dashboard";
     } catch (error) {
       console.error(error);
