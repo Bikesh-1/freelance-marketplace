@@ -4,7 +4,6 @@ import { useState } from "react";
 
 import { useEscrow } from "@/hooks/useEscrow";
 import { toast } from "sonner";
-import { toast } from "sonner";
 
 export default function EscrowFlowCard({
   jobId,
