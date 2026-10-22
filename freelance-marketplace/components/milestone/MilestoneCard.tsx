@@ -7,6 +7,7 @@ import { useEscrow } from "@/hooks/useEscrow";
 import { approveMilestone } from "@/services/milestone.action";
 import RaiseDisputeForm from "@/components/dispute/RaiseDisputeForm";
 import { ethers } from "ethers";
+import { toast } from "sonner";
 
 type Milestone = {
   id: string;
@@ -76,11 +77,11 @@ export default function MilestoneCard({
         }
       );
 
-      alert(`Milestone funded successfully.\nBlockchain Escrow ID: ${result.escrowIndex}`);
+      toast.success("Milestone funded", { description: `Escrow ID: ${result.escrowIndex}` });
       window.location.reload();
     } catch (err) {
       console.error("Fund milestone error:",err);
-      alert(err instanceof Error? err.message: "Failed to fund milestone");
+      toast.error("Could not fund milestone", { description: err instanceof Error ? err.message : "Please try again in a moment." });
     }
   };
 
@@ -98,7 +99,7 @@ export default function MilestoneCard({
         milestone.id
       );
 
-      alert("Milestone approved successfully");
+      toast.success("Milestone approved", { description: "The milestone was approved successfully." });
 
       window.location.reload();
     } catch (err) {
@@ -107,9 +108,7 @@ export default function MilestoneCard({
         err
       );
 
-      alert(
-        "Failed to approve milestone"
-      );
+      toast.error("Action unavailable", { description: "Failed to approve milestone" });
     } finally {
       setApproving(false);
     }
@@ -140,7 +139,7 @@ export default function MilestoneCard({
         txHash,
       });
 
-      alert(response.data?.message || "Payment verified and synced successfully");
+      toast.success("Payment verified", { description: response.data?.message || "The payment was verified and synced successfully." });
       window.location.reload();
     } catch (err) {
       console.error("Sync released payment error:", err);
@@ -149,7 +148,7 @@ export default function MilestoneCard({
         : err instanceof Error
           ? err.message
           : "Failed to sync released payment";
-      alert(message);
+      toast.error("Payment action failed", { description: message });
     } finally {
       setSyncingRelease(false);
     }
@@ -195,9 +194,7 @@ export default function MilestoneCard({
         milestone.amount
       );
 
-      alert(
-        "Payment released successfully"
-      );
+      toast.error("Action unavailable", { description: "Payment released successfully" });
 
       window.location.reload();
     } catch (err) {
