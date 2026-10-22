@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { useEscrow } from "@/hooks/useEscrow";
+import { toast } from "sonner";
 
 export default function EscrowFlowCard({
   jobId,
@@ -34,9 +35,7 @@ export default function EscrowFlowCard({
       jobId
     );
 
-    alert(
-      "Escrow created successfully"
-    );
+    toast.success("Escrow created", { description: "The escrow was created successfully." });
   };
 
   const handleFund = async () => {
@@ -46,9 +45,7 @@ export default function EscrowFlowCard({
       prismaEscrowId
     );
 
-    alert(
-      "Escrow funded successfully"
-    );
+    toast.success("Escrow funded", { description: "Funds have been deposited into escrow." });
   };
 
   const handleRelease = async () => {
@@ -59,17 +56,13 @@ export default function EscrowFlowCard({
       Number(amount)
     );
 
-    alert(
-      "Payment released successfully"
-    );
+    toast.success("Payment released", { description: "The payment was released successfully." });
   };
 
   const handleRefund = async () => {
     await refundPayment(escrowId, prismaEscrowId);
 
-    alert(
-      "Refund completed successfully"
-    );
+    toast.success("Refund completed", { description: "The client refund was processed successfully." });
   };
 
   return (
