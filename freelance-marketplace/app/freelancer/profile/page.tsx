@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { signOut } from "next-auth/react";
 import axios from "axios";
 import { useSkills } from "@/hooks/useSkills";
 import SkillSelector from "@/components/profile/SkillSelector";
@@ -56,6 +57,18 @@ export default function FreelancerProfilePage() {
         ===================================================== */}
 
         <div className="mb-8">
+          <div className="mb-6 flex justify-end">
+            <button
+              type="button"
+              onClick={() => signOut({ callbackUrl: "/" })}
+              className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-white px-4 py-2 text-sm font-semibold text-red-600 shadow-sm transition hover:border-red-500 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500/30"
+            >
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="h-4 w-4" stroke="currentColor" strokeWidth="1.8">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10 17l5-5-5-5M15 12H3m9-9h6a3 3 0 013 3v12a3 3 0 01-3 3h-6" />
+              </svg>
+              Logout
+            </button>
+          </div>
 
           <div className="mb-3 flex items-center gap-2">
 
